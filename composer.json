@@ -7,5 +7,15 @@
     },
     "require": {
         "doctrine/annotations": "^1.8"
+    },
+   "autoload": {
+        "psr-4": {
+            "Mallows\\LogicName\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mallows\\LogicName\\Tests\\": "tests/"
+        }
     }
 }
