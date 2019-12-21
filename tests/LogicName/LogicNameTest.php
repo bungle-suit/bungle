@@ -11,28 +11,42 @@ final class LogicNameTest extends TestCase
 {
     public function testResolveClassName()
     {
-        $this->assertEquals('Order Bill', LogicName::resolveClassName(Entity::class));
+        self::assertEquals('Order Bill', LogicName::resolveClassName(Entity::class));
     }
 
     public function testResolveClassNameNoLogicName()
     {
-        $this->assertEquals('LogicNameTest', LogicName::resolveClassName(self::class));
+        self::assertEquals('LogicNameTest', LogicName::resolveClassName(self::class));
     }
 
     public function testGetShortClassName()
     {
-        $this->assertEquals('Foo', LogicName::getShortClassName('Foo'));
-        $this->assertEquals('Entity', LogicName::getShortClassName(Entity::class));
+        self::assertEquals('Foo', LogicName::getShortClassName('Foo'));
+        self::assertEquals('Entity', LogicName::getShortClassName(Entity::class));
     }
 
     public function testResolvePropertyNames()
     {
-        $this->assertEquals(
+        self::assertEquals(
             [
-            'id' => 'ID',
-            'count' => 'Counter',
-            'name' => 'name'],
+              'id' => 'ID',
+              'count' => 'Counter',
+              'name' => 'name',
+            ],
             LogicName::resolvePropertyNames(Entity::class),
+        );
+    }
+
+    public function testResolveDerivedPropertyNames(): void
+    {
+        self::assertEquals(
+            [
+              'id' => 'ID',
+              'count' => 'New Counter',
+              'name' => 'name',
+              'address' => '地址',
+            ],
+            LogicName::resolvePropertyNames(Derived::class)
         );
     }
 }

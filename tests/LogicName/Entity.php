@@ -30,6 +30,5 @@ class Entity
 
     public static string $ignoreStatic;
 
-    // TODO: inherited properties
     // TODO: Trait
 }
