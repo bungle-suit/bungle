@@ -29,6 +29,4 @@ class Entity
     protected string $ignoreProtected;
 
     public static string $ignoreStatic;
-
-    // TODO: Trait
 }

@@ -49,4 +49,16 @@ final class LogicNameTest extends TestCase
             LogicName::resolvePropertyNames(Derived::class)
         );
     }
+
+    public function testResolveTraitsPropertyNames(): void
+    {
+        self::assertEquals(
+            [
+            'count' => '数量',
+            'modifier' => '修改人',
+            'modifyTime' => '修改时间',
+            ],
+            LogicName::resolvePropertyNames(MixedTraits::class),
+        );
+    }
 }
