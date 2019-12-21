@@ -38,6 +38,34 @@ final class LogicName
     }
 
     /**
+     * Resolve property logic names for the specific class.
+     *
+     * Returns name -> logicName array.
+     *
+     * Property names not marked with LogicName annotations has entry of
+     * name -> name, for easier detect not-defined property.
+     *
+     * Include inherited properties.
+     *
+     * Ignores private and protected properties.
+     */
+    public static function resolvePropertyNames(string $clsName): array
+    {
+        $cls = new \ReflectionClass($clsName);
+        $reader = new AnnotationReader();
+
+        $r = [];
+        foreach ($cls->getProperties(\ReflectionProperty::IS_PUBLIC) as $p) {
+            if ($p->isStatic()) {
+                continue;
+            }
+            $anno = $reader->getPropertyAnnotation($p, LogicName::class);
+            $r[$p->getName()] = $anno ? $anno->name : $p->getName();
+        }
+        return $r;
+    }
+
+    /**
      * Internal use
      */
     public static function getShortClassName(string $clsName): string

@@ -24,4 +24,15 @@ final class LogicNameTest extends TestCase
         $this->assertEquals('Foo', LogicName::getShortClassName('Foo'));
         $this->assertEquals('Entity', LogicName::getShortClassName(Entity::class));
     }
+
+    public function testResolvePropertyNames()
+    {
+        $this->assertEquals(
+            [
+            'id' => 'ID',
+            'count' => 'Counter',
+            'name' => 'name'],
+            LogicName::resolvePropertyNames(Entity::class),
+        );
+    }
 }
