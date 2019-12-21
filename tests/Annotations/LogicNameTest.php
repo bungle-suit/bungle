@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Bungle\Framework\Tests\LogicName;
+namespace Bungle\Framework\Tests\Annotations;
 
-use Bungle\Framework\LogicName\LogicName;
+use Bungle\Framework\Annotations\LogicName;
 use PHPUnit\Framework\TestCase;
 
 final class LogicNameTest extends TestCase
