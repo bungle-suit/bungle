@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mallows\LogicName;
+namespace Mallows\Framework\LogicName;
 
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\Annotation\Target;

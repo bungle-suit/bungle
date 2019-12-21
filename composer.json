@@ -10,12 +10,12 @@
     },
    "autoload": {
         "psr-4": {
-            "Mallows\\LogicName\\": "src/"
+            "Mallows\\Framework\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Mallows\\LogicName\\Tests\\": "tests/"
+            "Mallows\\Framework\\Tests\\": "tests/"
         }
     }
 }

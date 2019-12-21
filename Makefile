@@ -1,4 +1,4 @@
-.phony: test test-watch lint format lint-fix
+.phony: test test-watch lint format lint-fix regen-autoload
 
 test:
 	./vendor/bin/phpunit --bootstrap vendor/autoload.php tests/
@@ -16,3 +16,5 @@ format:
 	# ./vendor/bin/php-cs-fixer fix tests
 	./vendor/bin/php-cs-fixer fix src
 
+regen-autoload:
+	composer dump-autoload

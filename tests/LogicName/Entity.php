@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Mallows\LogicName\Tests;
+namespace Mallows\Framework\Tests\LogicName;
 
-use Mallows\LogicName\LogicName;
+use Mallows\Framework\LogicName\LogicName;
 
 /**
  * @LogicName("Order Bill")
