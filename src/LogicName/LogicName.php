@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mallows\Framework\LogicName;
+namespace Bungle\Framework\LogicName;
 
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\Annotation\Target;

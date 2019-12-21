@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Mallows\Framework\Tests\LogicName;
+namespace Bungle\Framework\Tests\LogicName;
 
-use Mallows\Framework\LogicName\LogicName;
+use Bungle\Framework\LogicName\LogicName;
 use PHPUnit\Framework\TestCase;
 
 final class LogicNameTest extends TestCase
