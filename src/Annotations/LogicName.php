@@ -11,7 +11,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 /**
  * Apply logic name to class and/or property.
  *
- * @Annotation;
+ * @Annotation
  * @Target({"CLASS","PROPERTY"})
  */
 final class LogicName
@@ -30,6 +30,11 @@ final class LogicName
      */
     public static function resolveClassName(string $clsName): string
     {
+        /*
+         * Doctrine annotations lib will failed if some annotations class not loaded,
+         */
+        require_once __DIR__.'/HighPrefix.php';
+
         $cls = new \ReflectionClass($clsName);
 
         $reader = new AnnotationReader();
@@ -51,6 +56,11 @@ final class LogicName
      */
     public static function resolvePropertyNames(string $clsName): array
     {
+        /*
+         * Doctrine annotations lib will failed if some annotations class not loaded,
+         */
+        require_once __DIR__.'/HighPrefix.php';
+
         $cls = new \ReflectionClass($clsName);
         $reader = new AnnotationReader();
 
