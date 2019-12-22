@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Bungle\Framework\Annotations;
 
 use Doctrine\Common\Annotations\Annotation;
+use Doctrine\Common\Annotations\Annotation\Required;
 use Doctrine\Common\Annotations\Annotation\Target;
 use Doctrine\Common\Annotations\AnnotationReader;
 
@@ -15,12 +16,10 @@ use Doctrine\Common\Annotations\AnnotationReader;
  */
 final class HighPrefix
 {
-    private string $high;
-
-    public function __construct(array $args)
-    {
-        $this->high = $args['value'];
-    }
+    /**
+     * @Required
+     */
+    public string $value;
 
     /**
      * Resolve high prefix for the specific class.
@@ -40,6 +39,6 @@ final class HighPrefix
         if (!$anno) {
             throw new AnnotationNotDefinedException();
         }
-        return $anno->high;
+        return $anno->value;
     }
 }

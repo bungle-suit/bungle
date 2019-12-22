@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bungle\Framework\Annotations;
 
 use Doctrine\Common\Annotations\Annotation;
+use Doctrine\Common\Annotations\Annotation\Required;
 use Doctrine\Common\Annotations\Annotation\Target;
 use Doctrine\Common\Annotations\AnnotationReader;
 
@@ -16,12 +17,10 @@ use Doctrine\Common\Annotations\AnnotationReader;
  */
 final class LogicName
 {
-    private string $name;
-
-    public function __construct(array $args)
-    {
-        $this->name = $args['value'];
-    }
+    /**
+     * @Required
+     */
+    public string $value;
 
     /**
      * resolve logic name for the specific class.
@@ -39,7 +38,7 @@ final class LogicName
 
         $reader = new AnnotationReader();
         $anno = $reader->getClassAnnotation($cls, LogicName::class);
-        return $anno ? $anno->name : self::getShortClassName($clsName);
+        return $anno ? $anno->value : self::getShortClassName($clsName);
     }
 
     /**
@@ -70,7 +69,7 @@ final class LogicName
                 continue;
             }
             $anno = $reader->getPropertyAnnotation($p, LogicName::class);
-            $r[$p->getName()] = $anno ? $anno->name : $p->getName();
+            $r[$p->getName()] = $anno ? $anno->value : $p->getName();
         }
         return $r;
     }
