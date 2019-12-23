@@ -10,12 +10,12 @@
     },
    "autoload": {
         "psr-4": {
-            "Bungle\\Framework\\": "src/"
+            "Bungle\\FrameworkBundle\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Bungle\\Framework\\Tests\\": "tests/"
+            "Bungle\\FrameworkBundle\\Tests\\": "tests/"
         }
     }
 }

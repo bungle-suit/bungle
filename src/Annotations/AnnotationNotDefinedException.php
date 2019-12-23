@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Bungle\Framework\Annotations;
+namespace Bungle\FrameworkBundle\Annotations;
 
 /**
  * Raised if annotation not defined while it supposed to be.

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Bungle\Framework\Tests\Annotations;
+namespace Bungle\FrameworkBundle\Tests\Annotations;
 
-use Bungle\Framework\Annotations\LogicName;
+use Bungle\FrameworkBundle\Annotations\LogicName;
 
 trait Modifier
 {

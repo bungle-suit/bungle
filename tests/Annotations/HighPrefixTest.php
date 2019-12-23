@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Bungle\Framework\Tests\Annotations;
+namespace Bungle\FrameworkBundle\Tests\Annotations;
 
 use PHPUnit\Framework\TestCase;
-use Bungle\Framework\Annotations\HighPrefix;
-use Bungle\Framework\Annotations\AnnotationNotDefinedException;
+use Bungle\FrameworkBundle\Annotations\HighPrefix;
+use Bungle\FrameworkBundle\Annotations\AnnotationNotDefinedException;
 
 final class HighPrefixTest extends TestCase
 {
