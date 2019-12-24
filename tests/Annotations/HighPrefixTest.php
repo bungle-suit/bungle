@@ -11,7 +11,7 @@ final class HighPrefixTest extends TestCase
 {
     public function testResolveHighPrefix(): void
     {
-        self::assertEquals('基础实体对象', HighPrefix::resolveHighPrefix(Entity::class));
+        self::assertEquals('ent', HighPrefix::resolveHighPrefix(Entity::class));
     }
 
     public function testResolveHighPrefixNotDefined(): void
@@ -19,5 +19,12 @@ final class HighPrefixTest extends TestCase
         self::expectException(AnnotationNotDefinedException::class);
 
         HighPrefix::resolveHighPrefix(HighPrefixTest::class);
+    }
+
+    public function testInvalidHighPrefixFormat(): void
+    {
+        self::expectException(\UnexpectedValueException::class);
+        
+        HighPrefix::resolveHighPrefix(InvalidPrefix::class);
     }
 }

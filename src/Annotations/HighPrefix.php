@@ -39,6 +39,11 @@ final class HighPrefix
         if (!$anno) {
             throw new AnnotationNotDefinedException();
         }
-        return $anno->value;
+
+        $high = $anno->value;
+        if (preg_match('/^[a-z]{3}$/', $high) === 0) {
+            throw new \UnexpectedValueException("Invalid format of high value '$high' of Entity '$clsName'");
+        }
+        return $high;
     }
 }

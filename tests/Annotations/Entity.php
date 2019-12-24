@@ -9,7 +9,7 @@ use Bungle\FrameworkBundle\Annotations\HighPrefix;
 
 /**
  * @LogicName("Order Bill")
- * @HighPrefix("基础实体对象")
+ * @HighPrefix("ent")
  */
 class Entity
 {

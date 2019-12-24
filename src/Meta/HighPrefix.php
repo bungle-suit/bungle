@@ -15,6 +15,7 @@ final class HighPrefix
     public function __construct(EntityDiscover $discover)
     {
         $this->highClsMap = self::scanMap($discover);
+        // TODO: generate source code, and load $highClsMap from php file.
     }
 
     /**
