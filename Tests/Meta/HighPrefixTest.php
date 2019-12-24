@@ -37,7 +37,7 @@ final class HighPrefixTest extends TestCase
     {
         self::expectException(\AssertionError::class);
 
-         new HighPrefix(new SimpleEntityDiscover([
+        new HighPrefix(new SimpleEntityDiscover([
           Order::class,
           Order::class,
          ]));

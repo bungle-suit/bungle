@@ -9,14 +9,10 @@
         "doctrine/annotations": "^1.8",
         "beberlei/assert": "^3.2"
     },
-   "autoload": {
-        "psr-4": {
-            "Bungle\\FrameworkBundle\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Bungle\\FrameworkBundle\\Tests\\": "tests/"
-        }
+    "autoload": {
+        "psr-4": { "Bungle\\FrameworkBundle\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     }
 }

@@ -8,13 +8,13 @@ use Bungle\FrameworkBundle\Annotations\LogicName;
 
 class Derived extends Entity
 {
-  /**
-   * @LogicName("New Counter")
-   */
+    /**
+     * @LogicName("New Counter")
+     */
     public int $count;
 
-  /**
-   * @LogicName("地址")
-   */
+    /**
+     * @LogicName("地址")
+     */
     public string $address;
 }
