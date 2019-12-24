@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Bungle\FrameworkBundle\Meta\HighPrefix;
 use Bungle\FrameworkBundle\Meta\EntityDiscover;
 use Bungle\FrameworkBundle\Meta\SimpleEntityDiscover;
+use Bungle\FrameworkBundle\Annotations\AnnotationNotDefinedException;
 
 final class HighPrefixTest extends TestCase
 {
@@ -28,20 +29,27 @@ final class HighPrefixTest extends TestCase
 
     public function test(): void
     {
-        $prefixer = new HighPrefix(new SimpleEntityDiscover([
-        Order::class,
-        ]));
+        $prefixer = new HighPrefix(new SimpleEntityDiscover([Order::class]));
         self::assertEquals(Order::class, $prefixer->getClass('ord'));
         self::assertEquals('ord', $prefixer->getHigh(Order::class));
     }
 
     public function testDupHigh(): void
     {
-        self::markTestSkipped('TODO');
+        self::expectException(\AssertionError::class);
+
+         new HighPrefix(new SimpleEntityDiscover([
+          Order::class,
+          Order::class,
+         ]));
     }
 
-    public function testInvalidFormat(): void
+    public function testHighNotDefined(): void
     {
-        self::markTestSkipped('TODO');
+        self::expectException(AnnotationNotDefinedException::class);
+        new HighPrefix(new SimpleEntityDiscover([
+          Order::class,
+          self::class,
+        ]));
     }
 }

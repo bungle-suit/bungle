@@ -1,10 +1,10 @@
 .phony: test test-watch lint format lint-fix regen-autoload
 
 test:
-	./vendor/bin/phpunit --bootstrap vendor/autoload.php tests/
+	./vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/
 
 test-watch:
-	noisy.py -d 'tests src' -e .php -- './vendor/bin/phpunit --bootstrap vendor/autoload.php tests/'
+	noisy.py -d 'tests src' -e .php -- './vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/'
 
 lint:
 	./vendor/bin/phpcs --standard=PSR2 src tests

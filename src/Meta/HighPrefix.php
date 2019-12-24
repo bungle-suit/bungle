@@ -45,9 +45,17 @@ final class HighPrefix
     // returns high -> className
     private static function scanMap(EntityDiscover $discover): array
     {
+        $get = fn (array $a, string $k) => $a[$k]??'';
+
         $r = [];
-        foreach ($discover->getAllEntities() as $cls) {
-            $r[HighPrefixAnno::resolveHighPrefix($cls)] = $cls;
+        $entities = $discover->getAllEntities();
+        foreach ($entities as $cls) {
+            $high = HighPrefixAnno::resolveHighPrefix($cls);
+            assert(
+                !array_key_exists($high, $r),
+                "Duplicate high '$high' defined on '$cls' and '{$get($r, $high)}",
+            );
+            $r[$high] = $cls;
         }
         return $r;
     }
