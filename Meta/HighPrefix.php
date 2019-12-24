@@ -59,7 +59,11 @@ final class HighPrefix
         $r = [];
         $entities = $discover->getAllEntities();
         foreach ($entities as $cls) {
-            $high = HighPrefixAnno::resolveHighPrefix($cls);
+            $high = HighPrefixAnno::loadHighPrefix($cls);
+            if (!$high) {
+                continue;
+            }
+
             assert(
                 !array_key_exists($high, $r),
                 "Duplicate high '$high' defined on '$cls' and '{$get($r, $high)}",

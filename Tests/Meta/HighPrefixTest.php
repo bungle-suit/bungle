@@ -45,12 +45,12 @@ final class HighPrefixTest extends TestCase
          ]));
     }
 
-    public function testHighNotDefined(): void
+    public function testIgnoreAnnoNotDefined(): void
     {
-        self::expectException(AnnotationNotDefinedException::class);
-        new HighPrefix(new SimpleEntityDiscover([
+        $prefixer = new HighPrefix(new SimpleEntityDiscover([
           Order::class,
           self::class,
         ]));
+        self::assertEquals(['ord'], $prefixer->getPrefixes());
     }
 }

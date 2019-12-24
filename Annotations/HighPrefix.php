@@ -24,9 +24,9 @@ final class HighPrefix
     /**
      * Resolve high prefix for the specific class.
      *
-     * @throws AnnotationNotDefinedException if @@HighPrefix not defined.
+     * Returns null if the Annotation not defined.
      */
-    public static function resolveHighPrefix(string $clsName): string
+    public static function loadHighPrefix(string $clsName): ?string
     {
         /*
          * Doctrine annotations lib will failed if some annotations class not loaded,
@@ -37,7 +37,7 @@ final class HighPrefix
         $reader = new AnnotationReader();
         $anno = $reader->getClassAnnotation($cls, HighPrefix::class);
         if (!$anno) {
-            throw new AnnotationNotDefinedException();
+            return null;
         }
 
         $high = $anno->value;

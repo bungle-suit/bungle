@@ -9,22 +9,20 @@ use Bungle\FrameworkBundle\Annotations\AnnotationNotDefinedException;
 
 final class HighPrefixTest extends TestCase
 {
-    public function testResolveHighPrefix(): void
+    public function testLoadHighPrefix(): void
     {
-        self::assertEquals('ent', HighPrefix::resolveHighPrefix(Entity::class));
+        self::assertEquals('ent', HighPrefix::loadHighPrefix(Entity::class));
     }
 
-    public function testResolveHighPrefixNotDefined(): void
+    public function testLoadHighPrefixNotDefined(): void
     {
-        self::expectException(AnnotationNotDefinedException::class);
-
-        HighPrefix::resolveHighPrefix(HighPrefixTest::class);
+        self::assertNull(HighPrefix::loadHighPrefix(HighPrefixTest::class));
     }
 
     public function testInvalidHighPrefixFormat(): void
     {
         self::expectException(\UnexpectedValueException::class);
         
-        HighPrefix::resolveHighPrefix(InvalidPrefix::class);
+        HighPrefix::loadHighPrefix(InvalidPrefix::class);
     }
 }
