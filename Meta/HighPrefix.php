@@ -19,6 +19,14 @@ final class HighPrefix
     }
 
     /**
+     * Return all high prefixes
+     */
+    public function getPrefixes(): array
+    {
+        return array_keys($this->highClsMap);
+    }
+
+    /**
      * Get high prefix from clsName.
      */
     public function getHigh(string $clsName): string

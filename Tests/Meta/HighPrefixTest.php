@@ -24,6 +24,7 @@ final class HighPrefixTest extends TestCase
 
         $prefixer = new HighPrefix(new SimpleEntityDiscover([]));
         $prefixer->getClass('Foo');
+        self::assertEmpty($prefixer->getPrefixes());
     }
 
     public function test(): void
@@ -31,6 +32,7 @@ final class HighPrefixTest extends TestCase
         $prefixer = new HighPrefix(new SimpleEntityDiscover([Order::class]));
         self::assertEquals(Order::class, $prefixer->getClass('ord'));
         self::assertEquals('ord', $prefixer->getHigh(Order::class));
+        self::assertEquals(['ord'], $prefixer->getPrefixes());
     }
 
     public function testDupHigh(): void
