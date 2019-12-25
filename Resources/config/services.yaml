@@ -16,3 +16,10 @@ services:
 
   Bungle\FrameworkBundle\Meta\LogicName: '@bungle.framework.logic_name'
   Bungle\FrameworkBundle\Meta\HighPrefix: '@bungle.framework.high_prefix'
+
+  bungle.framework.state_machine.transition_event_listener:
+    public: false
+    class: Bungle\FrameworkBundle\StateMachine\EventListener\TransitionEventListener 
+    tags:
+      - { name: kernel.event_listener, event: workflow.transition }
+    arguments: ["@bungle.framework.high_prefix"]

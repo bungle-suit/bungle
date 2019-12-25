@@ -7,15 +7,22 @@ use PHPUnit\Framework\TestCase;
 use Bungle\FrameworkBundle\DependencyInjection\BungleFrameworkExtension;
 use Bungle\FrameworkBundle\Meta\LogicName;
 use Bungle\FrameworkBundle\Meta\HighPrefix;
+use Bungle\FrameworkBundle\StateMachine\EventListener\TransitionEventListener;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 final class BungleFrameworkExtensionTest extends TestCase
 {
-    public function testLoad(): void
-    {
-        $container = new ContainerBuilder();
-        (new BungleFrameworkExtension())->load([], $container);
+    private ContainerBuilder $container;
 
+    public function setUp(): void
+    {
+        $this->container = new ContainerBuilder();
+        (new BungleFrameworkExtension())->load([], $this->container);
+    }
+
+    public function testLoadHighPrefixLogicName(): void
+    {
+        $container = $this->container;
         self::assertTrue($container->has('bungle.framework.logic_name'));
         self::assertTrue($container->has('bungle.framework.high_prefix'));
 
@@ -26,5 +33,13 @@ final class BungleFrameworkExtensionTest extends TestCase
         $highPrefix = $container->get('bungle.framework.high_prefix');
         self::assertInstanceOf(HighPrefix::class, $highPrefix);
         self::assertSame($highPrefix, $container->get(HighPrefix::class));
+    }
+
+    public function testStateMachine(): void
+    {
+        $container = $this->container;
+      
+        $transitionListener = $container->get('bungle.framework.state_machine.transition_event_listener');
+        self::assertInstanceOf(TransitionEventListener::class, $transitionListener);
     }
 }
