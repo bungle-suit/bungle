@@ -30,7 +30,7 @@ final class TransitionEventListener
         $sttClass = static::getSTTClass($entityClass);
         assert(($sttClass.'::getHighPrefix')() == $this->highPrefix->getHigh($entityClass));
 
-        $steps = $sttClass::getActionSteps()[$event->getTransition()->getName()];
+        $steps = $this->getSteps($subject, $event->getTransition()->getName());
         $ctx = new StepContext($event->getWorkflow(), $event->getTransition());
         foreach ($steps as $step) {
             call_user_func($step, $subject, $ctx);
@@ -46,5 +46,23 @@ final class TransitionEventListener
         $words[count($words)-1] .= 'STT';
         $words[count($words)-2] = 'STT';
         return implode('\\', $words);
+    }
+
+    private function getSteps($subject, string $transitionName): array
+    {
+        $entityClass = \get_class($subject);
+        $sttClass = static::getSTTClass($entityClass);
+        $sttHigh = ($sttClass.'::getHighPrefix')();
+        assert($sttHigh == $this->highPrefix->getHigh($entityClass));
+
+        $trans = $sttClass::getActionSteps();
+        if (!isset($trans[$transitionName])) {
+            trigger_error(
+                sprintf('StateMachine %s transition "%s" not defined', $sttHigh, $transitionName),
+                E_USER_WARNING
+            );
+            return [];
+        }
+        return $trans[$transitionName];
     }
 }

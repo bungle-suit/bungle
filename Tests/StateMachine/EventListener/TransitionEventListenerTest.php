@@ -61,8 +61,10 @@ final class TransitionEventListenerTest extends TestCase
 
     public function testIgnoreStepsNotConfigured(): void
     {
-        self::markTestSkipped('TODO');
-      // TODO  Ignore, but issue a warning
+        self::expectWarning();
+        $this->ord->state = 'saved';
+        $this->sm->apply($this->ord, 'print');
+        self::assertEquals('saved', $this->ord->state);
     }
 
     public function testThrowExceptionToAbort(): void
@@ -77,6 +79,7 @@ final class TransitionEventListenerTest extends TestCase
         Entity::INITIAL_STATE, 'saved'])
           ->addTransition(new Transition('save', Entity::INITIAL_STATE, 'saved'))
           ->addTransition(new Transition('update', 'saved', 'saved'))
+          ->addTransition(new Transition('print', 'saved', 'saved'))
           ->build();
 
         $marking = new PropertyMarkingStore('state');
