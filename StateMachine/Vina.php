@@ -37,4 +37,21 @@ class Vina
         }
         return $r;
     }
+
+    /**
+     * Return associated array of state/place name -> title
+     * for StateMachine attached with $subject
+     */
+    public function getStateTitles($subject): array
+    {
+        $sm = $this->registry->get($subject);
+        $store = $sm->getMetadataStore();
+        $r = [];
+        foreach ($sm->getDefinition()->getPlaces() as $place) {
+            $meta = $store->getPlaceMetadata($place);
+            $r[$place] = $meta['title'] ?? (
+                $place == Entity::INITIAL_STATE ? '未保存' : $place);
+        }
+        return $r;
+    }
 }

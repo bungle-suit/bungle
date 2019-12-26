@@ -30,6 +30,17 @@ final class VinaTest extends TestCase
         ], $vina->getTransitionTitles(new Order()));
     }
 
+    public function testGetStateTitles(): void
+    {
+        $vina = new Vina(self::createRegistry());
+        self::assertEquals([
+            Entity::INITIAL_STATE => '未保存',
+            'saved' => '已保存',
+            'checked' => '已审核',
+            'unchecked' => 'unchecked',
+        ], $vina->getStateTitles(new Order()));
+    }
+
     private static function createOrderWorkflow(): StateMachine
     {
         $trans = [
@@ -47,10 +58,13 @@ final class VinaTest extends TestCase
         $definition = (new DefinitionBuilder())
           ->setMetadataStore(new InMemoryMetadataStore(
               [],
-              [],
+              [
+                  'saved' => ['title' => '已保存'],
+                  'checked' => ['title' => '已审核'],
+              ],
               $transMeta,
           ))
-          ->addPlaces([Entity::INITIAL_STATE, 'saved', 'checked'])
+          ->addPlaces([Entity::INITIAL_STATE, 'saved', 'checked', 'unchecked'])
           ->addTransitions($trans)
           ->build();
 
