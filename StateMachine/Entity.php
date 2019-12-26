@@ -17,7 +17,7 @@ abstract class Entity
 
     public string $id = '';
 
-  // Stores current state, we should use 'initial' as the first
-  // state.
+    // Stores current state, we should use 'initial' as the first
+    // state.
     public string $state = Entity::INITIAL_STATE;
 }
