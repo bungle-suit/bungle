@@ -27,7 +27,11 @@ class PropertyMarkingStore implements MarkingStoreInterface
     {
         $cur = $subject->{$this->property};
         if (!is_string($cur)) {
-            assert(false, sprintf("Workspace object '%s' state property '%s' should returns string", \get_class($subject), $this->property));
+            assert(false, sprintf(
+                "Workspace object '%s' state property '%s' should returns string",
+                \get_class($subject),
+                $this->property
+            ));
         }
         return new Marking([$cur => 1]);
     }

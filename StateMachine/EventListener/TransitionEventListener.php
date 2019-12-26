@@ -5,6 +5,7 @@ namespace Bungle\FrameworkBundle\StateMachine\EventListener;
 
 use Symfony\Component\Workflow\Event\TransitionEvent;
 use Bungle\FrameworkBundle\Meta\HighPrefix;
+use Bungle\FrameworkBundle\StateMachine\StepContext;
 
 /**
  * Host STTInterfaces, run transition steps on state
@@ -30,8 +31,9 @@ final class TransitionEventListener
         assert(($sttClass.'::getHighPrefix')() == $this->highPrefix->getHigh($entityClass));
 
         $steps = $sttClass::getActionSteps()[$event->getTransition()->getName()];
+        $ctx = new StepContext($event->getWorkflow(), $event->getTransition());
         foreach ($steps as $step) {
-            call_user_func($step, $subject);
+            call_user_func($step, $subject, $ctx);
         }
     }
 

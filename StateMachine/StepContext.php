@@ -11,10 +11,10 @@ final class StepContext
     private $transition;
     private $workflow;
 
-    public function __construct(Transition $transition, WorkflowInterface $workflow)
+    public function __construct(WorkflowInterface $workflow, Transition $transition)
     {
-        $this->transition = $transition;
         $this->workflow = $workflow;
+        $this->transition = $transition;
     }
 
     public function getTransition(): Transition
@@ -25,5 +25,20 @@ final class StepContext
     public function getWorkflow(): WorkflowInterface
     {
         return $this->workflow;
+    }
+
+    public function getTransitionName(): string
+    {
+        return $this->transition->getName();
+    }
+
+    public function getFromState(): string
+    {
+        return $this->transition->getFroms();
+    }
+
+    public function getToState(): string
+    {
+        return $this->transition->getTos();
     }
 }

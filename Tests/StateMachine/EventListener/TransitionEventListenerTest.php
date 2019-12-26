@@ -14,7 +14,7 @@ use Symfony\Component\Workflow\DefinitionBuilder;
 use Symfony\Component\Workflow\Event\TransitionEvent;
 use Symfony\Component\Workflow\Marking;
 use Symfony\Component\Workflow\Transition;
-use Symfony\Component\Workflow\Workflow;
+use Symfony\Component\Workflow\StateMachine;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 final class TransitionEventListenerTest extends TestCase
@@ -27,31 +27,59 @@ final class TransitionEventListenerTest extends TestCase
         self::assertEquals('Order\STT\BarSTT', $f('Order\Entity\Bar'));
     }
 
-    public function testInvoke(): void
+    private EventDispatcher $dispatcher;
+    private StateMachine $sm;
+    private Order $ord;
+
+    public function setUp(): void
     {
-        $dispatcher = new EventDispatcher();
+        $this->dispatcher = new EventDispatcher();
         $listener = new TransitionEventListener(
             new HighPrefix(
                 new SimpleEntityDiscover([Order::class])
             )
         );
-        $dispatcher->addListener('workflow.transition', $listener);
-        $workflow = self::createOrderWorkflow($dispatcher);
-        $ord = new Order();
-        $workflow->apply($ord, 'save');
-
-        self::assertEquals('foo', $ord->code);
+        $this->dispatcher->addListener('workflow.transition', $listener);
+        $this->sm = self::createOrderWorkflow($this->dispatcher);
+        $this->ord = new Order();
     }
 
-    private static function createOrderWorkflow(EventDispatcher $dispatcher): Workflow
+    public function testInvoke(): void
+    {
+        $this->sm->apply($this->ord, 'save');
+        self::assertEquals('foo', $this->ord->code);
+        self::assertEquals('saved', $this->ord->state);
+    }
+
+    public function testInvokeWithContext(): void
+    {
+        $this->ord->state = 'saved';
+        $this->sm->apply($this->ord, 'update');
+        self::assertEquals('update', $this->ord->code);
+        self::assertEquals('saved', $this->ord->state);
+    }
+
+    public function testIgnoreStepsNotConfigured(): void
+    {
+        self::markTestSkipped('TODO');
+      // TODO  Ignore, but issue a warning
+    }
+
+    public function testThrowExceptionToAbort(): void
+    {
+        self::markTestSkipped('TODO');
+    }
+
+    private static function createOrderWorkflow(EventDispatcher $dispatcher): StateMachine
     {
         $definitionBuilder = new DefinitionBuilder();
         $definition = $definitionBuilder->addPlaces([
         Entity::INITIAL_STATE, 'saved'])
-                                      ->addTransition(new Transition('save', Entity::INITIAL_STATE, 'saved'))
-                                      ->build();
+          ->addTransition(new Transition('save', Entity::INITIAL_STATE, 'saved'))
+          ->addTransition(new Transition('update', 'saved', 'saved'))
+          ->build();
 
         $marking = new PropertyMarkingStore('state');
-        return new Workflow($definition, $marking, $dispatcher);
+        return new StateMachine($definition, $marking, $dispatcher, 'ord');
     }
 }
