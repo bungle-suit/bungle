@@ -14,6 +14,16 @@ class OrderSTT implements STTInterface
         $ord->code = 'foo';
     }
 
+    public static function setCodeBar(Order $ord): void
+    {
+        $ord->code = 'bar';
+    }
+
+    public function abort(Order $ord): string
+    {
+        return 'Abort';
+    }
+
     public function updateCodeWithTransitionName(Order $ord, StepContext $ctx): void
     {
         $ord->code = $ctx->getTransitionName();
@@ -32,6 +42,11 @@ class OrderSTT implements STTInterface
           ],
           'update' => [
             [static::class, 'updateCodeWithTransitionName'],
+          ],
+          'check' => [
+            [static::class, 'setCodeBar'],
+            [static::class, 'abort'],
+            [static::class, 'setCodeFoo'],
           ],
         ];
     }

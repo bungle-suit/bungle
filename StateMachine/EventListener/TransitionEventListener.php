@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Bungle\FrameworkBundle\StateMachine\EventListener;
 
 use Symfony\Component\Workflow\Event\TransitionEvent;
+use Bungle\FrameworkBundle\Exceptions\TransitionException;
 use Bungle\FrameworkBundle\Meta\HighPrefix;
 use Bungle\FrameworkBundle\StateMachine\StepContext;
 
@@ -33,7 +34,10 @@ final class TransitionEventListener
         $steps = $this->getSteps($subject, $event->getTransition()->getName());
         $ctx = new StepContext($event->getWorkflow(), $event->getTransition());
         foreach ($steps as $step) {
-            call_user_func($step, $subject, $ctx);
+            $msg = call_user_func($step, $subject, $ctx);
+            if (is_string($msg)) {
+                throw new TransitionException($msg);
+            }
         }
     }
 

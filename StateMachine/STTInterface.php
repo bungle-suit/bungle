@@ -17,18 +17,21 @@ namespace Bungle\FrameworkBundle\StateMachine;
  */
 interface STTInterface
 {
-  /**
-   * Returns high prefix this STT table work for.
-   */
+    /**
+     * Returns high prefix this STT table work for.
+     */
     public static function getHighPrefix(): string;
 
-  /**
-   * Returns array, action -> steps.
-   *
-   * `action` is transition action name, defined as symfony/workflow transition metadata item: `action`.
-   *
-   * Steps is an array of callbacks executed in order.
-   * Step accept two arguments: the object, StepContext.
-   */
+    /**
+     * Returns array, action -> steps.
+     *
+     * `action` is transition action name, defined as symfony/workflow transition metadata item: `action`.
+     *
+     * Steps is an array of callbacks executed in order.
+     * Step accept two arguments: the object, StepContext.
+     * If step function returns non-null string, the transition abort,
+     * and raise exception TransitonException with the returned string
+     * as message.
+     */
     public static function getActionSteps(): array;
 }

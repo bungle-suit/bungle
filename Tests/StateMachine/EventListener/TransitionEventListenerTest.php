@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Bungle\FrameworkBundle\Tests\StateMachine\EventListener;
 
 use Bungle\FrameworkBundle\Meta\HighPrefix;
+use Bungle\FrameworkBundle\Exceptions\TransitionException;
 use Bungle\FrameworkBundle\Meta\SimpleEntityDiscover;
 use Bungle\FrameworkBundle\StateMachine\Entity;
 use Bungle\FrameworkBundle\StateMachine\MarkingStore\PropertyMarkingStore;
@@ -67,19 +68,30 @@ final class TransitionEventListenerTest extends TestCase
         self::assertEquals('saved', $this->ord->state);
     }
 
-    public function testThrowExceptionToAbort(): void
+    public function testReturnMessageToAbort(): void
     {
-        self::markTestSkipped('TODO');
+        $hit = false;
+        try {
+            $this->ord->state = 'saved';
+            $this->sm->apply($this->ord, 'check');
+        } catch (TransitionException $e) {
+            self::assertEquals('Abort', $e->getMessage());
+            $hit = true;
+        }
+        self::assertTrue($hit);
+        self::assertEquals('bar', $this->ord->code);
+        self::assertEquals('saved', $this->ord->state);
     }
 
     private static function createOrderWorkflow(EventDispatcher $dispatcher): StateMachine
     {
         $definitionBuilder = new DefinitionBuilder();
         $definition = $definitionBuilder->addPlaces([
-        Entity::INITIAL_STATE, 'saved'])
+        Entity::INITIAL_STATE, 'saved', 'checked'])
           ->addTransition(new Transition('save', Entity::INITIAL_STATE, 'saved'))
           ->addTransition(new Transition('update', 'saved', 'saved'))
           ->addTransition(new Transition('print', 'saved', 'saved'))
+          ->addTransition(new Transition('check', 'saved', 'checked'))
           ->build();
 
         $marking = new PropertyMarkingStore('state');
