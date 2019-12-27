@@ -8,9 +8,12 @@ use Bungle\FrameworkBundle\Meta\HighPrefix;
 use Bungle\FrameworkBundle\Meta\LogicName;
 use Bungle\FrameworkBundle\StateMachine\EventListener\TransitionEventListener;
 use Bungle\FrameworkBundle\StateMachine\EventListener\TransitionRoleGuardListener;
+use Bungle\FrameworkBundle\StateMachine\Vina;
 use Bungle\FrameworkBundle\Tests\StateMachine\EventListener\FakeAuthorizationChecker;
+
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Workflow\Registry;
 
 final class BungleFrameworkExtensionTest extends TestCase
 {
@@ -47,5 +50,17 @@ final class BungleFrameworkExtensionTest extends TestCase
         $container->set('security.authorization_checker', new FakeAuthorizationChecker('Role_ADMIN'));
         $listener = $container->get('bungle.framework.state_machine.transition_role_guard_listener');
         self::assertInstanceOf(TransitionRoleGuardListener::class, $listener);
+    }
+
+    public function testVina(): void
+    {
+        $this->container->set('workflow.registry', new Registry());
+        $this->container->set(
+            'security.authorization_checker',
+            new FakeAuthorizationChecker('Role_ADMIN'),
+        );
+
+        $vina = $this->container->get('bungle.workflow.vina');
+        self::assertInstanceOf(Vina::class, $vina);
     }
 }

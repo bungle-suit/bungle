@@ -29,3 +29,11 @@ services:
     tags:
       - { name: kernel.event_listener, event: workflow.guard }
     arguments: ["@security.authorization_checker"]
+
+  bungle.workflow.vina:
+    public: false
+    class: Bungle\FrameworkBundle\StateMachine\Vina
+    arguments: ["@workflow.registry", "@security.authorization_checker"]
+
+  Bungle\FrameworkBundle\StateMachine: '@bungle.workflow.vina'
+
