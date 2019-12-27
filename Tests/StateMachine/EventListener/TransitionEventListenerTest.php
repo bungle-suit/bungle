@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Bungle\FrameworkBundle\Tests\StateMachine\EventListener;
 
 use Bungle\FrameworkBundle\Meta\HighPrefix;
-use Bungle\FrameworkBundle\Meta\SimpleEntityDiscover;
+use Bungle\FrameworkBundle\Meta\SimpleEntityLocator;
 use Bungle\FrameworkBundle\StateMachine\EventListener\TransitionEventListener;
 use Bungle\FrameworkBundle\Tests\StateMachine\Entity\Order;
 
@@ -16,7 +16,7 @@ final class TransitionEventListenerTest extends TestBase
 
         $listener = new TransitionEventListener(
             new HighPrefix(
-                new SimpleEntityDiscover([Order::class])
+                new SimpleEntityLocator([Order::class])
             )
         );
         $this->dispatcher->addListener('workflow.transition', $listener);

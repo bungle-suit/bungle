@@ -1,17 +1,17 @@
 services:
-  bungle.entity_discover:
-    class: Bungle\FrameworkBundle\Meta\SimpleEntityDiscover
+  bungle.entity_locator:
+    class: Bungle\FrameworkBundle\Meta\SimpleEntityLocator
     arguments: [[]]
 
   bungle.framework.logic_name:
     class: Bungle\FrameworkBundle\Meta\LogicName
     # By default use a empty EntityDiscover, use DoctrineBungleBridgeBundle to override
-    arguments: ["@bungle.entity_discover"]
+    arguments: ["@bungle.entity_locator"]
 
   bungle.framework.high_prefix:
     class: Bungle\FrameworkBundle\Meta\HighPrefix
     # By default use a empty EntityDiscover, use DoctrineBungleBridgeBundle to override
-    arguments: ["@bungle.entity_discover"]
+    arguments: ["@bungle.entity_locator"]
 
   Bungle\FrameworkBundle\Meta\LogicName: '@bungle.framework.logic_name'
   Bungle\FrameworkBundle\Meta\HighPrefix: '@bungle.framework.high_prefix'

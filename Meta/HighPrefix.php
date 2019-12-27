@@ -12,7 +12,7 @@ final class HighPrefix
 {
     private array $highClsMap;
 
-    public function __construct(EntityDiscover $discover)
+    public function __construct(EntityLocator $discover)
     {
         $this->highClsMap = self::scanMap($discover);
         // TODO: generate source code, and load $highClsMap from php file.
@@ -52,7 +52,7 @@ final class HighPrefix
     }
 
     // returns high -> className
-    private static function scanMap(EntityDiscover $discover): array
+    private static function scanMap(EntityLocator $discover): array
     {
         $get = fn (array $a, string $k) => $a[$k]??'';
 

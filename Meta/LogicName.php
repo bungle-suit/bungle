@@ -13,7 +13,7 @@ final class LogicName
     // entity class -> EntityLogicName instances
     private array $entities;
 
-    public function __construct(EntityDiscover $discover)
+    public function __construct(EntityLocator $discover)
     {
         // TODO: generate all source code on entity classes changes,
         // generate *all* source code in constructor to discover
@@ -37,7 +37,7 @@ final class LogicName
         return $this->entities[$entityCls];
     }
 
-    private static function scan(EntityDiscover $discover): array
+    private static function scan(EntityLocator $discover): array
     {
         $r = [];
         $entities = $discover->getAllEntities();

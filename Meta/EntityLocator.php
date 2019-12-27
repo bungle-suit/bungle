@@ -6,7 +6,7 @@ namespace Bungle\FrameworkBundle\Meta;
 /**
  * Interface support returns all entity class of current system.
  */
-interface EntityDiscover
+interface EntityLocator
 {
     /**
      * Return all entity class names of current system.
