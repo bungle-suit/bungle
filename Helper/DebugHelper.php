@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Bungle\FrameworkBundle\Helpers;
+namespace Bungle\FrameworkBundle\Helper;
 
 final class DebugHelper
 {

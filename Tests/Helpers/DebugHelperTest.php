@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Bungle\FrameworkBundle\Test\Helpers;
 
 use PHPUnit\Framework\TestCase;
-use Bungle\FrameworkBundle\Helpers\DebugHelper;
+use Bungle\FrameworkBundle\Helper\DebugHelper;
 
 final class DebugHelperTest extends TestCase
 {
