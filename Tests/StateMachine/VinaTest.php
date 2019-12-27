@@ -16,12 +16,25 @@ use Symfony\Component\Workflow\StateMachine;
 use Symfony\Component\Workflow\SupportStrategy\InstanceOfSupportStrategy;
 use Symfony\Component\Workflow\Transition;
 use Symfony\Component\Workflow\Metadata\InMemoryMetadataStore;
+use Bungle\FrameworkBundle\Tests\StateMachine\EventListener\FakeAuthorizationChecker;
 
 final class VinaTest extends TestCase
 {
+    private static function createVina():Vina
+    {
+        return new Vina(
+            self::createRegistry(),
+            new FakeAuthorizationChecker(
+                'ROLE_ord_save',
+                'ROLE_ord_print',
+                'Role_prd_new'
+            ),
+        );
+    }
+
     public function testGetTransitionTitles(): void
     {
-        $vina = new Vina(self::createRegistry());
+        $vina = self::createVina();
         self::assertEquals([
             'save' => '保存',
             'update' => '保存',
@@ -32,13 +45,22 @@ final class VinaTest extends TestCase
 
     public function testGetStateTitles(): void
     {
-        $vina = new Vina(self::createRegistry());
+        $vina = self::createVina();
         self::assertEquals([
             Entity::INITIAL_STATE => '未保存',
             'saved' => '已保存',
             'checked' => '已审核',
             'unchecked' => 'unchecked',
         ], $vina->getStateTitles(new Order()));
+    }
+
+    public function testGetPossibleTransitions(): void
+    {
+        $vina = self::createVina();
+        self::assertEquals(
+            ['save', 'print'],
+            $vina->getPossibleTransitions(new Order())
+        );
     }
 
     private static function createOrderWorkflow(): StateMachine
