@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Bungle\FrameworkBundle\StateMachine\EventListener;
 
 use Symfony\Component\Workflow\Event\TransitionEvent;
-use Bungle\FrameworkBundle\Exceptions\TransitionException;
+use Bungle\FrameworkBundle\Exception\TransitionException;
 use Bungle\FrameworkBundle\Meta\HighPrefix;
 use Bungle\FrameworkBundle\StateMachine\StepContext;
 

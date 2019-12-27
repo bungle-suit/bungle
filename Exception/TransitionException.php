@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Bungle\FrameworkBundle\Exceptions;
+namespace Bungle\FrameworkBundle\Exception;
 
 /**
  * It is exception raised during execute State Machine transition

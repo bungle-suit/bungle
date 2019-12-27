@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Bungle\FrameworkBundle\Tests\StateMachine\EventListener;
 
 use Bungle\FrameworkBundle\Meta\HighPrefix;
-use Bungle\FrameworkBundle\Exceptions\TransitionException;
+use Bungle\FrameworkBundle\Exception\TransitionException;
 use Bungle\FrameworkBundle\Meta\SimpleEntityDiscover;
 use Bungle\FrameworkBundle\StateMachine\Entity;
 use Bungle\FrameworkBundle\StateMachine\MarkingStore\PropertyMarkingStore;
