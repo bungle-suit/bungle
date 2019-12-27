@@ -23,3 +23,10 @@ services:
     tags:
       - { name: kernel.event_listener, event: workflow.transition }
     arguments: ["@bungle.framework.high_prefix"]
+
+  bungle.framework.state_machine.transition_role_guard_listener:
+    public: false
+    class: Bungle\FrameworkBundle\StateMachine\EventListener\TransitionRoleGuardListener  
+    tags:
+      - { name: kernel.event_listener, event: workflow.guard }
+    arguments: ["@security.authorization_checker"]
