@@ -4,45 +4,30 @@ declare(strict_types=1);
 namespace Bungle\FrameworkBundle\Tests\StateMachine\EventListener;
 
 use Bungle\FrameworkBundle\Meta\HighPrefix;
-use Bungle\FrameworkBundle\Exception\TransitionException;
 use Bungle\FrameworkBundle\Meta\SimpleEntityDiscover;
-use Bungle\FrameworkBundle\StateMachine\Entity;
-use Bungle\FrameworkBundle\StateMachine\MarkingStore\PropertyMarkingStore;
 use Bungle\FrameworkBundle\StateMachine\EventListener\TransitionEventListener;
 use Bungle\FrameworkBundle\Tests\StateMachine\Entity\Order;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Workflow\DefinitionBuilder;
-use Symfony\Component\Workflow\Event\TransitionEvent;
-use Symfony\Component\Workflow\Marking;
-use Symfony\Component\Workflow\Transition;
-use Symfony\Component\Workflow\StateMachine;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
-final class TransitionEventListenerTest extends TestCase
+final class TransitionEventListenerTest extends TestBase
 {
-    public function testGetSTTClass(): void
-    {
-        $f = TransitionEventListener::class.'::getSTTClass';
-
-        self::assertEquals('STT\FooSTT', $f('Entity\Foo'));
-        self::assertEquals('Order\STT\BarSTT', $f('Order\Entity\Bar'));
-    }
-
-    private EventDispatcher $dispatcher;
-    private StateMachine $sm;
-    private Order $ord;
-
     public function setUp(): void
     {
-        $this->dispatcher = new EventDispatcher();
+        parent::setUp();
+
         $listener = new TransitionEventListener(
             new HighPrefix(
                 new SimpleEntityDiscover([Order::class])
             )
         );
         $this->dispatcher->addListener('workflow.transition', $listener);
-        $this->sm = self::createOrderWorkflow($this->dispatcher);
-        $this->ord = new Order();
+    }
+
+    public function testGetSTTClass(): void
+    {
+        $f = TransitionEventListener::class.'::getSTTClass';
+
+        self::assertEquals('STT\FooSTT', $f('Entity\Foo'));
+        self::assertEquals('Order\STT\BarSTT', $f('Order\Entity\Bar'));
     }
 
     public function testInvoke(): void
@@ -66,35 +51,5 @@ final class TransitionEventListenerTest extends TestCase
         $this->ord->state = 'saved';
         $this->sm->apply($this->ord, 'print');
         self::assertEquals('saved', $this->ord->state);
-    }
-
-    public function testReturnMessageToAbort(): void
-    {
-        $hit = false;
-        try {
-            $this->ord->state = 'saved';
-            $this->sm->apply($this->ord, 'check');
-        } catch (TransitionException $e) {
-            self::assertEquals('Abort', $e->getMessage());
-            $hit = true;
-        }
-        self::assertTrue($hit);
-        self::assertEquals('bar', $this->ord->code);
-        self::assertEquals('saved', $this->ord->state);
-    }
-
-    private static function createOrderWorkflow(EventDispatcher $dispatcher): StateMachine
-    {
-        $definitionBuilder = new DefinitionBuilder();
-        $definition = $definitionBuilder->addPlaces([
-        Entity::INITIAL_STATE, 'saved', 'checked'])
-          ->addTransition(new Transition('save', Entity::INITIAL_STATE, 'saved'))
-          ->addTransition(new Transition('update', 'saved', 'saved'))
-          ->addTransition(new Transition('print', 'saved', 'saved'))
-          ->addTransition(new Transition('check', 'saved', 'checked'))
-          ->build();
-
-        $marking = new PropertyMarkingStore('state');
-        return new StateMachine($definition, $marking, $dispatcher, 'ord');
     }
 }
