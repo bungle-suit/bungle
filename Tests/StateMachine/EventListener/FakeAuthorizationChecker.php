@@ -7,10 +7,10 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class FakeAuthorizationChecker implements AuthorizationCheckerInterface
 {
-    private string $wantedRole;
-    public function __construct(string $wantedRole)
+    private array $wantedRoles;
+    public function __construct(string ...$wantedRoles)
     {
-        $this->wantedRole = $wantedRole;
+        $this->wantedRoles = $wantedRoles;
     }
   
     public function isGranted($attribute, $subject = null): bool
@@ -19,6 +19,6 @@ class FakeAuthorizationChecker implements AuthorizationCheckerInterface
             return false;
         }
 
-        return $attribute == $this->wantedRole;
+        return in_array($attribute, $this->wantedRoles);
     }
 }
