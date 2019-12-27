@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Bungle\FrameworkBundle\Tests\Annotations;
 
-use Bungle\FrameworkBundle\Annotations\LogicName;
+use Bungle\FrameworkBundle\Annotation\LogicName;
 
 trait Modifier
 {

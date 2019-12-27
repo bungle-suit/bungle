@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Bungle\FrameworkBundle\Meta;
 
-use Bungle\FrameworkBundle\Annotations\HighPrefix as HighPrefixAnno;
+use Bungle\FrameworkBundle\Annotation\HighPrefix as HighPrefixAnno;
 
 /**
  * HighPrefix service provide function related to high prefix.

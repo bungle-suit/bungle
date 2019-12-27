@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Bungle\FrameworkBundle\Meta;
 
-use Bungle\FrameworkBundle\Annotations\LogicName as LogicNameAnno;
+use Bungle\FrameworkBundle\Annotation\LogicName as LogicNameAnno;
 
 /**
  * LogicName service provide ops related to logic names.

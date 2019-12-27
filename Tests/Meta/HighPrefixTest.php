@@ -6,7 +6,7 @@ namespace Bungle\FrameworkBundle\Tests\Meta;
 use PHPUnit\Framework\TestCase;
 use Bungle\FrameworkBundle\Meta\HighPrefix;
 use Bungle\FrameworkBundle\Meta\SimpleEntityDiscover;
-use Bungle\FrameworkBundle\Annotations\AnnotationNotDefinedException;
+use Bungle\FrameworkBundle\Annotation\AnnotationNotDefinedException;
 
 final class HighPrefixTest extends TestCase
 {
