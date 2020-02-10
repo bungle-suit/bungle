@@ -7,6 +7,16 @@ final class RoleRegistry
 {
     public array $defs = [];
 
+    /**
+     * $providers: array of RoleDefinitionProviderInterface.
+     */
+    public function __construct(array $providers = [])
+    {
+        foreach ($providers as $p) {
+            $this->adds($p->getRoleDefinitions());
+        }
+    }
+
     public function add(RoleDefinition $roleDef): void
     {
         assert(
