@@ -56,7 +56,8 @@ class Vina
         foreach ($sm->getDefinition()->getPlaces() as $place) {
             $meta = $store->getPlaceMetadata($place);
             $r[$place] = $meta['title'] ?? (
-                $place == Entity::INITIAL_STATE ? '未保存' : $place);
+                $place == Entity::INITIAL_STATE ? '未保存' : $place
+            );
         }
         return $r;
     }
