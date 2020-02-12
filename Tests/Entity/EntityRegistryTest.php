@@ -78,4 +78,28 @@ final class EntityRegistryTest extends TestCase
         $reg = new EntityRegistry($dis, $resolver);
         $reg->getHigh(self::ORDER);
     }
+
+    public function testGetEntityByHigh(): void
+    {
+        $dis = new ArrayEntityDiscovery([
+          self::ORDER,
+          self::ORDER_LINE,
+        ]);
+        $resolver = new ArrayHighResolver([
+          self::ORDER => 'ord',
+          self::ORDER_LINE => 'oln',
+        ]);
+        $reg = new EntityRegistry($dis, $resolver);
+        self::assertEquals(self::ORDER, $reg->getEntityByHigh('ord'));
+    }
+
+    public function testGetEntityByHighNotFound(): void
+    {
+        $this->expectExceptionObject(Exceptions::highNotFound('ord'));
+
+        $dis = new ArrayEntityDiscovery([ ]);
+        $resolver = new ArrayHighResolver([ ]);
+        $reg = new EntityRegistry($dis, $resolver);
+        $reg->getEntityByHigh('ord');
+    }
 }

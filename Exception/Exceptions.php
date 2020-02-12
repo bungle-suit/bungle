@@ -18,4 +18,9 @@ final class Exceptions
     {
         return new \DomainException("Entity class '$cls1' and '$cls2', has the same high code: $high");
     }
+
+    public static function highNotFound(string $high): \DomainException
+    {
+        return new \DomainException("High not found: $high");
+    }
 }

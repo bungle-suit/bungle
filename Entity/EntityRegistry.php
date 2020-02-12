@@ -36,6 +36,21 @@ class EntityRegistry
         return $r;
     }
 
+    /**
+     * Get Entity class by high prefix
+     */
+    public function getEntityByHigh(string $high): string
+    {
+        if (!isset($this->highClsMap)) {
+            $this->highClsMap = $this->scanMap($this->entities);
+        }
+
+        if (!($r = $this->highClsMap[$high] ?? '')) {
+            throw Exceptions::highNotFound($high);
+        }
+        return $r;
+    }
+
     private function scanMap(array $entities): array
     {
         $r = [];
