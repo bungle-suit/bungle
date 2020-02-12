@@ -31,4 +31,9 @@ final class Exceptions
         }
         return new \DomainException("class '$entityClass' not declared as entity");
     }
+
+    public function propertyNotFound(string $entityClass, string $propertyName): \DomainException
+    {
+        return new \DomainException("Can not found property $propertyName in entity $entityClass");
+    }
 }
