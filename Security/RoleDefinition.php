@@ -28,14 +28,14 @@ class RoleDefinition
         $this->description = $description;
     }
 
-    public static function newActionRole(String $high, String $action): String
+    public static function newActionRole(string $high, string $action): string
     {
         return "ROLE_${high}_$action";
     }
 
     // Parse state machine action role name, returns array with two items:
     // [$high, $action].
-    public function parseActionRole(String $roleName): array
+    public function parseActionRole(string $roleName): array
     {
         return array_slice(explode('_', $roleName), 1);
     }

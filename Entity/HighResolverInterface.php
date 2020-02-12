@@ -10,6 +10,6 @@ interface HighResolverInterface {
   /**
    * Returns null if high not defined in that entity class.
    */
-  function resolveHigh(String $entityCls): ?String;
+  function resolveHigh(string $entityCls): ?string;
 }
 

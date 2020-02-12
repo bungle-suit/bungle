@@ -14,7 +14,7 @@ class ArrayHighResolver implements HighResolverInterface {
     $this->highs = $highs; 
   } 
 
-  public function resolveHigh(String $entityCls): ?String
+  public function resolveHigh(string $entityCls): ?string
   {
     return $this->highs[$entityCls] ?? null;    
   }
