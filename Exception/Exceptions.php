@@ -14,7 +14,7 @@ final class Exceptions
         return new \DomainException("High not defined on entity '$entityClass'");
     }
 
-    public function highDuplicated(string $high, string $cls1, string $cls2): \DomainException
+    public static function highDuplicated(string $high, string $cls1, string $cls2): \DomainException
     {
         return new \DomainException("Entity class '$cls1' and '$cls2', has the same high code: $high");
     }
@@ -22,5 +22,13 @@ final class Exceptions
     public static function highNotFound(string $high): \DomainException
     {
         return new \DomainException("High not found: $high");
+    }
+
+    public static function entityNotDefined(string $entityClass): \DomainException
+    {
+      if (!class_exists($entityClass)) {
+        return new \DomainException("No class '$entityClass', check your spell");
+      }
+      return new \DomainException("class '$entityClass' not declared as entity"); 
     }
 }

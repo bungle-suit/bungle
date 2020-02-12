@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Bungle\FrameworkBundle\Entity;
 
 use Bungle\FrameworkBundle\Exception\Exceptions;
-use Bungle\FrameworkBundle\Exception\EntityNotFoundException;
 
 class EntityRegistry
 {
@@ -28,9 +27,9 @@ class EntityRegistry
             $this->highClsMap = $this->scanMap($this->entities);
         }
 
-        if (!($r = $this->highClsMap[$clsName] ?? '')) {
+        if (!($r = array_search($clsName, $this->highClsMap))) {
             if (!\in_array($clsName, $this->entities)) {
-                throw EntityNotFoundException::entityClass($clsName);
+                throw Exceptions::entityNotDefined($clsName);
             }
         }
         return $r;

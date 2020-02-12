@@ -8,7 +8,6 @@ use Bungle\FrameworkBundle\Entity\EntityRegistry;
 use Bungle\FrameworkBundle\Entity\ArrayEntityDiscovery;
 use Bungle\FrameworkBundle\Entity\ArrayHighResolver;
 use Bungle\FrameworkBundle\Exception\Exceptions;
-use Bungle\FrameworkBundle\Exception\EntityNotFoundException;
 
 final class EntityRegistryTest extends TestCase
 {
@@ -39,13 +38,13 @@ final class EntityRegistryTest extends TestCase
         ]);
         $reg = new EntityRegistry($dis, $resolver);
 
-        self::assertEquals($ord, $reg->getHigh('ord'));
+        self::assertEquals('ord', $reg->getHigh($ord));
     }
 
     public function testGetHighBadEntityClass(): void
     {
         $order = self::ORDER;
-        $this->expectExceptionObject(EntityNotFoundException::entityClass($order));
+        $this->expectExceptionObject(Exceptions::entityNotDefined($order));
         $reg = new EntityRegistry(
             new ArrayEntityDiscovery([ ]),
             new ArrayHighResolver([ ])
@@ -95,11 +94,11 @@ final class EntityRegistryTest extends TestCase
 
     public function testGetEntityByHighNotFound(): void
     {
-        $this->expectExceptionObject(Exceptions::highNotFound('ord'));
+      $this->expectExceptionObject(Exceptions::highNotFound('ord')); 
 
-        $dis = new ArrayEntityDiscovery([ ]);
-        $resolver = new ArrayHighResolver([ ]);
-        $reg = new EntityRegistry($dis, $resolver);
-        $reg->getEntityByHigh('ord');
+      $dis = new ArrayEntityDiscovery([ ]);
+      $resolver = new ArrayHighResolver([ ]);
+      $reg = new EntityRegistry($dis, $resolver);
+      $reg->getEntityByHigh('ord');
     }
 }
