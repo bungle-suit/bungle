@@ -26,9 +26,9 @@ final class Exceptions
 
     public static function entityNotDefined(string $entityClass): \DomainException
     {
-      if (!class_exists($entityClass)) {
-        return new \DomainException("No class '$entityClass', check your spell");
-      }
-      return new \DomainException("class '$entityClass' not declared as entity"); 
+        if (!class_exists($entityClass)) {
+            return new \DomainException("No class '$entityClass', check your spell");
+        }
+        return new \DomainException("class '$entityClass' not declared as entity");
     }
 }

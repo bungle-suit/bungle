@@ -94,11 +94,11 @@ final class EntityRegistryTest extends TestCase
 
     public function testGetEntityByHighNotFound(): void
     {
-      $this->expectExceptionObject(Exceptions::highNotFound('ord')); 
+        $this->expectExceptionObject(Exceptions::highNotFound('ord'));
 
-      $dis = new ArrayEntityDiscovery([ ]);
-      $resolver = new ArrayHighResolver([ ]);
-      $reg = new EntityRegistry($dis, $resolver);
-      $reg->getEntityByHigh('ord');
+        $dis = new ArrayEntityDiscovery([ ]);
+        $resolver = new ArrayHighResolver([ ]);
+        $reg = new EntityRegistry($dis, $resolver);
+        $reg->getEntityByHigh('ord');
     }
 }
