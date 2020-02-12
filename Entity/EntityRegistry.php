@@ -56,7 +56,7 @@ class EntityRegistry
         foreach ($entities as $cls) {
             $high = $this->highResolver->resolveHigh($cls);
             if (!$high) {
-                throw Exceptions::highNotDefined($cls);
+                throw Exceptions::highNotDefinedOn($cls);
             }
 
             if (array_key_exists($high, $r)) {

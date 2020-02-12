@@ -55,7 +55,7 @@ final class EntityRegistryTest extends TestCase
     public function testGetHighNoHighDefined(): void
     {
         $order = self::ORDER;
-        $this->expectExceptionObject(Exceptions::highNotDefined($order));
+        $this->expectExceptionObject(Exceptions::highNotDefinedOn($order));
 
         $dis = new ArrayEntityDiscovery([$order]);
         $reg = new EntityRegistry($dis, new ArrayHighResolver([]));

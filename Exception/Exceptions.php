@@ -9,9 +9,9 @@ final class Exceptions
     {
     }
 
-    public static function highNotDefined(string $entityClass): \DomainException
+    public static function highNotDefinedOn(string $entityClass): \DomainException
     {
-        return new \DomainException("High not defined on entity '$entityClass'");
+        return new \DomainException("No High prefix defined on entity '$entityClass'");
     }
 
     public static function highDuplicated(string $high, string $cls1, string $cls2): \DomainException
