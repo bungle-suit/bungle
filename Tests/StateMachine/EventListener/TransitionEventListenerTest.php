@@ -3,22 +3,23 @@ declare(strict_types=1);
 
 namespace Bungle\FrameworkBundle\Tests\StateMachine\EventListener;
 
-use Bungle\FrameworkBundle\Meta\HighPrefix;
-use Bungle\FrameworkBundle\Meta\SimpleEntityLocator;
 use Bungle\FrameworkBundle\StateMachine\EventListener\TransitionEventListener;
 use Bungle\FrameworkBundle\Tests\StateMachine\Entity\Order;
+use Bungle\FrameworkBundle\Entity\EntityRegistry;
+use Bungle\FrameworkBundle\Entity\ArrayEntityDiscovery;
+use Bungle\FrameworkBundle\Entity\ArrayHighResolver;
 
 final class TransitionEventListenerTest extends TestBase
 {
     public function setUp(): void
     {
         parent::setUp();
-
-        $listener = new TransitionEventListener(
-            new HighPrefix(
-                new SimpleEntityLocator([Order::class])
-            )
+        $reg = new EntityRegistry(
+            new ArrayEntityDiscovery([Order::class]),
+            new ArrayHighResolver([Order::class=> 'ord']),
         );
+
+        $listener = new TransitionEventListener($reg);
         $this->dispatcher->addListener('workflow.transition', $listener);
     }
 

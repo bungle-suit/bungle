@@ -5,7 +5,7 @@ namespace Bungle\FrameworkBundle\StateMachine\EventListener;
 
 use Symfony\Component\Workflow\Event\TransitionEvent;
 use Bungle\FrameworkBundle\Exception\TransitionException;
-use Bungle\FrameworkBundle\Meta\HighPrefix;
+use Bungle\FrameworkBundle\Entity\EntityRegistry;
 use Bungle\FrameworkBundle\StateMachine\StepContext;
 
 /**
@@ -18,10 +18,10 @@ use Bungle\FrameworkBundle\StateMachine\StepContext;
  */
 final class TransitionEventListener
 {
-    private HighPrefix $highPrefix;
-    public function __construct(HighPrefix $highPrefix)
+    private EntityRegistry $entityRegistry;
+    public function __construct(EntityRegistry $entityRegistry)
     {
-        $this->highPrefix = $highPrefix;
+        $this->entityRegistry = $entityRegistry;
     }
 
     public function __invoke(TransitionEvent $event): void
@@ -29,7 +29,7 @@ final class TransitionEventListener
         $subject = $event->getSubject();
         $entityClass = \get_class($subject);
         $sttClass = static::getSTTClass($entityClass);
-        assert(($sttClass.'::getHighPrefix')() == $this->highPrefix->getHigh($entityClass));
+        assert(($sttClass.'::getHighPrefix')() == $this->entityRegistry->getHigh($entityClass));
 
         $steps = $this->getSteps($subject, $event->getTransition()->getName());
         $ctx = new StepContext($event->getWorkflow(), $event->getTransition());
@@ -57,7 +57,7 @@ final class TransitionEventListener
         $entityClass = \get_class($subject);
         $sttClass = static::getSTTClass($entityClass);
         $sttHigh = ($sttClass.'::getHighPrefix')();
-        assert($sttHigh == $this->highPrefix->getHigh($entityClass));
+        assert($sttHigh == $this->entityRegistry->getHigh($entityClass));
 
         $trans = $sttClass::getActionSteps();
         if (!isset($trans[$transitionName])) {

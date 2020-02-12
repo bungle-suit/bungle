@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Bungle\FrameworkBundle\StateMachine;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Workflow\Registry;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Bungle\FrameworkBundle\StateMachine\EventListener\TransitionRoleGuardListener;

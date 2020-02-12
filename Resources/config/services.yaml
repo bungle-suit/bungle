@@ -1,27 +1,33 @@
 services:
-  bungle.entity_locator:
-    class: Bungle\FrameworkBundle\Meta\SimpleEntityLocator
+  bungle.entity.discover:
+    class: Bungle\FrameworkBundle\Entity\ArrayEntityDiscovery
     arguments: [[]]
 
-  bungle.framework.logic_name:
-    class: Bungle\FrameworkBundle\Meta\LogicName
-    # By default use a empty EntityDiscover, use DoctrineBungleBridgeBundle to override
-    arguments: ["@bungle.entity_locator"]
+  bungle.entity.meta_resolver:
+    class: Bungle\FrameworkBundle\Entity\ArrayEntityMetaResolver
+    arguments: [[]]
 
-  bungle.framework.high_prefix:
-    class: Bungle\FrameworkBundle\Meta\HighPrefix
-    # By default use a empty EntityDiscover, use DoctrineBungleBridgeBundle to override
-    arguments: ["@bungle.entity_locator"]
+  bungle.entity.meta_repository:
+    class: Bungle\FrameworkBundle\Entity\EntityMetaRepository
+    arguments: ["@bungle.entity.registry", "@bungle.entity.meta_resolver"]
 
-  Bungle\FrameworkBundle\Meta\LogicName: '@bungle.framework.logic_name'
-  Bungle\FrameworkBundle\Meta\HighPrefix: '@bungle.framework.high_prefix'
+  bungle.entity.high_resolver:
+    class: Bungle\FrameworkBundle\Entity\ArrayHighResolver
+    arguments: [[]]
+
+  bungle.entity.registry:
+    class: Bungle\FrameworkBundle\Entity\EntityRegistry
+    arguments: ["@bungle.entity.discover", "@bungle.entity.high_resolver"]
+
+  Bungle\FrameworkBundle\Entity\EntityMetaRepository: '@bungle.entity.meta_repository'
+  Bungle\FrameworkBundle\Entity\EntityRegistry: '@bungle.entity.registry'
 
   bungle.framework.state_machine.transition_event_listener:
     public: false
     class: Bungle\FrameworkBundle\StateMachine\EventListener\TransitionEventListener 
     tags:
       - { name: kernel.event_listener, event: workflow.transition }
-    arguments: ["@bungle.framework.high_prefix"]
+    arguments: ["@bungle.entity.registry"]
 
   bungle.framework.state_machine.transition_role_guard_listener:
     public: false

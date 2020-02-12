@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 
 use Bungle\FrameworkBundle\DependencyInjection\BungleFrameworkExtension;
-use Bungle\FrameworkBundle\Meta\HighPrefix;
-use Bungle\FrameworkBundle\Meta\LogicName;
+use Bungle\FrameworkBundle\Entity\EntityRegistry;
+use Bungle\FrameworkBundle\Entity\EntityMetaRepository;
 use Bungle\FrameworkBundle\StateMachine\EventListener\TransitionEventListener;
 use Bungle\FrameworkBundle\StateMachine\EventListener\TransitionRoleGuardListener;
 use Bungle\FrameworkBundle\StateMachine\Vina;
@@ -25,19 +25,19 @@ final class BungleFrameworkExtensionTest extends TestCase
         (new BungleFrameworkExtension())->load([], $this->container);
     }
 
-    public function testLoadHighPrefixLogicName(): void
+    public function testEntityServices(): void
     {
         $container = $this->container;
-        self::assertTrue($container->has('bungle.framework.logic_name'));
-        self::assertTrue($container->has('bungle.framework.high_prefix'));
+        self::assertTrue($container->has('bungle.entity.registry'));
+        self::assertTrue($container->has('bungle.entity.meta_repository'));
 
-        $logicName = $container->get('bungle.framework.logic_name');
-        self::assertInstanceOf(LogicName::class, $logicName);
-        self::assertSame($logicName, $container->get(LogicName::class));
+        $registry = $container->get('bungle.entity.registry');
+        self::assertInstanceOf(EntityRegistry::class, $registry);
+        self::assertSame($registry, $container->get(EntityRegistry::class));
 
-        $highPrefix = $container->get('bungle.framework.high_prefix');
-        self::assertInstanceOf(HighPrefix::class, $highPrefix);
-        self::assertSame($highPrefix, $container->get(HighPrefix::class));
+        $repository = $container->get('bungle.entity.meta_repository');
+        self::assertInstanceOf(EntityMetaRepository::class, $repository);
+        self::assertSame($repository, $container->get(EntityMetaRepository::class));
     }
 
     public function testStateMachine(): void
