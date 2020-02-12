@@ -5,10 +5,10 @@ namespace Bungle\FrameworkBundle\Entity;
 
 use Bungle\FrameworkBundle\Annotation\HighPrefix;
 
-class AnnotationHighResolver implements HighResolverInterface {
-  public function resolveHigh(string $entityCls): ?string {
-    return HighPrefix::loadHighPrefix($entityCls);
-  }
-  
+class AnnotationHighResolver implements HighResolverInterface
+{
+    public function resolveHigh(string $entityCls): ?string
+    {
+        return HighPrefix::loadHighPrefix($entityCls);
+    }
 }
-

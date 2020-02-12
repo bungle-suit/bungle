@@ -42,7 +42,7 @@ final class HighPrefixTest extends TestCase
         new HighPrefix(new SimpleEntityLocator([
           Order::class,
           Order::class,
-         ]));
+        ]));
     }
 
     public function testIgnoreAnnoNotDefined(): void
