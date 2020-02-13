@@ -10,10 +10,10 @@ use Bungle\FrameworkBundle\Exception\Exceptions;
  */
 final class EntityUtils
 {
-  /**
-   * Create an instance of specific entity class.
-   *
-   * Entity class must have empty constructor.  */
+    /**
+     * Create an instance of specific entity class.
+     *
+     * Entity class must have empty constructor.  */
     public function create(string $entityClass): object
     {
         try {

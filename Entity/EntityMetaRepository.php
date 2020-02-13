@@ -18,7 +18,7 @@ class EntityMetaRepository
         $this->resolver = $resolver;
     }
 
-  // Get entity meta by high.
+    // Get entity meta by high.
     public function get(string $high): EntityMeta
     {
         if (isset($this->metaByHigh[$high])) {

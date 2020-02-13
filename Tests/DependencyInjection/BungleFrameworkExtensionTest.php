@@ -63,4 +63,13 @@ final class BungleFrameworkExtensionTest extends TestCase
         $vina = $this->container->get('bungle.workflow.vina');
         self::assertInstanceOf(Vina::class, $vina);
     }
+
+    public function testRoleRegistry(): void
+    {
+        $this->container->set('workflow.registry', new Registry());
+        $this->container->set('security.authorization_checker', new FakeAuthorizationChecker('Role_ADMIN'));
+
+        $reg = $this->container->get('Bungle\FrameworkBundle\Security\RoleRegistry');
+        self::assertEmpty($reg->defs);
+    }
 }

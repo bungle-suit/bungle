@@ -14,7 +14,6 @@ use Bungle\FrameworkBundle\Entity\ArrayEntityMetaResolver;
 
 final class EntityMetaRepositoryTest extends TestCase
 {
-  
     public function testGetMeta(): void
     {
         $reg = new EntityRegistry(

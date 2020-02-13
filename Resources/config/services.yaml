@@ -43,3 +43,19 @@ services:
 
   Bungle\FrameworkBundle\StateMachine: '@bungle.workflow.vina'
 
+  bungle.state_machine.workflow_definition_resolver:
+    public: false
+    class: Bungle\FrameworkBundle\StateMachine\EntityWorkflowDefinitionResolver 
+    arguments: ['@workflow.registry', '@bungle.workflow.vina']
+
+  bungle.role.entity_role_provider:
+    public: false
+    class: Bungle\FrameworkBundle\Security\EntityRoleDefinitionProvider 
+    arguments: ['@bungle.entity.registry', '@bungle.state_machine.workflow_definition_resolver']
+
+  bungle.role.registry:
+    public: false
+    class: Bungle\FrameworkBundle\Security\RoleRegistry
+    arguments: [['@bungle.role.entity_role_provider']]
+
+  Bungle\FrameworkBundle\Security\RoleRegistry: '@bungle.role.registry'
