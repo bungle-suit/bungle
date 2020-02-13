@@ -36,4 +36,9 @@ final class Exceptions
     {
         return new \DomainException("Can not found property $propertyName in entity $entityClass");
     }
+
+    public function entityExpectDefaultConstructor(string $entityClass, $inner = null): \DomainException
+    {
+        return new \DomainException("Expect entity class $entityClass's __construct has zero argument", 0, $inner);
+    }
 }
