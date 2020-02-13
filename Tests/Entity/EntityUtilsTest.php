@@ -8,14 +8,14 @@ use Bungle\FrameworkBundle\Tests\StateMachine\Entity\Order;
 use Bungle\FrameworkBundle\Entity\EntityUtils;
 use Bungle\FrameworkBundle\Exception\Exceptions;
 
-class EntityCtorHasArgumnet
+class EntityCtorHasArgumnet // phpcs:ignore
 {
     public function __construct(int $id)
     {
     }
 }
 
-final class EntityUtilsTest extends TestCase
+final class EntityUtilsTest extends TestCase // phpcs:ignore
 {
     public function testCreate(): void
     {
