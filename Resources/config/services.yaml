@@ -1,7 +1,7 @@
 services:
   bungle.entity.discover:
-    class: Bungle\FrameworkBundle\Entity\ArrayEntityDiscovery
-    arguments: [[]]
+    class: Bungle\FrameworkBundle\Entity\EntityDiscoverer
+    arguments: ["@doctrine_mongodb"]
 
   bungle.entity.meta_resolver:
     class: Bungle\FrameworkBundle\Entity\ArrayEntityMetaResolver
