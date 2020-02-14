@@ -1,0 +1,61 @@
+services:
+  bungle.entity.discover:
+    class: Bungle\Framework\Entity\EntityDiscoverer
+    arguments: ["@doctrine_mongodb"]
+
+  bungle.entity.meta_resolver:
+    class: Bungle\Framework\Entity\EntityMetaResolver
+    arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
+
+  bungle.entity.meta_repository:
+    class: Bungle\Framework\Entity\EntityMetaRepository
+    arguments: ["@bungle.entity.registry", "@bungle.entity.meta_resolver"]
+
+  bungle.entity.high_resolver:
+    class: Bungle\Framework\Entity\AnnotationHighResolver 
+    arguments: [[]]
+
+  bungle.entity.registry:
+    class: Bungle\Framework\Entity\EntityRegistry
+    arguments: ["@bungle.entity.discover", "@bungle.entity.high_resolver"]
+
+  Bungle\Framework\Entity\EntityMetaRepository: '@bungle.entity.meta_repository'
+  Bungle\Framework\Entity\EntityRegistry: '@bungle.entity.registry'
+
+  bungle.framework.state_machine.transition_event_listener:
+    public: false
+    class: Bungle\Framework\StateMachine\EventListener\TransitionEventListener 
+    tags:
+      - { name: kernel.event_listener, event: workflow.transition }
+    arguments: ["@bungle.entity.registry"]
+
+  bungle.framework.state_machine.transition_role_guard_listener:
+    public: false
+    class: Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener  
+    tags:
+      - { name: kernel.event_listener, event: workflow.guard }
+    arguments: ["@security.authorization_checker"]
+
+  bungle.workflow.vina:
+    public: false
+    class: Bungle\Framework\StateMachine\Vina
+    arguments: ["@workflow.registry", "@security.authorization_checker"]
+
+  Bungle\Framework\StateMachine: '@bungle.workflow.vina'
+
+  bungle.state_machine.workflow_definition_resolver:
+    public: false
+    class: Bungle\Framework\StateMachine\EntityWorkflowDefinitionResolver 
+    arguments: ['@workflow.registry', '@bungle.workflow.vina']
+
+  bungle.role.entity_role_provider:
+    public: false
+    class: Bungle\Framework\Security\EntityRoleDefinitionProvider 
+    arguments: ['@bungle.entity.registry', '@bungle.state_machine.workflow_definition_resolver']
+
+  bungle.role.registry:
+    public: false
+    class: Bungle\Framework\Security\RoleRegistry
+    arguments: [['@bungle.role.entity_role_provider']]
+
+  Bungle\Framework\Security\RoleRegistry: '@bungle.role.registry'

@@ -1,18 +1,16 @@
-.phony: test test-watch lint format lint-fix regen-autoload
+.phony: test lint format regen-autoload
 
 test:
-	./vendor/bin/phpunit --bootstrap Tests/bootstrap.php Tests/
-
-test-watch:
-	noisy.py -d '.' -e .php -- './vendor/bin/phpunit --bootstrap Tests/bootstrap.php Tests/'
+	cd ./Framework; $(MAKE) test
+	cd ./BungleBundle; $(MAKE) test
 
 lint:
-	./vendor/bin/phpcs --standard=PSR2 --ignore=vendor . *.php
-	./vendor/bin/phpmd  . ansi ./.phpmd-ruleset.xml --exclude vendor
+	cd ./Framework; $(MAKE) lint
+	cd ./BungleBundle; $(MAKE) lint
 
 format:
-	./vendor/bin/php-cs-fixer fix .
-	./vendor/bin/phpcbf --standard=PSR2 --ignore=vendor .
+	cd ./Framework; $(MAKE) format
+	cd ./BungleBundle; $(MAKE) format
 
 regen-autoload:
 	composer dump-autoload
