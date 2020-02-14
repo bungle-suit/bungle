@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Bungle\FrameworkBundle\Entity;
 
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
+use Bungle\FrameworkBundle\Annotation\HighPrefix;
 
 class EntityDiscoverer implements EntityDiscovererInterface
 {
@@ -17,8 +18,13 @@ class EntityDiscoverer implements EntityDiscovererInterface
     public function getAllEntities(): \Iterator
     {
         $documentManager = $this->managerRegistry->getManager();
-        return new \ArrayIterator($documentManager->getConfiguration()
+        $list = $documentManager->getConfiguration()
                                           ->getMetadataDriverImpl()
-                                          ->getAllClassNames());
+                                          ->getAllClassNames();
+        foreach ($list as $cls) {
+            if (HighPrefix::loadHighPrefix($cls)) {
+                yield $cls;
+            }
+        }
     }
 }
