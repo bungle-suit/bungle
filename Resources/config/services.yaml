@@ -12,7 +12,7 @@ services:
     arguments: ["@bungle.entity.registry", "@bungle.entity.meta_resolver"]
 
   bungle.entity.high_resolver:
-    class: Bungle\FrameworkBundle\Entity\ArrayHighResolver
+    class: Bungle\FrameworkBundle\Entity\AnnotationHighResolver 
     arguments: [[]]
 
   bungle.entity.registry:
