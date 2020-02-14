@@ -39,6 +39,7 @@ final class BungleFrameworkExtensionTest extends TestCase
         self::assertInstanceOf(EntityRegistry::class, $registry);
         self::assertSame($registry, $container->get(EntityRegistry::class));
 
+        $container->set('Doctrine\ODM\MongoDB\DocumentManager', $this->createStub(DocumentManager::class));
         $repository = $container->get('bungle.entity.meta_repository');
         self::assertInstanceOf(EntityMetaRepository::class, $repository);
         self::assertSame($repository, $container->get(EntityMetaRepository::class));
