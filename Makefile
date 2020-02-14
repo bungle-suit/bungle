@@ -7,14 +7,12 @@ test-watch:
 	noisy.py -d '.' -e .php -- './vendor/bin/phpunit --bootstrap Tests/bootstrap.php Tests/'
 
 lint:
-	./vendor/bin/phpcs --standard=PSR2 --ignore=vendor .
-
-lint-fix:
-	./vendor/bin/phpcbf --standard=PSR2 --ignore=vendor .
+	./vendor/bin/phpcs --standard=PSR2 --ignore=vendor . *.php
+	./vendor/bin/phplint ./ --exclude=vendor
 
 format:
-	# ./vendor/bin/php-cs-fixer fix tests
 	./vendor/bin/php-cs-fixer fix .
+	./vendor/bin/phpcbf --standard=PSR2 --ignore=vendor .
 
 regen-autoload:
 	composer dump-autoload
