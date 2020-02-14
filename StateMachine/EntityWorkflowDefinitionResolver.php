@@ -23,8 +23,8 @@ class EntityWorkflowDefinitionResolver implements EntityWorkflowDefinitionResolv
         $subject = EntityUtils::create($entityClass);
         $wf = $this->workflowRegistry->get($subject);
         return [
-        $wf->getDefinition(),
-        $vina->getTransitionTitles($subject)
+          $wf->getDefinition(),
+          $this->vina->getTransitionTitles($subject)
         ];
     }
 }

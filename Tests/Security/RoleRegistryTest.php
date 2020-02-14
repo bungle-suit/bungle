@@ -50,7 +50,6 @@ final class RoleRegistryTest extends TestCase
      */
     public function testAdds(RoleRegistry $reg): void
     {
-        $a = 1;
         $expRoles = $reg->defs;
         $reg->adds([
           $r3 = new RoleDefinition('ROLE_2_1', '', ''),

@@ -69,7 +69,7 @@ final class VinaTest extends TestCase
           $save = new Transition('save', Entity::INITIAL_STATE, 'saved'),
           $update = new Transition('update', 'saved', 'saved'),
           $print = new Transition('print', 'saved', 'saved'),
-          $check = new Transition('check', 'saved', 'checked'),
+          new Transition('check', 'saved', 'checked'),
         ];
 
         $transMeta = new \SplObjectStorage();

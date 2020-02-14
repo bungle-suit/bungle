@@ -10,6 +10,9 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class BungleFrameworkExtension extends Extension
 {
+    /**
+     * @inheritDoc
+     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new YamlFileLoader(

@@ -13,6 +13,6 @@ final class BungleFrameworkBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass((new RegisterListenersPass());
-    };
+        $container->addCompilerPass(new RegisterListenersPass());
+    }
 }

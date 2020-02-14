@@ -13,6 +13,9 @@ class FakeAuthorizationChecker implements AuthorizationCheckerInterface
         $this->wantedRoles = $wantedRoles;
     }
   
+    /**
+     * @inheritDoc
+     */
     public function isGranted($attribute, $subject = null): bool
     {
         if (!is_string($attribute)) {

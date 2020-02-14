@@ -6,6 +6,9 @@ namespace Bungle\FrameworkBundle\Test\Helpers;
 use PHPUnit\Framework\TestCase;
 use Bungle\FrameworkBundle\Helper\DebugHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
 final class DebugHelperTest extends TestCase
 {
     public function testIsDebug(): void

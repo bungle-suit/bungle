@@ -10,6 +10,9 @@ use Bungle\FrameworkBundle\Exception\Exceptions;
 
 class EntityCtorHasArgumnet // phpcs:ignore
 {
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function __construct(int $id)
     {
     }

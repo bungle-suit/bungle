@@ -19,7 +19,7 @@ class OrderSTT implements STTInterface
         $ord->code = 'bar';
     }
 
-    public function abort(Order $ord): string
+    public function abort(): string
     {
         return 'Abort';
     }

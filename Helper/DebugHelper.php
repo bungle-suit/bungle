@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Bungle\FrameworkBundle\Helper;
 
+/**
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
 final class DebugHelper
 {
     /**
