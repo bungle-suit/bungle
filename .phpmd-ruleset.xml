@@ -10,7 +10,6 @@
         My custom rule set that checks my code...
     </description>
 
-  <rule ref="rulesets/unusedcode.xml" />
   <rule ref="rulesets/design.xml">
     <exclude name="CouplingBetweenObjects"/>
   </rule>
@@ -24,5 +23,16 @@
     <exclude name="MissingImport"/>
     <exclude name="StaticAccess"/>
     <exclude name="IfStatementAssignment"/>
+  </rule>
+
+  <rule ref="rulesets/unusedcode.xml">
+    <exclude name="UnusedLocalVariable"/>
+  </rule>
+  <rule ref="rulesets/unusedcode.xml/UnusedLocalVariable">
+    <properties>
+      <property name="allow-unused-foreach-variables">
+        <value>true</value>
+      </property>
+    </properties>
   </rule>
 </ruleset>
