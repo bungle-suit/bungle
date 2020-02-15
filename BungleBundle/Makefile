@@ -8,7 +8,7 @@ test-watch:
 
 lint:
 	../vendor/bin/phpcs --standard=PSR2 --ignore=vendor . *.php
-	../vendor/bin/phpmd  . ansi ./..phpmd-ruleset.xml --exclude vendor
+	../vendor/bin/phpmd  . ansi ../.phpmd-ruleset.xml --exclude vendor
 
 format:
 	../vendor/bin/php-cs-fixer fix .
