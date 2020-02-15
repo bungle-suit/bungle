@@ -6,6 +6,7 @@ namespace Bungle\FrameworkBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
+use Bungle\FrameworkBundle\DependencyInjection\RegisterSTTPass;
 
 final class BungleFrameworkBundle extends Bundle
 {
@@ -13,6 +14,10 @@ final class BungleFrameworkBundle extends Bundle
     {
         parent::build($container);
 
+        $container->addCompilerPass(new RegisterSTTPass());
+
+        // TODO: remove RegisterListenersPass(), RegisterListenersPass() add by
+        // FrameworkBundle
         $container->addCompilerPass(new RegisterListenersPass());
     }
 }
