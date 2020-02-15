@@ -50,9 +50,6 @@ final class BungleFrameworkExtensionTest extends TestCase
         $container = $this->container;
         $this->addManagerRegistry();
       
-        $listener = $container->get('bungle.framework.state_machine.transition_event_listener');
-        self::assertInstanceOf(TransitionEventListener::class, $listener);
-
         $container->set('security.authorization_checker', new FakeAuthorizationChecker('Role_ADMIN'));
         $listener = $container->get('bungle.framework.state_machine.transition_role_guard_listener');
         self::assertInstanceOf(TransitionRoleGuardListener::class, $listener);

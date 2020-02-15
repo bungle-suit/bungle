@@ -22,13 +22,6 @@ services:
   Bungle\Framework\Entity\EntityMetaRepository: '@bungle.entity.meta_repository'
   Bungle\Framework\Entity\EntityRegistry: '@bungle.entity.registry'
 
-  bungle.framework.state_machine.transition_event_listener:
-    public: false
-    class: Bungle\Framework\StateMachine\EventListener\TransitionEventListener 
-    tags:
-      - { name: kernel.event_listener, event: workflow.transition }
-    arguments: ["@bungle.entity.registry"]
-
   bungle.framework.state_machine.transition_role_guard_listener:
     public: false
     class: Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener  
