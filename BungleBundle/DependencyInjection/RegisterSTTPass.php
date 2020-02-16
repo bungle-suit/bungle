@@ -18,7 +18,7 @@ class RegisterSTTPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds(self::STT_TAG, true) as $id => $stt) {
             $high = self::getHigh($container, $id);
             $dispatcher->addMethodCall('addListener', [
-              "workflow.$high.guard",
+              "workflow.$high.transition",
               [new ServiceClosureArgument(new Reference($id)), '__invoke'],
               0,
             ]);

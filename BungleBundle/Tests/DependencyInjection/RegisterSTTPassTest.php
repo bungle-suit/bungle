@@ -23,7 +23,7 @@ final class RegisterSTTPassTest extends TestCase
         (new RegisterSTTPass())->process($container);
 
         $dispatcher = $container->get('event_dispatcher');
-        $events = $dispatcher->getListeners('workflow.ord.guard');
+        $events = $dispatcher->getListeners('workflow.ord.transition');
         self::assertCount(1, $events);
         self::assertInstanceOf(OrderSTT::class, $events[0][0]);
         self::assertEquals('__invoke', $events[0][1]);
