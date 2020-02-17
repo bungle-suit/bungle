@@ -1,22 +1,22 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 
-use Bungle\FrameworkBundle\DependencyInjection\BungleFrameworkExtension;
-use Bungle\Framework\Entity\EntityRegistry;
 use Bungle\Framework\Entity\EntityMetaRepository;
-use Bungle\Framework\StateMachine\EventListener\TransitionEventListener;
+use Bungle\Framework\Entity\EntityRegistry;
 use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
 use Bungle\Framework\StateMachine\Vina;
 use Bungle\Framework\Tests\StateMachine\EventListener\FakeAuthorizationChecker;
+use Bungle\FrameworkBundle\DependencyInjection\BungleFrameworkExtension;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
+use Doctrine\ODM\MongoDB\Configuration;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Workflow\Registry;
-use Doctrine\ODM\MongoDB\DocumentManager;
-use Doctrine\ODM\MongoDB\Configuration;
-use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 
 final class BungleFrameworkExtensionTest extends TestCase
 {
@@ -49,7 +49,7 @@ final class BungleFrameworkExtensionTest extends TestCase
     {
         $container = $this->container;
         $this->addManagerRegistry();
-      
+
         $container->set('security.authorization_checker', new FakeAuthorizationChecker('Role_ADMIN'));
         $listener = $container->get('bungle.framework.state_machine.transition_role_guard_listener');
         self::assertInstanceOf(TransitionRoleGuardListener::class, $listener);
@@ -90,6 +90,7 @@ final class BungleFrameworkExtensionTest extends TestCase
         $r->method('getManager')
           ->willReturn($defManager);
         $this->container->set('doctrine_mongodb', $r);
+
         return $r;
     }
 }

@@ -1,15 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 
+use Bungle\Framework\Tests\StateMachine\STT\OrderSTT;
+use Bungle\FrameworkBundle\DependencyInjection\RegisterSTTPass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Psr\EventDispatcher\EventDispatcherInterface;
-use Bungle\FrameworkBundle\DependencyInjection\RegisterSTTPass;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Bungle\Framework\Tests\StateMachine\STT\OrderSTT;
 
 final class RegisterSTTPassTest extends TestCase
 {

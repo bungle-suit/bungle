@@ -1,12 +1,13 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Bungle\FrameworkBundle\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 
 class RegisterSTTPass implements CompilerPassInterface
 {
@@ -24,10 +25,11 @@ class RegisterSTTPass implements CompilerPassInterface
             ]);
         }
     }
-  
+
     private static function getHigh(ContainerBuilder $container, string $id): string
     {
         $cls = $container->getDefinition($id)->getClass();
+
         return ($cls.'::getHigh')();
     }
 }
