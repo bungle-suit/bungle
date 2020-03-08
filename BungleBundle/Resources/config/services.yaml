@@ -22,6 +22,9 @@ services:
   Bungle\Framework\Entity\EntityMetaRepository: '@bungle.entity.meta_repository'
   Bungle\Framework\Entity\EntityRegistry: '@bungle.entity.registry'
 
+  bungle.workflow.stateful_marking_store:
+    class: Bungle\Framework\StateMachine\MarkingStore\StatefulInterfaceMarkingStore
+
   bungle.framework.state_machine.transition_role_guard_listener:
     public: false
     class: Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener

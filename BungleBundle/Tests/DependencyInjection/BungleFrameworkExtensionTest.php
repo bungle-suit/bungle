@@ -7,6 +7,7 @@ namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 use Bungle\Framework\Entity\EntityMetaRepository;
 use Bungle\Framework\Entity\EntityRegistry;
 use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
+use Bungle\Framework\StateMachine\MarkingStore\StatefulInterfaceMarkingStore;
 use Bungle\Framework\StateMachine\Vina;
 use Bungle\Framework\Tests\StateMachine\EventListener\FakeAuthorizationChecker;
 use Bungle\FrameworkBundle\DependencyInjection\BungleFrameworkExtension;
@@ -79,6 +80,12 @@ final class BungleFrameworkExtensionTest extends TestCase
 
         $reg = $this->container->get('Bungle\Framework\Security\RoleRegistry');
         self::assertEmpty($reg->defs);
+    }
+
+    public function testStatefulMarkingStore(): void
+    {
+        $store = $this->container->get('bungle.workflow.stateful_marking_store');
+        self::assertInstanceOf(StatefulInterfaceMarkingStore::class, $store);
     }
 
     private function addManagerRegistry(): ManagerRegistry
