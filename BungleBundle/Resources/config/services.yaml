@@ -12,7 +12,7 @@ services:
     arguments: ["@bungle.entity.registry", "@bungle.entity.meta_resolver"]
 
   bungle.entity.high_resolver:
-    class: Bungle\Framework\Entity\AnnotationHighResolver 
+    class: Bungle\Framework\Entity\AnnotationHighResolver
     arguments: [[]]
 
   bungle.entity.registry:
@@ -24,7 +24,7 @@ services:
 
   bungle.framework.state_machine.transition_role_guard_listener:
     public: false
-    class: Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener  
+    class: Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener
     tags:
       - { name: kernel.event_listener, event: workflow.guard }
     arguments: ["@security.authorization_checker"]
@@ -32,18 +32,18 @@ services:
   bungle.workflow.vina:
     public: false
     class: Bungle\Framework\StateMachine\Vina
-    arguments: ["@workflow.registry", "@security.authorization_checker"]
+    arguments: ["@workflow.registry", "@security.authorization_checker", "@Doctrine\\ODM\\MongoDB\\DocumentManager", "@request_stack"]
 
   Bungle\Framework\StateMachine: '@bungle.workflow.vina'
 
   bungle.state_machine.workflow_definition_resolver:
     public: false
-    class: Bungle\Framework\StateMachine\EntityWorkflowDefinitionResolver 
+    class: Bungle\Framework\StateMachine\EntityWorkflowDefinitionResolver
     arguments: ['@workflow.registry', '@bungle.workflow.vina']
 
   bungle.role.entity_role_provider:
     public: false
-    class: Bungle\Framework\Security\EntityRoleDefinitionProvider 
+    class: Bungle\Framework\Security\EntityRoleDefinitionProvider
     arguments: ['@bungle.entity.registry', '@bungle.state_machine.workflow_definition_resolver']
 
   bungle.role.registry:

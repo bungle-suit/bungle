@@ -16,6 +16,7 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Workflow\Registry;
 
 final class BungleFrameworkExtensionTest extends TestCase
@@ -62,6 +63,8 @@ final class BungleFrameworkExtensionTest extends TestCase
             'security.authorization_checker',
             new FakeAuthorizationChecker('Role_ADMIN'),
         );
+        $this->container->set('Doctrine\ODM\MongoDB\DocumentManager', $this->createStub(DocumentManager::class));
+        $this->container->set('request_stack', new RequestStack());
 
         $vina = $this->container->get('bungle.workflow.vina');
         self::assertInstanceOf(Vina::class, $vina);
@@ -71,6 +74,7 @@ final class BungleFrameworkExtensionTest extends TestCase
     {
         $this->container->set('workflow.registry', new Registry());
         $this->container->set('security.authorization_checker', new FakeAuthorizationChecker('Role_ADMIN'));
+        $this->container->set('request_stack', new RequestStack());
         $this->addManagerRegistry();
 
         $reg = $this->container->get('Bungle\Framework\Security\RoleRegistry');
@@ -85,6 +89,7 @@ final class BungleFrameworkExtensionTest extends TestCase
         $config->method('getMetadataDriverImpl')->willReturn($mappingDriver);
         $defManager = $this->createStub(DocumentManager::class);
         $defManager->method('getConfiguration')->willReturn($config);
+        $this->container->set('Doctrine\ODM\MongoDB\DocumentManager', $defManager);
 
         $r = $this->createStub(ManagerRegistry::class);
         $r->method('getManager')
