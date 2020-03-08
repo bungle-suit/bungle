@@ -69,6 +69,7 @@ final class BungleFrameworkExtensionTest extends TestCase
 
         $vina = $this->container->get('bungle.workflow.vina');
         self::assertInstanceOf(Vina::class, $vina);
+        self::assertSame($vina, $this->container->get(Vina::class));
     }
 
     public function testRoleRegistry(): void
