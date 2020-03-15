@@ -94,7 +94,7 @@ final class BungleFrameworkExtensionTest extends TestCase
     public function testBungleFormTypeGuesser(): void
     {
         $this->addManagerRegistry();
-        $this->container->set(ValidatorTypeGuesser::class, $this->createStub(ValidatorTypeGuesser::class));
+        $this->container->set('form.type_guesser.doctrine.mongodb', $this->createStub(ValidatorTypeGuesser::class));
         $guesser = $this->container->get('Bungle\Framework\Form\BungleFormTypeGuesser');
         self::assertInstanceOf(BungleFormTypeGuesser::class, $guesser);
     }

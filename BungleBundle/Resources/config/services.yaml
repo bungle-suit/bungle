@@ -59,7 +59,7 @@ services:
   Bungle\Framework\Form\BungleFormTypeGuesser:
     class: Bungle\Framework\Form\BungleFormTypeGuesser
     arguments: 
-      - '@Symfony\Component\Form\Extension\Validator\ValidatorTypeGuesser'
+      - '@form.type_guesser.doctrine.mongodb'
       - '@bungle.entity.meta_repository'
       - '@bungle.entity.registry'
-    tags: [form.type_guesser]
+    tags: ['form.type_guesser']
