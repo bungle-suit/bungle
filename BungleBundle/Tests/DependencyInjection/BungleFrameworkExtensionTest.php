@@ -6,6 +6,7 @@ namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 
 use Bungle\Framework\Entity\EntityMetaRepository;
 use Bungle\Framework\Entity\EntityRegistry;
+use Bungle\Framework\Form\BungleFormTypeGuesser;
 use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
 use Bungle\Framework\StateMachine\MarkingStore\StatefulInterfaceMarkingStore;
 use Bungle\Framework\StateMachine\Vina;
@@ -17,6 +18,7 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Form\Extension\Validator\ValidatorTypeGuesser;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Workflow\Registry;
 
@@ -87,6 +89,14 @@ final class BungleFrameworkExtensionTest extends TestCase
     {
         $store = $this->container->get('bungle.workflow.stateful_marking_store');
         self::assertInstanceOf(StatefulInterfaceMarkingStore::class, $store);
+    }
+
+    public function testBungleFormTypeGuesser(): void
+    {
+        $this->addManagerRegistry();
+        $this->container->set(ValidatorTypeGuesser::class, $this->createStub(ValidatorTypeGuesser::class));
+        $guesser = $this->container->get('Bungle\Framework\Form\BungleFormTypeGuesser');
+        self::assertInstanceOf(BungleFormTypeGuesser::class, $guesser);
     }
 
     private function addManagerRegistry(): ManagerRegistry

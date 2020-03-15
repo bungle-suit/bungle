@@ -55,3 +55,11 @@ services:
     arguments: [['@bungle.role.entity_role_provider']]
 
   Bungle\Framework\Security\RoleRegistry: '@bungle.role.registry'
+
+  Bungle\Framework\Form\BungleFormTypeGuesser:
+    class: Bungle\Framework\Form\BungleFormTypeGuesser
+    arguments: 
+      - '@Symfony\Component\Form\Extension\Validator\ValidatorTypeGuesser'
+      - '@bungle.entity.meta_repository'
+      - '@bungle.entity.registry'
+    tags: [form.type_guesser]
