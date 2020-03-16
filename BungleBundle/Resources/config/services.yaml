@@ -4,7 +4,7 @@ services:
     arguments: ["@doctrine_mongodb"]
 
   bungle.entity.meta_resolver:
-    class: Bungle\Framework\Entity\ODMEntityMetaResolver
+    class: Bungle\Framework\Entity\EntityMetaResolver
     arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
 
   bungle.entity.meta_repository:
