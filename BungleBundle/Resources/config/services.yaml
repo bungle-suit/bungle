@@ -1,10 +1,10 @@
 services:
   bungle.entity.discover:
-    class: Bungle\Framework\Entity\EntityDiscoverer
+    class: Bungle\Framework\Entity\ODMEntityDiscoverer
     arguments: ["@doctrine_mongodb"]
 
   bungle.entity.meta_resolver:
-    class: Bungle\Framework\Entity\EntityMetaResolver
+    class: Bungle\Framework\Entity\ODMEntityMetaResolver
     arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
 
   bungle.entity.meta_repository:
