@@ -9,7 +9,7 @@ services:
 
   bungle.entity.meta_repository:
     class: Bungle\Framework\Entity\EntityMetaRepository
-    arguments: ["@bungle.entity.registry", "@bungle.entity.meta_resolver"]
+    arguments: ["@bungle.entity.meta_resolver"]
 
   bungle.entity.high_resolver:
     class: Bungle\Framework\Entity\AnnotationHighResolver
@@ -61,5 +61,4 @@ services:
     arguments: 
       - '@form.type_guesser.doctrine.mongodb'
       - '@bungle.entity.meta_repository'
-      - '@bungle.entity.registry'
     tags: ['form.type_guesser']
