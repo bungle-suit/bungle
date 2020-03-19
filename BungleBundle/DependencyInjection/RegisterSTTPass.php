@@ -17,17 +17,18 @@ class RegisterSTTPass implements CompilerPassInterface
     {
         $dispatcher = $container->findDefinition('event_dispatcher');
         foreach ($container->findTaggedServiceIds(self::STT_TAG, true) as $id => $stt) {
+            $hook = function (string $evt, string $method) use ($dispatcher, $id) {
+                $dispatcher->addMethodCall('addListener', [
+                  $evt,
+                  [new ServiceClosureArgument(new Reference($id)), $method],
+                  0,
+                ]);
+            };
+
             $high = self::getHigh($container, $id);
-            $dispatcher->addMethodCall('addListener', [
-              "workflow.$high.transition",
-              [new ServiceClosureArgument(new Reference($id)), '__invoke'],
-              0,
-            ]);
-            $dispatcher->addMethodCall('addListener', [
-              "vina.$high.save",
-              [new ServiceClosureArgument(new Reference($id)), 'invokeSave'],
-              0,
-            ]);
+            $hook("workflow.$high.transition", '__invoke');
+            $hook("vina.$high.save", 'invokeSave');
+            $hook("vina.$high.have_save_action", 'invokeCanSave');
         }
     }
 
