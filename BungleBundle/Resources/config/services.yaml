@@ -35,7 +35,7 @@ services:
   bungle.workflow.vina:
     public: false
     class: Bungle\Framework\StateMachine\Vina
-    arguments: ["@workflow.registry", "@security.authorization_checker", "@Doctrine\\ODM\\MongoDB\\DocumentManager", "@request_stack"]
+    arguments: ["@workflow.registry", "@security.authorization_checker", "@request_stack"]
 
   Bungle\Framework\StateMachine\Vina: '@bungle.workflow.vina'
 

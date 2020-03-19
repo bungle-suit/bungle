@@ -43,7 +43,6 @@ final class BungleFrameworkExtensionTest extends TestCase
         self::assertInstanceOf(EntityRegistry::class, $registry);
         self::assertSame($registry, $container->get(EntityRegistry::class));
 
-        $container->set('Doctrine\ODM\MongoDB\DocumentManager', $this->createStub(DocumentManager::class));
         $repository = $container->get('bungle.entity.meta_repository');
         self::assertInstanceOf(EntityMetaRepository::class, $repository);
         self::assertSame($repository, $container->get(EntityMetaRepository::class));
@@ -66,7 +65,6 @@ final class BungleFrameworkExtensionTest extends TestCase
             'security.authorization_checker',
             new FakeAuthorizationChecker('Role_ADMIN'),
         );
-        $this->container->set('Doctrine\ODM\MongoDB\DocumentManager', $this->createStub(DocumentManager::class));
         $this->container->set('request_stack', new RequestStack());
 
         $vina = $this->container->get('bungle.workflow.vina');
