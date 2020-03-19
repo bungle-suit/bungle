@@ -27,5 +27,10 @@ final class RegisterSTTPassTest extends TestCase
         self::assertCount(1, $events);
         self::assertInstanceOf(OrderSTT::class, $events[0][0]);
         self::assertEquals('__invoke', $events[0][1]);
+
+        $events = $dispatcher->getListeners('vina.ord.save');
+        self::assertCount(1, $events);
+        self::assertInstanceOf(OrderSTT::class, $events[0][0]);
+        self::assertEquals('invokeSave', $events[0][1]);
     }
 }

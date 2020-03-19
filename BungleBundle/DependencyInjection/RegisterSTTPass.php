@@ -23,6 +23,11 @@ class RegisterSTTPass implements CompilerPassInterface
               [new ServiceClosureArgument(new Reference($id)), '__invoke'],
               0,
             ]);
+            $dispatcher->addMethodCall('addListener', [
+              "vina.$high.save",
+              [new ServiceClosureArgument(new Reference($id)), 'invokeSave'],
+              0,
+            ]);
         }
     }
 
