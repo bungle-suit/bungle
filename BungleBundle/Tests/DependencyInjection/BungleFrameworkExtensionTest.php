@@ -18,6 +18,7 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Form\Extension\Validator\ValidatorTypeGuesser;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Workflow\Registry;
@@ -65,6 +66,7 @@ final class BungleFrameworkExtensionTest extends TestCase
             'security.authorization_checker',
             new FakeAuthorizationChecker('Role_ADMIN'),
         );
+        $this->container->set('event_dispatcher', new EventDispatcher());
         $this->container->set('request_stack', new RequestStack());
 
         $vina = $this->container->get('bungle.workflow.vina');
@@ -77,6 +79,7 @@ final class BungleFrameworkExtensionTest extends TestCase
         $this->container->set('workflow.registry', new Registry());
         $this->container->set('security.authorization_checker', new FakeAuthorizationChecker('Role_ADMIN'));
         $this->container->set('request_stack', new RequestStack());
+        $this->container->set('event_dispatcher', new EventDispatcher());
         $this->addManagerRegistry();
 
         $reg = $this->container->get('Bungle\Framework\Security\RoleRegistry');
