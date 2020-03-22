@@ -24,6 +24,10 @@ services:
     class: Bungle\Framework\Entity\EntityRegistry
     arguments: ["@bungle.entity.discover", "@bungle.entity.high_resolver"]
 
+  bungle.twig.extension:
+    class: Bungle\Framework\Twig\BungleTwigExtension
+    tags: ['twig.extension']
+
   Bungle\Framework\Entity\EntityMetaRepository: '@bungle.entity.meta_repository'
   Bungle\Framework\Entity\EntityRegistry: '@bungle.entity.registry'
 

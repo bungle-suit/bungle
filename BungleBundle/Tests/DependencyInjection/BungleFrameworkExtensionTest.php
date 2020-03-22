@@ -12,6 +12,7 @@ use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
 use Bungle\Framework\StateMachine\MarkingStore\StatefulInterfaceMarkingStore;
 use Bungle\Framework\StateMachine\Vina;
 use Bungle\Framework\Tests\StateMachine\EventListener\FakeAuthorizationChecker;
+use Bungle\Framework\Twig\BungleTwigExtension;
 use Bungle\FrameworkBundle\DependencyInjection\BungleFrameworkExtension;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\ODM\MongoDB\Configuration;
@@ -108,6 +109,14 @@ final class BungleFrameworkExtensionTest extends TestCase
         $this->container->set(DocumentManager::class, $docManager);
         $inst = $this->container->get(Inquiry::class);
         self::assertInstanceOf(Inquiry::class, $inst);
+    }
+
+    public function testBungleTwigExtension(): void
+    {
+        $ext = $this->container->get('bungle.twig.extension') ;
+        self::assertInstanceOf(BungleTwigExtension::class, $ext);
+        $def = $this->container->getDefinition('bungle.twig.extension');
+        self::assertEquals(['twig.extension' => [[]]], $def->getTags());
     }
 
     private function addManagerRegistry(): ManagerRegistry
