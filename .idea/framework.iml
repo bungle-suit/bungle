@@ -5,7 +5,6 @@
       <sourceFolder url="file://$MODULE_DIR$/BungleBundle" isTestSource="false" packagePrefix="Bungle\FrameworkBundle\" />
       <sourceFolder url="file://$MODULE_DIR$/Framework" isTestSource="false" packagePrefix="Bungle\Framework\" />
       <sourceFolder url="file://$MODULE_DIR$/Framework/Tests" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/BungleBundle/Tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/vendor" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/beberlei/assert" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
