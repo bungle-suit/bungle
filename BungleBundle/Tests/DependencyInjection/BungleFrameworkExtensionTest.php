@@ -7,6 +7,7 @@ namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 use Bungle\Framework\Entity\EntityMetaRepository;
 use Bungle\Framework\Entity\EntityRegistry;
 use Bungle\Framework\Form\BungleFormTypeGuesser;
+use Bungle\Framework\Inquiry\Inquiry;
 use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
 use Bungle\Framework\StateMachine\MarkingStore\StatefulInterfaceMarkingStore;
 use Bungle\Framework\StateMachine\Vina;
@@ -16,6 +17,7 @@ use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -100,6 +102,14 @@ final class BungleFrameworkExtensionTest extends TestCase
         self::assertInstanceOf(BungleFormTypeGuesser::class, $guesser);
     }
 
+    public function testInquiry(): void
+    {
+        $docManager = $this->createStub(DocumentManager::class);
+        $this->container->set(DocumentManager::class, $docManager);
+        $inst = $this->container->get(Inquiry::class);
+        self::assertInstanceOf(Inquiry::class, $inst);
+    }
+
     private function addManagerRegistry(): ManagerRegistry
     {
         $mappingDriver = $this->createStub(MappingDriver::class);
@@ -110,9 +120,9 @@ final class BungleFrameworkExtensionTest extends TestCase
         $defManager->method('getConfiguration')->willReturn($config);
         $this->container->set('Doctrine\ODM\MongoDB\DocumentManager', $defManager);
 
+        /** @var Stub|ManagerRegistry $r */
         $r = $this->createStub(ManagerRegistry::class);
-        $r->method('getManager')
-          ->willReturn($defManager);
+        $r->method('getManager')->willReturn($defManager);
         $this->container->set('doctrine_mongodb', $r);
 
         return $r;

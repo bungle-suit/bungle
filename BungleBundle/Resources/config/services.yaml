@@ -7,6 +7,11 @@ services:
     class: Bungle\Framework\Entity\EntityMetaResolver
     arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
 
+  Bungle\Framework\Inquiry\Inquiry:
+    class: Bungle\Framework\Inquiry\Inquiry
+    public: true
+    arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
+
   bungle.entity.meta_repository:
     class: Bungle\Framework\Entity\EntityMetaRepository
     arguments: ["@bungle.entity.meta_resolver"]
@@ -58,7 +63,7 @@ services:
 
   Bungle\Framework\Form\BungleFormTypeGuesser:
     class: Bungle\Framework\Form\BungleFormTypeGuesser
-    arguments: 
+    arguments:
       - '@form.type_guesser.doctrine.mongodb'
       - '@bungle.entity.meta_repository'
     tags: ['form.type_guesser']
