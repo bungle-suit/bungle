@@ -15,9 +15,9 @@
     "symfony/yaml": "^5.0"
   },
   "autoload": {
-    "psr-4": { "Bungle\\FrameworkBundle\\": "" },
-    "exclude-from-classmap": [
-      "/Tests/"
-    ]
+    "psr-4": { "Bungle\\FrameworkBundle\\": "src/" }
+  },
+  "autoload-dev": {
+    "psr-4": { "Bungle\\FrameworkBundle\\Tests": "tests/" }
   }
 }

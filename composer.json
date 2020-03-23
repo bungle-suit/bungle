@@ -24,11 +24,18 @@
   },
   "autoload": {
     "psr-4": {
-      "Bungle\\Framework\\": "Framework/",
-      "Bungle\\FrameworkBundle\\": "BungleBundle/"
+      "Bungle\\Framework\\": "Framework/src/",
+      "Bungle\\FrameworkBundle\\": "BungleBundle/src/"
     },
     "exclude-from-classmap": [
-      "**/Tests/"
+      "*/tests/"
     ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Bungle\\Framework\\Tests\\": "Framework/tests/",
+      "Bungle\\FrameworkBundle\\Tests\\": "BungleBundle/tests/"
+    }
   }
+
 }
