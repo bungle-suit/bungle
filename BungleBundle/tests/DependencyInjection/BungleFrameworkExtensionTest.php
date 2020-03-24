@@ -71,6 +71,7 @@ final class BungleFrameworkExtensionTest extends TestCase
         );
         $this->container->set('event_dispatcher', new EventDispatcher());
         $this->container->set('request_stack', new RequestStack());
+        $this->container->set(DocumentManager::class, $this->createStub(DocumentManager::class));
 
         $vina = $this->container->get('bungle.workflow.vina');
         self::assertInstanceOf(Vina::class, $vina);

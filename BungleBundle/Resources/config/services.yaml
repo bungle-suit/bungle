@@ -41,10 +41,15 @@ services:
       - { name: kernel.event_listener, event: workflow.guard }
     arguments: ["@security.authorization_checker"]
 
+  bungle.workflow.odm_synctodb:
+     public: false
+     class: Bungle\Framework\StateMachine\ODMSyncToDB
+     arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
+
   bungle.workflow.vina:
     public: false
     class: Bungle\Framework\StateMachine\Vina
-    arguments: ["@workflow.registry", "@security.authorization_checker", "@request_stack", "@event_dispatcher"]
+    arguments: ["@workflow.registry", "@security.authorization_checker", "@request_stack", "@event_dispatcher", "@bungle.workflow.odm_synctodb"]
 
   Bungle\Framework\StateMachine\Vina: '@bungle.workflow.vina'
 
