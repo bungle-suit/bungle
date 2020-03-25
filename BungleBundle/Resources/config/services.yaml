@@ -70,6 +70,14 @@ services:
 
   Bungle\Framework\Security\RoleRegistry: '@bungle.role.registry'
 
+  Bungle\Framework\StateMachine\Steps\ValidateStep:
+    class: Bungle\Framework\StateMachine\Steps\ValidateStep
+    arguments: ['@validator']
+
+  Bungle\Framework\StateMachine\SaveSteps\ValidateSaveStep:
+    class: Bungle\Framework\StateMachine\SaveSteps\ValidateSaveStep
+    arguments: ['@validator']
+
   Bungle\Framework\Form\BungleFormTypeGuesser:
     class: Bungle\Framework\Form\BungleFormTypeGuesser
     arguments:

@@ -10,6 +10,8 @@ use Bungle\Framework\Form\BungleFormTypeGuesser;
 use Bungle\Framework\Inquiry\Inquiry;
 use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
 use Bungle\Framework\StateMachine\MarkingStore\StatefulInterfaceMarkingStore;
+use Bungle\Framework\StateMachine\SaveSteps\ValidateSaveStep;
+use Bungle\Framework\StateMachine\Steps\ValidateStep;
 use Bungle\Framework\StateMachine\Vina;
 use Bungle\Framework\Tests\StateMachine\EventListener\FakeAuthorizationChecker;
 use Bungle\Framework\Twig\BungleTwigExtension;
@@ -24,6 +26,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Form\Extension\Validator\ValidatorTypeGuesser;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Workflow\Registry;
 
 final class BungleFrameworkExtensionTest extends TestCase
@@ -118,6 +121,20 @@ final class BungleFrameworkExtensionTest extends TestCase
         self::assertInstanceOf(BungleTwigExtension::class, $ext);
         $def = $this->container->getDefinition('bungle.twig.extension');
         self::assertEquals(['twig.extension' => [[]]], $def->getTags());
+    }
+
+    public function testValidationStep(): void
+    {
+        $this->container->set('validator', $this->createStub(ValidatorInterface::class));
+        $step = $this->container->get(ValidateStep::class);
+        self::assertInstanceOf(ValidateStep::class, $step);
+    }
+
+    public function testValidationSaveStep(): void
+    {
+        $this->container->set('validator', $this->createStub(ValidatorInterface::class));
+        $step = $this->container->get(ValidateSaveStep::class);
+        self::assertInstanceOf(ValidateSaveStep::class, $step);
     }
 
     private function addManagerRegistry(): ManagerRegistry
