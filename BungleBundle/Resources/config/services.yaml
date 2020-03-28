@@ -78,9 +78,3 @@ services:
     class: Bungle\Framework\StateMachine\SaveSteps\ValidateSaveStep
     arguments: ['@validator']
 
-  Bungle\Framework\Form\BungleFormTypeGuesser:
-    class: Bungle\Framework\Form\BungleFormTypeGuesser
-    arguments:
-      - '@form.type_guesser.doctrine.mongodb'
-      - '@bungle.entity.meta_repository'
-    tags: ['form.type_guesser']

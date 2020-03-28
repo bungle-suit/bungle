@@ -99,14 +99,6 @@ final class BungleFrameworkExtensionTest extends TestCase
         self::assertInstanceOf(StatefulInterfaceMarkingStore::class, $store);
     }
 
-    public function testBungleFormTypeGuesser(): void
-    {
-        $this->addManagerRegistry();
-        $this->container->set('form.type_guesser.doctrine.mongodb', $this->createStub(ValidatorTypeGuesser::class));
-        $guesser = $this->container->get('Bungle\Framework\Form\BungleFormTypeGuesser');
-        self::assertInstanceOf(BungleFormTypeGuesser::class, $guesser);
-    }
-
     public function testInquiry(): void
     {
         $docManager = $this->createStub(DocumentManager::class);
