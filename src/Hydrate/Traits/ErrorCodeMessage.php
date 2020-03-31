@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Bungle\DingTalk\Hydrate;
+namespace Bungle\DingTalk\Hydrate\Traits;
 
 use RuntimeException;
 use Symfony\Component\Serializer\Annotation\SerializedName;
