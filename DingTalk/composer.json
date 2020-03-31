@@ -4,6 +4,7 @@
   "type": "library",
   "license": "MIT",
   "require": {
+    "bungle/framework": "dev-master",
     "mingyoung/dingtalk": "^2.3",
     "symfony/serializer": "^5.0",
     "symfony/property-info": "^5.0",

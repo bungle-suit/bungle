@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Bungle\DingTalk\Tests\Hydrate;
+namespace Bungle\DingTalk\Tests\Hydrate\Traits;
 
-use Bungle\DingTalk\Hydrate\ErrorCodeMessage;
+use Bungle\DingTalk\Hydrate\Traits\ErrorCodeMessage;
 use Mockery;
 use Mockery\Mock;
 use PHPUnit\Framework\TestCase;
