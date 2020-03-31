@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bungle\DingTalk\Hydrate\Traits;
 
+use Bungle\DingTalk\Hydrate\HydrateUtil;
 use RuntimeException;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
