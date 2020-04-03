@@ -12,17 +12,13 @@ services:
     public: true
     arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
 
-  bungle.entity.meta_repository:
-    class: Bungle\Framework\Entity\EntityMetaRepository
-    arguments: ["@bungle.entity.meta_resolver"]
-
   bungle.entity.high_resolver:
     class: Bungle\Framework\Entity\AnnotationHighResolver
     arguments: [[]]
 
   bungle.entity.registry:
     class: Bungle\Framework\Entity\EntityRegistry
-    arguments: ["@bungle.entity.discover", "@bungle.entity.high_resolver"]
+    arguments: ["@bungle.entity.discover", "@bungle.entity.high_resolver", "@bungle.entity.meta_resolver"]
 
   bungle.twig.extension:
     class: Bungle\Framework\Twig\BungleTwigExtension

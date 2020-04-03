@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 
-use Bungle\Framework\Entity\EntityMetaRepository;
 use Bungle\Framework\Entity\EntityRegistry;
-use Bungle\Framework\Form\BungleFormTypeGuesser;
 use Bungle\Framework\Inquiry\Inquiry;
 use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
 use Bungle\Framework\StateMachine\MarkingStore\StatefulInterfaceMarkingStore;
@@ -24,7 +22,6 @@ use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\Form\Extension\Validator\ValidatorTypeGuesser;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Workflow\Registry;
@@ -43,16 +40,11 @@ final class BungleFrameworkExtensionTest extends TestCase
     {
         $container = $this->container;
         self::assertTrue($container->has('bungle.entity.registry'));
-        self::assertTrue($container->has('bungle.entity.meta_repository'));
 
         $this->addManagerRegistry();
         $registry = $container->get('bungle.entity.registry');
         self::assertInstanceOf(EntityRegistry::class, $registry);
         self::assertSame($registry, $container->get(EntityRegistry::class));
-
-        $repository = $container->get('bungle.entity.meta_repository');
-        self::assertInstanceOf(EntityMetaRepository::class, $repository);
-        self::assertSame($repository, $container->get(EntityMetaRepository::class));
     }
 
     public function testStateMachine(): void
