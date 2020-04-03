@@ -6,6 +6,7 @@ namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 
 use Bungle\Framework\Entity\EntityRegistry;
 use Bungle\Framework\Inquiry\Inquiry;
+use Bungle\Framework\Security\RoleRegistry;
 use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
 use Bungle\Framework\StateMachine\MarkingStore\StatefulInterfaceMarkingStore;
 use Bungle\Framework\StateMachine\SaveSteps\ValidateSaveStep;
@@ -81,8 +82,9 @@ final class BungleFrameworkExtensionTest extends TestCase
         $this->container->set('event_dispatcher', new EventDispatcher());
         $this->addManagerRegistry();
 
+        /** @var RoleRegistry $reg */
         $reg = $this->container->get('Bungle\Framework\Security\RoleRegistry');
-        self::assertEmpty($reg->defs);
+        self::assertEmpty($reg->getDefinitions());
     }
 
     public function testStatefulMarkingStore(): void
