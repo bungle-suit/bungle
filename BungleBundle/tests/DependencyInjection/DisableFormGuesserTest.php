@@ -44,7 +44,7 @@ class DisableFormGuesserTest extends TestCase
         $exp = new Definition(BungleFormTypeGuesser::class);
         $exp->addTag(self::TAG_TYPE_GUESSER);
         $exp->addArgument(new Reference('bungle.type_guesser.chained'));
-        $exp->addArgument(new Reference('bungle.entity.meta_repository'));
+        $exp->addArgument(new Reference('bungle.entity.registry'));
         self::assertEquals($exp, $container->findDefinition('bungle.form.type_guesser'));
     }
 }
