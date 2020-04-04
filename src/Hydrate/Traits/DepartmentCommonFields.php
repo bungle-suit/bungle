@@ -13,6 +13,12 @@ trait DepartmentCommonFields
     /** @SerializedName("parentid") */
     public int $parentId = 0;
 
+    /** @SerializedName("outerDept") */
+    public bool $isOuterDepartment;
+    public string $ext = '';
+    public string $deptManagerUseridList = '';
+    public string $sourceIdentifier = '';
+
     public static function create(int $id, string $name, int $parentId): self
     {
         $r = new self();

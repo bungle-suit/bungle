@@ -20,7 +20,7 @@ class DepartmentListResponseTest extends TestCase
                     'name' => 'root',
                     'createDeptGroup' => true,
                     'autoAddUser' => true,
-                    'ext' => '{"deptNo":1}',
+                    'ext' => '',
                 ],
                 [
                     'id' => 2,
@@ -28,7 +28,7 @@ class DepartmentListResponseTest extends TestCase
                     'parentid' => 1,
                     'createDeptGroup' => true,
                     'autoAddUser' => true,
-                    'ext' => '{"deptNo":1}',
+                    'ext' => '',
                 ],
                 [
                     'id' => 3,
@@ -36,7 +36,7 @@ class DepartmentListResponseTest extends TestCase
                     'parentid' => 2,
                     'createDeptGroup' => false,
                     'autoAddUser' => false,
-                    'ext' => '{"deptNo":2}',
+                    'ext' => '',
                 ],
             ],
         ];

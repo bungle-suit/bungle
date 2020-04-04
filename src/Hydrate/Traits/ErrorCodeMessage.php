@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Bungle\DingTalk\Hydrate\Traits;
 
+use Bungle\DingTalk\DingTalkException;
 use Bungle\DingTalk\Hydrate\HydrateUtil;
-use RuntimeException;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
+// TODO: remove ErrorCodeMessage
 trait ErrorCodeMessage
 {
     // success if 0, error if other value.
@@ -20,10 +21,8 @@ trait ErrorCodeMessage
      */
     public function checkCode(): void
     {
-        $errCode = $this->errorCode;
-        $errMsg = $this->errorMessage;
-        if (0 !== $errCode) {
-            throw new RuntimeException("[DingTalk] $errCode/$errMsg");
+        if (0 !== $this->errorCode) {
+            throw new DingTalkException($this->errorMessage, $this->errorCode);
         }
     }
 

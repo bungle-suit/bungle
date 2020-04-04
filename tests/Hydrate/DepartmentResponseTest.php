@@ -34,6 +34,9 @@ class DepartmentResponseTest extends TestCase
         $exp->order = 10;
         $exp->errorMessage = 'ok';
         $exp->deptManagerUseridList = 'manager1122|manager3211';
+        $exp->ext = '{"deptNo":1}';
+        $exp->sourceIdentifier = 'source';
+        $exp->isOuterDepartment = true;
         self::assertEquals($exp, DepartmentResponse::hydrate($input));
     }
 

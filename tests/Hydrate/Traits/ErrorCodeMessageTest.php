@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bungle\DingTalk\Tests\Hydrate\Traits;
 
+use Bungle\DingTalk\DingTalkException;
 use Bungle\DingTalk\Hydrate\Traits\ErrorCodeMessage;
 use Mockery;
 use Mockery\Mock;
@@ -23,7 +24,9 @@ class ErrorCodeMessageTest extends TestCase
 
     public function testCheckCodeFailed(): void
     {
-        $this->expectExceptionMessage('10/Bad Happened');
+        $this->expectException(DingTalkException::class);
+        $this->expectExceptionMessage('Bad Happened');
+        $this->expectExceptionCode(10);
 
         /** @var Mock|ErrorCodeMessage $rec */
         $rec = Mockery::mock(ErrorCodeMessage::class)->makePartial();

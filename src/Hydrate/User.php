@@ -16,4 +16,10 @@ class User
     public bool $isAdmin;
     public bool $isLeader;
     public string $mobile;
+
+    /**
+     * @var string[]
+     * @SerializedName("department")
+     */
+    public array $departments;
 }
