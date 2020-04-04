@@ -15,4 +15,5 @@ class User
     public string $name;
     public bool $isAdmin;
     public bool $isLeader;
+    public string $mobile;
 }
