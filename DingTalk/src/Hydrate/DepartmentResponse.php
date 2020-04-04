@@ -13,9 +13,6 @@ class DepartmentResponse
 {
     use DepartmentCommonFields, ErrorCodeMessage;
 
-    // 部门的主管列表，取值为由主管的userid组成的字符串，不同的userid使用“|”符号进行分割
-    public string $deptManagerUseridList = '';
-
     // 当前部门在父部门下的所有子部门中的排序值
     public int $order = 0;
 
