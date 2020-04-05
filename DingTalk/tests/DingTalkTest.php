@@ -42,7 +42,7 @@ class DingTalkTest extends MockeryTestCase
         $this
             ->department
             ->expects('list')
-            ->with()
+            ->with(null, true)
             ->andReturn(
                 [
                     'errcode' => 10,
@@ -160,7 +160,7 @@ class DingTalkTest extends MockeryTestCase
         $this
             ->department
             ->expects('list')
-            ->with()
+            ->with(null, true)
             ->andReturn(
                 [
                     'errcode' => 0,

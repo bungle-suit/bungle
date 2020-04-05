@@ -13,7 +13,7 @@ class User
     /** @SerializedName("userid") */
     public string $id;
     public string $name;
-    public string $mobile;
+    public string $mobile = '';
     // 是否已激活
     public bool $active = false;
 

@@ -81,7 +81,7 @@ class DingTalk
             return;
         }
 
-        $resp = $this->app->department->list();
+        $resp = $this->app->department->list(null, true);
         $this->checkResponse($resp);
 
         $ids = array_map(fn ($rec) => $rec['id'], $resp['department']);
