@@ -13,9 +13,9 @@ class User
     /** @SerializedName("userid") */
     public string $id;
     public string $name;
-    public bool $isAdmin;
-    public bool $isLeader;
     public string $mobile;
+    // 是否已激活
+    public bool $active = false;
 
     /**
      * @var string[]

@@ -6,8 +6,10 @@ namespace Bungle\DingTalk\Tests;
 use Bungle\DingTalk\DingTalk;
 use Bungle\DingTalk\DingTalkException;
 use Bungle\DingTalk\Hydrate\Department;
+use Bungle\DingTalk\Hydrate\User;
 use EasyDingTalk\Application;
 use EasyDingTalk\Department\Client as DepartmentClient;
+use EasyDingTalk\User\Client as UserClient;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
@@ -18,14 +20,18 @@ class DingTalkTest extends MockeryTestCase
     private DingTalk $dd;
     /** @var DepartmentClient|Mockery\LegacyMockInterface|Mockery\MockInterface  */
     private $department;
+    /** @var UserClient|Mockery\LegacyMockInterface|Mockery\MockInterface  */
+    private $user;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->app = Mockery::mock(Application::class);
         $this->department = Mockery::mock(DepartmentClient::class);
+        $this->user = Mockery::mock(UserClient::class);
+        $this->app = Mockery::mock(Application::class);
         $this->app->department = $this->department;
+        $this->app->user = $this->user;
         $this->dd = new DingTalk($this->app);
     }
 
@@ -49,63 +55,9 @@ class DingTalkTest extends MockeryTestCase
         $this->dd->getDepartmentTree();
     }
 
-    public function testGetDepartment(): void
+    public function testGetDepartment(): DingTalk
     {
-        $this
-            ->department
-            ->expects('list')
-            ->with()
-            ->andReturn(
-                [
-                    'errcode' => 0,
-                    'errmsg' => 'ok',
-                    'department' =>[
-                        [
-                            'id' => 1,
-                            'name' => 'root',
-                            'parentid' => 0,
-                            'ext' => 'ext12',
-                        ],
-                        [
-                            'id' => 2,
-                            'name' => 'child',
-                            'parentid' => 1,
-                            'ext' => '',
-                        ],
-                    ],
-                ]
-            )
-        ;
-        $this->department->expects('get')
-            ->with(1)
-            ->andReturn(
-                [
-                    'errcode' => 0,
-                    'errmsg' => 'ok',
-                    'id' => 1,
-                    'name' => 'root',
-                    'parentid' => 0,
-                    'outerDept' => true,
-                    'deptManagerUseridList' => 'manager1122|manager3211',
-                    'sourceIdentifier' => 'source',
-                    'ext' => 'blah',
-                ]
-            )
-        ;
-        $this->department->expects('get')
-            ->with(2)
-            ->andReturn(
-                [
-                    'errcode' => 0,
-                    'errmsg' => 'ok',
-                    'id' => 2,
-                    'name' => 'child',
-                    'parentid' => 1,
-                    'outerDept' => false,
-                    'ext' => '',
-                ]
-            )
-        ;
+        $this->mockDepartments();
 
         $dept1 = new Department();
         $dept1->id = 1;
@@ -130,5 +82,127 @@ class DingTalkTest extends MockeryTestCase
 
         self::assertEquals($dept1, $this->dd->getDepartment(1));
         self::assertEquals($dept2, $this->dd->getDepartment(2));
+        return $this->dd;
+    }
+
+    public function testGetUsers(): void
+    {
+        $this->mockDepartments();
+        $recZhangsan = [
+            'userid' => 'zhangsan',
+            'unionid' => 'PiiiPyQqBNBii0HnCJ3zljcxxxxxx',
+            'mobile' => '13212345678',
+            'isLeaderInDepts' => [],
+            'order' => 1,
+            'name' => '张三',
+
+            'active' => true,
+            'department' => [1],
+            'position' => '工程师',
+            'email' => 'test@xxx.com',
+        ];
+        $recLisi = [
+            'userid' => 'lisi',
+            'unionid' => 'PiiiPyQqBNBii0HnCJ3zljcxxxxx1',
+            'mobile' => '13212345679',
+            'order' => 1,
+            'name' => '莉丝',
+            'active' => true,
+            'department' => [1, 2],
+            'position' => '工程师',
+            'email' => 'test@xxx.com',
+        ];
+        $this->user->expects('getDetailedUsers')
+            ->with(1, 0, 100)->andReturn(
+                [
+                    'errcode' => 0,
+                    'errmsg' => 'ok',
+                    'userlist' => [ $recZhangsan, $recLisi ],
+                ]
+            );
+        $this->user->expects('getDetailedUsers')
+            ->with(2, 0, 100)->andReturn(
+                [
+                    'errcode' => 0,
+                    'errmsg' => 'ok',
+                    'userlist' => [ $recLisi ],
+                ]
+            );
+
+        $u1= new User();
+        $u1->id = 'zhangsan';
+        $u1->name = '张三';
+        $u1->mobile = '13212345678';
+        $u1->active = true;
+        $u1->departments = [1];
+
+        $u2= new User();
+        $u2->id = 'lisi';
+        $u2->name = '莉丝';
+        $u2->mobile = '13212345679';
+        $u2->active = true;
+        $u2->departments = [1, 2];
+        $exp = [
+            'zhangsan' => $u1,
+            'lisi' => $u2,
+        ];
+
+        self::assertEquals($exp, $this->dd->getUsers());
+    }
+
+    private function mockDepartments(): void
+    {
+        $this
+            ->department
+            ->expects('list')
+            ->with()
+            ->andReturn(
+                [
+                    'errcode' => 0,
+                    'errmsg' => 'ok',
+                    'department' => [
+                        [
+                            'id' => 1,
+                            'name' => 'root',
+                            'parentid' => 0,
+                            'ext' => 'ext12',
+                        ],
+                        [
+                            'id' => 2,
+                            'name' => 'child',
+                            'parentid' => 1,
+                            'ext' => '',
+                        ],
+                    ],
+                ]
+            );
+        $this->department->expects('get')
+            ->with(1)
+            ->andReturn(
+                [
+                    'errcode' => 0,
+                    'errmsg' => 'ok',
+                    'id' => 1,
+                    'name' => 'root',
+                    'parentid' => 0,
+                    'outerDept' => true,
+                    'deptManagerUseridList' => 'manager1122|manager3211',
+                    'sourceIdentifier' => 'source',
+                    'ext' => 'blah',
+                ]
+            );
+        $this->department->expects('get')
+            ->with(2)
+            ->andReturn(
+                [
+                    'errcode' => 0,
+                    'errmsg' => 'ok',
+                    'id' => 2,
+                    'name' => 'child',
+                    'parentid' => 1,
+                    'outerDept' => false,
+                    'ext' => '',
+                ]
+            );
     }
 }
