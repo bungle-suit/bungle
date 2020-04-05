@@ -64,7 +64,15 @@ class DingTalk
                 $users[$u->id] = $u;
             }
         }
-        return $users;
+        return $this->users = $users;
+    }
+
+    /**
+     * Get user by its id.
+     */
+    public function getUser(string $id): User
+    {
+        return $this->getUsers()[$id];
     }
 
     private function initDepartments(): void
