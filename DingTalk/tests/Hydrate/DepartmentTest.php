@@ -15,6 +15,18 @@ class DepartmentTest extends TestCase
         Department::toTree([]);
     }
 
+    /**
+     * @return Department[]
+     */
+    private static function createDepartmentList(): array {
+        return [
+            Department::create(4, 'ca1', 2),
+            Department::create(1, 'root', 0),
+            Department::create(2, 'c1', 1),
+            Department::create(3, 'c2', 1),
+        ];
+    }
+
     public function testListToTree(): void
     {
         $list = [Department::create(1, 'root', 0)];
@@ -22,17 +34,11 @@ class DepartmentTest extends TestCase
         $act = Department::toTree($list);
         self::assertEquals($exp, $act);
 
-        $list = [
-            $ca1 = Department::create(4, 'ca1', 2),
-            $root = Department::create(1, 'root', 0),
-            $c1 = Department::create(2, 'c1', 1),
-            $c2 = Department::create(3, 'c2', 1),
-        ];
-        list($root, $c1, $c2, $ca1) = [clone $root, $c1, $c2, $ca1];
-        $root->children = [ $c1, $c2 ];
+        list($ca1, $root, $c1, $c2) = self::createDepartmentList();
+        $root->children = [$c1, $c2];
         $c1->children  = [$ca1];
 
-        self::assertEquals($root, Department::toTree($list));
+        self::assertEquals($root, Department::toTree(self::createDepartmentList()));
     }
 
     public function testGetManagerUserIds(): void
