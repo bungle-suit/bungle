@@ -34,4 +34,16 @@ class DepartmentTest extends TestCase
 
         self::assertEquals($root, Department::toTree($list));
     }
+
+    public function testGetManagerUserIds(): void
+    {
+        $exp = Department::create(2, 'xxx', 1);
+        self::assertEquals([], $exp->getManagerUserIds());
+
+        $exp->deptManagerUseridList = 'one';
+        self::assertEquals(['one'], $exp->getManagerUserIds());
+
+        $exp->deptManagerUseridList = 'manager1122|manager3211';
+        self::assertEquals(['manager1122', 'manager3211'], $exp->getManagerUserIds());
+    }
 }
