@@ -148,6 +148,11 @@ class DingTalkTest extends MockeryTestCase
         ];
 
         self::assertEquals($exp, $this->dd->getUsers());
+        // should use cached results.
+        self::assertEquals($exp, $this->dd->getUsers());
+        self::assertEquals($u1, $this->dd->getUser('zhangsan'));
+        self::assertEquals($u2, $this->dd->getUser('lisi'));
+
     }
 
     private function mockDepartments(): void
@@ -204,5 +209,6 @@ class DingTalkTest extends MockeryTestCase
                     'ext' => '',
                 ]
             );
+
     }
 }
