@@ -74,3 +74,7 @@ services:
     class: Bungle\Framework\StateMachine\SaveSteps\ValidateSaveStep
     arguments: ['@validator']
 
+  bungle.state_machine.stt_locator:
+    class: Bungle\Framework\StateMachine\STTLocator\ContainerSTTLocator
+    calls:
+      - [ setContainer, [ '@service_container' ] ]

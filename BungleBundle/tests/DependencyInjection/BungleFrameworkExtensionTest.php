@@ -11,6 +11,7 @@ use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
 use Bungle\Framework\StateMachine\MarkingStore\StatefulInterfaceMarkingStore;
 use Bungle\Framework\StateMachine\SaveSteps\ValidateSaveStep;
 use Bungle\Framework\StateMachine\Steps\ValidateStep;
+use Bungle\Framework\StateMachine\STTLocator\ContainerSTTLocator;
 use Bungle\Framework\StateMachine\Vina;
 use Bungle\Framework\Tests\StateMachine\EventListener\FakeAuthorizationChecker;
 use Bungle\Framework\Twig\BungleTwigExtension;
@@ -121,6 +122,14 @@ final class BungleFrameworkExtensionTest extends TestCase
         $this->container->set('validator', $this->createStub(ValidatorInterface::class));
         $step = $this->container->get(ValidateSaveStep::class);
         self::assertInstanceOf(ValidateSaveStep::class, $step);
+    }
+
+    public function testSTTLocator(): void
+    {
+        /** @var ContainerSTTLocator $locator */
+        $locator = $this->container->get('bungle.state_machine.stt_locator');
+        self::assertInstanceOf(ContainerSTTLocator::class, $locator);
+        self::assertEquals($this->container, $locator->getContainer());
     }
 
     private function addManagerRegistry(): ManagerRegistry
