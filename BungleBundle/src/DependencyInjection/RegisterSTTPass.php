@@ -27,8 +27,6 @@ class RegisterSTTPass implements CompilerPassInterface
 
             $high = self::getHigh($container, $id);
             $hook("workflow.$high.transition", '__invoke');
-            $hook("vina.$high.save", 'invokeSave');
-            $hook("vina.$high.have_save_action", 'invokeCanSave');
         }
     }
 
