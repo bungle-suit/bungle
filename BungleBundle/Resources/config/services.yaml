@@ -1,0 +1,85 @@
+services:
+  bungle.entity.discover:
+    class: Bungle\Framework\Entity\ODMEntityDiscoverer
+    arguments: ["@doctrine_mongodb"]
+
+  bungle.entity.meta_resolver:
+    class: Bungle\Framework\Entity\EntityMetaResolver
+    arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
+
+  Bungle\Framework\Inquiry\Inquiry:
+    class: Bungle\Framework\Inquiry\Inquiry
+    public: true
+    arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
+
+  bungle.entity.high_resolver:
+    class: Bungle\Framework\Entity\AnnotationHighResolver
+    arguments: [[]]
+
+  bungle.entity.registry:
+    class: Bungle\Framework\Entity\EntityRegistry
+    arguments: ["@bungle.entity.discover", "@bungle.entity.high_resolver", "@bungle.entity.meta_resolver"]
+
+  bungle.twig.extension:
+    class: Bungle\Framework\Twig\BungleTwigExtension
+    tags: ['twig.extension']
+
+  Bungle\Framework\Entity\EntityMetaRepository: '@bungle.entity.meta_repository'
+  Bungle\Framework\Entity\EntityRegistry: '@bungle.entity.registry'
+
+  bungle.workflow.stateful_marking_store:
+    class: Bungle\Framework\StateMachine\MarkingStore\StatefulInterfaceMarkingStore
+
+  bungle.framework.state_machine.transition_role_guard_listener:
+    public: false
+    class: Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener
+    tags:
+      - { name: kernel.event_listener, event: workflow.guard }
+    arguments: ["@security.authorization_checker"]
+
+  bungle.workflow.odm_synctodb:
+     public: false
+     class: Bungle\Framework\StateMachine\ODMSyncToDB
+     arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
+
+  bungle.workflow.vina:
+    public: false
+    class: Bungle\Framework\StateMachine\Vina
+    arguments: ["@workflow.registry", "@security.authorization_checker", "@request_stack", "@bungle.state_machine.stt_locator", "@bungle.workflow.odm_synctodb"]
+
+  Bungle\Framework\StateMachine\Vina: '@bungle.workflow.vina'
+
+  bungle.state_machine.workflow_definition_resolver:
+    public: false
+    class: Bungle\Framework\StateMachine\EntityWorkflowDefinitionResolver
+    arguments: ['@workflow.registry', '@bungle.workflow.vina']
+
+  bungle.role.entity_role_provider:
+    public: false
+    class: Bungle\Framework\Security\EntityRoleDefinitionProvider
+    arguments: ['@bungle.entity.registry', '@bungle.state_machine.workflow_definition_resolver']
+
+  bungle.role.registry:
+    public: false
+    class: Bungle\Framework\Security\RoleRegistry
+    arguments: [['@bungle.role.entity_role_provider']]
+
+  Bungle\Framework\Security\RoleRegistry: '@bungle.role.registry'
+
+  Bungle\Framework\StateMachine\Steps\ValidateStep:
+    class: Bungle\Framework\StateMachine\Steps\ValidateStep
+    arguments: ['@validator']
+
+  Bungle\Framework\StateMachine\SaveSteps\ValidateSaveStep:
+    class: Bungle\Framework\StateMachine\SaveSteps\ValidateSaveStep
+    arguments: ['@validator']
+
+  bungle.state_machine.stt_locator:
+    class: Bungle\Framework\StateMachine\STTLocator\ContainerSTTLocator
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+  bungle.state_machine.stt_view_voter:
+    class: Bungle\Framework\StateMachine\FSMViewVoter
+    arguments: ['@bungle.state_machine.stt_locator', '@bungle.entity.registry']
+    tags: ['security.voter']
