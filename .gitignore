@@ -3,3 +3,4 @@
 .phplint-cache
 .idea
 .phpunit.result.cache
+.vagrant
