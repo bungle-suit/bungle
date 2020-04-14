@@ -15,5 +15,10 @@ format:
 	cd ./BungleBundle; $(MAKE) format
 	cd ./DingTalk; $(MAKE) format
 
+publish:
+	git subtree push --prefix=Framework framework master
+	git subtree push --prefix=BungleBundle bunglebundle master
+	git subtree push --prefix=DingTalk dingtalk master
+
 regen-autoload:
 	composer dump-autoload
