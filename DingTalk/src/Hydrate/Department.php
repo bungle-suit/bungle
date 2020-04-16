@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Bungle\DingTalk\Hydrate;
 
-use Bungle\Framework\Collection\CollectionUtil;
 use Bungle\Framework\FP;
 use Iterator;
 use Symfony\Component\Serializer\Annotation\SerializedName;
@@ -49,7 +48,7 @@ class Department
             throw new UnexpectedValueException('Can not process empty Departments');
         }
         // to id keyed array
-        $byIds = CollectionUtil::toKeyed(FP::attr('id'), $departments);
+        $byIds = FP::toKeyed(FP::attr('id'), $departments);
 
         $r = self::getRoot($byIds);
         self::treeFromRoot($r, $byIds);
