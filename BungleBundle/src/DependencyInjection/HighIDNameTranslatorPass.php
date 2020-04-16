@@ -14,7 +14,7 @@ class HighIDNameTranslatorPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $refs = array_map(fn (string $id) => new Reference($id), array_keys($container->findTaggedServiceIds(self::IDName_TAG)));
-        $chainDef =$container->getDefinition('bungle.high_id_name_translator_chain');
+        $chainDef =$container->getDefinition('bungle.id_name.chain_translator');
 
         if (null !== $chainDef) {
             $chainDef->addArgument($refs);

@@ -16,11 +16,11 @@ class HighIDNameTranslatorPassTest extends TestCase
         $container = new ContainerBuilder();
         $container->register('Translator1', 'Translator1')->addTag(HighIDNameTranslatorPass::IDName_TAG);
         $container->register('Translator2', 'Translator2')->addTag(HighIDNameTranslatorPass::IDName_TAG);
-        $container->register('bungle.high_id_name_translator_chain', HighIDNameTranslatorChain::class)
+        $container->register('bungle.id_name.chain_translator', HighIDNameTranslatorChain::class)
             ->addArgument(new Reference('bungle.entity.registry'));
 
         (new HighIDNameTranslatorPass())->process($container);
-        $def = $container->getDefinition('bungle.high_id_name_translator_chain');
+        $def = $container->getDefinition('bungle.id_name.chain_translator');
         self::assertCount(2, $def->getArguments());
         self::assertEquals([
             new Reference('Translator1'),
