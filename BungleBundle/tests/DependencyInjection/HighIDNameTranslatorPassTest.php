@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 
-use Bungle\Framework\IDName\HighIDNameTranslatorChain;
+use Bungle\Framework\Ent\IDName\HighIDNameTranslatorChain;
 use Bungle\FrameworkBundle\DependencyInjection\HighIDNameTranslatorPass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

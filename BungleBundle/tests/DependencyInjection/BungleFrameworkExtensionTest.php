@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 
+use Bungle\Framework\Ent\IDName\HighIDNameTranslator;
 use Bungle\Framework\Entity\EntityRegistry;
-use Bungle\Framework\IDName\HighIDNameTranslator;
 use Bungle\Framework\Inquiry\Inquiry;
 use Bungle\Framework\Security\RoleRegistry;
 use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
