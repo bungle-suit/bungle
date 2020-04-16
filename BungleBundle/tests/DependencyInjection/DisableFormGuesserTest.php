@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Bungle\Framework\Tests\DependencyInjection;
+namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 
 use Bungle\Framework\Form\BungleFormTypeGuesser;
 use Bungle\FrameworkBundle\DependencyInjection\DisableFormGuesser;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 
 use Bungle\Framework\Entity\EntityRegistry;
+use Bungle\Framework\IDName\HighIDNameTranslator;
 use Bungle\Framework\Inquiry\Inquiry;
 use Bungle\Framework\Security\RoleRegistry;
 use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
@@ -17,6 +18,7 @@ use Bungle\Framework\StateMachine\Vina;
 use Bungle\Framework\Tests\StateMachine\EventListener\FakeAuthorizationChecker;
 use Bungle\Framework\Twig\BungleTwigExtension;
 use Bungle\FrameworkBundle\DependencyInjection\BungleFrameworkExtension;
+use Bungle\FrameworkBundle\DependencyInjection\HighIDNameTranslatorPass;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\DocumentManager;
@@ -24,6 +26,7 @@ use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Mockery;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -142,6 +145,15 @@ final class BungleFrameworkExtensionTest extends TestCase
 
         $def = $this->container->getDefinition('bungle.state_machine.stt_view_voter');
         self::assertTrue($def->hasTag('security.voter'));
+    }
+
+    public function testHighIDNameTranslator(): void
+    {
+        $this->container->set('cache.app', new ArrayAdapter());
+        (new HighIDNameTranslatorPass())->process($this->container);
+        self::addManagerRegistry();
+        $idName = $this->container->get(HighIDNameTranslator::class);
+        self::assertInstanceOf(HighIDNameTranslator::class, $idName);
     }
 
     private function addManagerRegistry(): ManagerRegistry
