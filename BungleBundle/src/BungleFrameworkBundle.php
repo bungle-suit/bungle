@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bungle\FrameworkBundle;
 
 use Bungle\FrameworkBundle\DependencyInjection\DisableFormGuesser;
+use Bungle\FrameworkBundle\DependencyInjection\HighIDNameTranslatorPass;
 use Bungle\FrameworkBundle\DependencyInjection\RegisterSTTPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,6 +23,7 @@ final class BungleFrameworkBundle extends Bundle
         // TODO: remove RegisterListenersPass(), RegisterListenersPass() add by
         // FrameworkBundle
         $container->addCompilerPass(new RegisterListenersPass());
+        $container->addCompilerPass(new HighIDNameTranslatorPass());
         $container->addCompilerPass(new DisableFormGuesser(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 100);
     }
 }

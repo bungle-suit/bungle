@@ -83,3 +83,23 @@ services:
     class: Bungle\Framework\StateMachine\FSMViewVoter
     arguments: ['@bungle.state_machine.stt_locator', '@bungle.entity.registry']
     tags: ['security.voter']
+
+  bungle.id_name.code_translator:
+    class: Bungle\Framework\IDName\CodeAbleHighIDNameTranslator
+    arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
+    tags:
+      - { name: 'bungle.idName', priority: -2 }
+
+  bungle.id_name.name_translator:
+    class: Bungle\Framework\IDName\NameAbleHighIDNameTranslator
+    arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
+    tags:
+      - { name: 'bungle.idName', priority: -1 }
+
+  bungle.id_name.chain_translator:
+    class: Bungle\Framework\IDName\HighIDNameTranslatorChain
+    arguments: ["@bungle.entity.registry"]
+
+  Bungle\Framework\IDName\HighIDNameTranslator:
+    class: Bungle\Framework\IDName\HighIDNameTranslator
+    arguments: ["@bungle.id_name.chain_translator", "@cache.app"]
