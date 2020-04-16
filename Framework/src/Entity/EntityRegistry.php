@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Bungle\Framework\Entity;
 
-use Bungle\Framework\Collection\CollectionUtil;
-use Bungle\Framework\Exception\Exceptions;
+use Bungle\Framework\Exceptions;
+use Bungle\Framework\FP;
+use function in_array;
 
 class EntityRegistry
 {
@@ -41,7 +42,7 @@ class EntityRegistry
         }
 
         if (!($r = array_search($clsName, $this->highClsMap))) {
-            if (!\in_array($clsName, $this->entities)) {
+            if (!in_array($clsName, $this->entities)) {
                 return '';
             }
         }
@@ -64,7 +65,7 @@ class EntityRegistry
     }
 
     /**
-     * Get Entity class by high prefix.
+     * Get Entity class by the high prefix.
      */
     public function getEntityByHigh(string $high): string
     {
@@ -93,10 +94,10 @@ class EntityRegistry
     // Get entity meta
     public function getEntityMeta(string $class): EntityMeta
     {
-        return CollectionUtil::getOrCreate(
+        return FP::getOrCreate(
             $this->metaByClass,
             $class,
-            fn (string $class) => $this->metaResolver->resolveEntityMeta($class)
+            fn(string $class) => $this->metaResolver->resolveEntityMeta($class)
         );
     }
 
