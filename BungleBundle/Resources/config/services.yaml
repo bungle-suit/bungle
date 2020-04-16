@@ -7,8 +7,8 @@ services:
     class: Bungle\Framework\Entity\EntityMetaResolver
     arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
 
-  Bungle\Framework\Inquiry\Inquiry:
-    class: Bungle\Framework\Inquiry\Inquiry
+  Bungle\Framework\Ent\Inquiry\Inquiry:
+    class: Bungle\Framework\Ent\Inquiry\Inquiry
     public: true
     arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
 
