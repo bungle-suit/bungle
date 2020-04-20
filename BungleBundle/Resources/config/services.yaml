@@ -22,6 +22,7 @@ services:
 
   bungle.twig.extension:
     class: Bungle\Framework\Twig\BungleTwigExtension
+    arguments: ["@Bungle\\Framework\\Ent\\IDName\\HighIDNameTranslator"]
     tags: ['twig.extension']
 
   Bungle\Framework\Entity\EntityMetaRepository: '@bungle.entity.meta_repository'
