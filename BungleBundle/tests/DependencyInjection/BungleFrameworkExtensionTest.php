@@ -109,6 +109,11 @@ final class BungleFrameworkExtensionTest extends TestCase
 
     public function testBungleTwigExtension(): void
     {
+        $this->addManagerRegistry();
+        $this->container->set('cache.app', new ArrayAdapter());
+        (new HighIDNameTranslatorPass())->process($this->container);
+        self::addManagerRegistry();
+
         $ext = $this->container->get('bungle.twig.extension') ;
         self::assertInstanceOf(BungleTwigExtension::class, $ext);
         $def = $this->container->getDefinition('bungle.twig.extension');
