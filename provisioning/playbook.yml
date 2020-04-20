@@ -26,5 +26,12 @@
         enabled: yes
       become: true
 
+    - name: Enable assert throws AssertionException
+      replace:
+        path: /etc/php/php.ini
+        regexp: '^zend.assertions = -1'
+        replace: ';zend.assertions = -1'
+      become: true
+
     - name: set composer mirror
       shell: composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
