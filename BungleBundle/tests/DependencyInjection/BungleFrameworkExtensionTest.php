@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 
+use Bungle\Framework\Ent\Code\CodeGenerator;
 use Bungle\Framework\Ent\IDName\HighIDNameTranslator;
 use Bungle\Framework\Ent\Inquiry\Inquiry;
 use Bungle\Framework\Entity\EntityRegistry;
@@ -159,6 +160,12 @@ final class BungleFrameworkExtensionTest extends TestCase
         self::addManagerRegistry();
         $idName = $this->container->get(HighIDNameTranslator::class);
         self::assertInstanceOf(HighIDNameTranslator::class, $idName);
+    }
+
+    public function testCodeGenerator(): void
+    {
+        $gen = $this->container->get(CodeGenerator::class);
+        self::assertInstanceOf(CodeGenerator::class, $gen);
     }
 
     private function addManagerRegistry(): ManagerRegistry
