@@ -18,6 +18,8 @@ use Bungle\Framework\StateMachine\STTLocator\ContainerSTTLocator;
 use Bungle\Framework\StateMachine\Vina;
 use Bungle\Framework\Tests\StateMachine\EventListener\FakeAuthorizationChecker;
 use Bungle\Framework\Twig\BungleTwigExtension;
+use Bungle\FrameworkBundle\Command\ListCodeGeneratorsCommand;
+use Bungle\FrameworkBundle\Command\ListIDNameCommand;
 use Bungle\FrameworkBundle\DependencyInjection\BungleFrameworkExtension;
 use Bungle\FrameworkBundle\DependencyInjection\HighIDNameTranslatorPass;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
@@ -166,6 +168,21 @@ final class BungleFrameworkExtensionTest extends TestCase
     {
         $gen = $this->container->get(CodeGenerator::class);
         self::assertInstanceOf(CodeGenerator::class, $gen);
+    }
+
+    public function testListIDNameCommand(): void
+    {
+        $this->container->set('cache.app', new ArrayAdapter());
+        (new HighIDNameTranslatorPass())->process($this->container);
+        self::addManagerRegistry();
+        $cmd = $this->container->get('bungle.command.list_id_names');
+        self::assertInstanceOf(ListIDNameCommand::class, $cmd);
+    }
+
+    public function testListCodeGeneratorsCommand(): void
+    {
+        $cmd = $this->container->get('bungle.command.list_code_generators');
+        self::assertInstanceOf(ListCodeGeneratorsCommand::class, $cmd);
     }
 
     private function addManagerRegistry(): ManagerRegistry
