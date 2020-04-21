@@ -14,6 +14,8 @@ class ListIDNameCommand extends Command
 {
     /** @var HighIDNameTranslatorInterface[]  */
     private array $translators;
+    
+    protected static $defaultName = 'bungle:id-name';
 
     public function __construct(HighIDNameTranslatorChain $chain)
     {
