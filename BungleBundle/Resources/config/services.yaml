@@ -104,3 +104,7 @@ services:
   Bungle\Framework\Ent\IDName\HighIDNameTranslator:
     class: Bungle\Framework\Ent\IDName\HighIDNameTranslator
     arguments: ["@bungle.id_name.chain_translator", "@cache.app"]
+
+  Bungle\Framework\Ent\Code\CodeGenerator:
+    class: Bungle\Framework\Ent\Code\CodeGenerator
+    arguments: [[]]
