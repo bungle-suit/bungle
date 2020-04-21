@@ -24,15 +24,17 @@ class ListIDNameCommand extends Command
         $this->translators =  $chain->getTranslators();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('List id name translators');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $items = array_map(fn (HighIDNameTranslatorInterface $o) => get_class($o), $this->translators);
         $io->listing($items);
+
+        return 0;
     }
 }
