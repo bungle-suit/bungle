@@ -113,3 +113,8 @@ services:
     class: Bungle\FrameworkBundle\Command\ListIDNameCommand
     arguments: ["@bungle.id_name.chain_translator"]
     tags: ["console.command"]
+
+  bungle.command.list_code_generators:
+    class: Bungle\FrameworkBundle\Command\ListCodeGeneratorsCommand
+    arguments: ["@Bungle\\Framework\\Ent\\Code\\CodeGenerator"]
+    tags: ["console.command"]
