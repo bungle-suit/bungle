@@ -27,7 +27,7 @@ final class BungleFrameworkBundle extends Bundle
             ->addTag(RegisterCodeGeneratorPass::CODE_GEN_TAG);
 
         $container->registerForAutoconfiguration(HighIDNameTranslatorInterface::class)
-            ->addTag(HighIDNameTranslatorPass::IDName_TAG);
+            ->addTag(HighIDNameTranslatorPass::ID_NAME_TAG);
 
         $container->registerForAutoconfiguration(STTInterface::class)
             ->addTag(RegisterSTTPass::STT_TAG);
