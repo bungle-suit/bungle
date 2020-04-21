@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bungle\FrameworkBundle;
 
+use Bungle\Framework\Ent\Code\GeneratorInterface;
 use Bungle\FrameworkBundle\DependencyInjection\DisableFormGuesser;
 use Bungle\FrameworkBundle\DependencyInjection\HighIDNameTranslatorPass;
 use Bungle\FrameworkBundle\DependencyInjection\RegisterCodeGeneratorPass;
@@ -20,6 +21,9 @@ final class BungleFrameworkBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new RegisterSTTPass());
+
+        $container->registerForAutoconfiguration(GeneratorInterface::class)
+            ->addTag(RegisterCodeGeneratorPass::CODE_GEN_TAG);
 
         // TODO: remove RegisterListenersPass(), RegisterListenersPass() add by
         // FrameworkBundle
