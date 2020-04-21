@@ -9,11 +9,14 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class HighIDNameTranslatorPass implements CompilerPassInterface
 {
-    public const IDName_TAG = 'bungle.idName';
+    public const ID_NAME_TAG = 'bungle.idName';
 
     public function process(ContainerBuilder $container)
     {
-        $refs = array_map(fn (string $id) => new Reference($id), array_keys($container->findTaggedServiceIds(self::IDName_TAG)));
+        $refs = array_map(
+            fn (string $id) => new Reference($id),
+            array_keys($container->findTaggedServiceIds(self::ID_NAME_TAG))
+        );
         $chainDef =$container->getDefinition('bungle.id_name.chain_translator');
 
         if (null !== $chainDef) {

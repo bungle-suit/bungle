@@ -14,8 +14,8 @@ class HighIDNameTranslatorPassTest extends TestCase
     public function testProcess()
     {
         $container = new ContainerBuilder();
-        $container->register('Translator1', 'Translator1')->addTag(HighIDNameTranslatorPass::IDName_TAG);
-        $container->register('Translator2', 'Translator2')->addTag(HighIDNameTranslatorPass::IDName_TAG);
+        $container->register('Translator1', 'Translator1')->addTag(HighIDNameTranslatorPass::ID_NAME_TAG);
+        $container->register('Translator2', 'Translator2')->addTag(HighIDNameTranslatorPass::ID_NAME_TAG);
         $container->register('bungle.id_name.chain_translator', HighIDNameTranslatorChain::class)
             ->addArgument(new Reference('bungle.entity.registry'));
 
