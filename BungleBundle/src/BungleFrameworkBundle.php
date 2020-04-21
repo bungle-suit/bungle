@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bungle\FrameworkBundle;
 
 use Bungle\Framework\Ent\Code\GeneratorInterface;
+use Bungle\Framework\StateMachine\STT\STTInterface;
 use Bungle\FrameworkBundle\DependencyInjection\DisableFormGuesser;
 use Bungle\FrameworkBundle\DependencyInjection\HighIDNameTranslatorPass;
 use Bungle\FrameworkBundle\DependencyInjection\RegisterCodeGeneratorPass;
@@ -24,6 +25,9 @@ final class BungleFrameworkBundle extends Bundle
 
         $container->registerForAutoconfiguration(GeneratorInterface::class)
             ->addTag(RegisterCodeGeneratorPass::CODE_GEN_TAG);
+
+        $container->registerForAutoconfiguration(STTInterface::class)
+            ->addTag(RegisterSTTPass::STT_TAG);
 
         // TODO: remove RegisterListenersPass(), RegisterListenersPass() add by
         // FrameworkBundle
