@@ -118,3 +118,7 @@ services:
     class: Bungle\FrameworkBundle\Command\ListCodeGeneratorsCommand
     arguments: ["@Bungle\\Framework\\Ent\\Code\\CodeGenerator"]
     tags: ["console.command"]
+
+  Bungle\Framework\StateMachine\Steps\SetCodeStep:
+    class: Bungle\Framework\StateMachine\Steps\SetCodeStep
+    arguments: ['@Bungle\Framework\Ent\Code\CodeGenerator']

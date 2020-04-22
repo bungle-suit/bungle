@@ -13,6 +13,7 @@ use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
 use Bungle\Framework\StateMachine\FSMViewVoter;
 use Bungle\Framework\StateMachine\MarkingStore\StatefulInterfaceMarkingStore;
 use Bungle\Framework\StateMachine\SaveSteps\ValidateSaveStep;
+use Bungle\Framework\StateMachine\Steps\SetCodeStep;
 use Bungle\Framework\StateMachine\Steps\ValidateStep;
 use Bungle\Framework\StateMachine\STTLocator\ContainerSTTLocator;
 use Bungle\Framework\StateMachine\Vina;
@@ -168,6 +169,12 @@ final class BungleFrameworkExtensionTest extends TestCase
     {
         $gen = $this->container->get(CodeGenerator::class);
         self::assertInstanceOf(CodeGenerator::class, $gen);
+    }
+
+    public function testSetCodeStep(): void
+    {
+        $step = $this->container->get(SetCodeStep::class);
+        self::assertInstanceOf(SetCodeStep::class, $step);
     }
 
     public function testListIDNameCommand(): void
