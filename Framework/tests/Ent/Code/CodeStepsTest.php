@@ -32,4 +32,35 @@ class CodeStepsTest extends TestCase
         $f($o, $ctx);
         self::assertNotEmpty($ctx->sections);
     }
+
+    public function testLiteral(): void
+    {
+        $s1 = CodeSteps::literal('Foo');
+        $s2 = CodeSteps::literal('Bar');
+        $ctx = new CodeContext();
+        $s1((object)[], $ctx);
+        $s2((object)[], $ctx);
+
+        self::assertEquals(['Foo', 'Bar'], $ctx->sections);
+    }
+
+    public function testJoin(): void
+    {
+        $ctx = new CodeContext();
+        $ctx->addSection('foo');
+        $ctx->addSection('bar');
+        $ctx->addSection('123');
+
+        $j = CodeSteps::join('');
+        $j((object)[], $ctx);
+        self::assertEquals('foobar123', $ctx->result);
+
+        // join always replace result, not append
+        $j((object)[], $ctx);
+        self::assertEquals('foobar123', $ctx->result);
+
+        $j = CodeSteps::join('-');
+        $j((object)[], $ctx);
+        self::assertEquals('foo-bar-123', $ctx->result);
+    }
 }
