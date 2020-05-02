@@ -15,13 +15,14 @@ Vagrant.configure("2") do |config|
   config.vm.box = "archlinux"
   config.vm.provider "virtualbox" do |v|
     v.memory = 512
-    v.cpus = 1
+    v.cpus = 2
   end
   config.vm.provision "ansible_local" do |ansible|
     ansible.playbook = "./provisioning/playbook.yml"
     install = false
   end
-  config.vm.synced_folder "./", "/home/vagrant/bungle_framework"
+  config.vm.network "private_network", ip: "192.168.33.18"
+  config.vm.synced_folder "./", "/vagrant", type: 'nfs', nfs_udp: false
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
