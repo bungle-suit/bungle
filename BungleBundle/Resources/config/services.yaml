@@ -120,3 +120,8 @@ services:
   Bungle\Framework\StateMachine\Steps\SetCodeStep:
     class: Bungle\Framework\StateMachine\Steps\SetCodeStep
     arguments: ['@Bungle\Framework\Ent\Code\CodeGenerator']
+
+  Bungle\Framework\Form\PropertyInfoTypeGuesser:
+    class: Bungle\Framework\Form\PropertyInfoTypeGuesser
+    arguments: ['@property_info']
+    tags: ["form.type_guesser"]
