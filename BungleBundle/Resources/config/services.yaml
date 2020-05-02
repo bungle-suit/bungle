@@ -76,9 +76,8 @@ services:
     arguments: ['@validator']
 
   bungle.state_machine.stt_locator:
-    class: Bungle\Framework\StateMachine\STTLocator\ContainerSTTLocator
-    calls:
-      - [ setContainer, [ '@service_container' ] ]
+    class: Bungle\Framework\StateMachine\STTLocator\STTLocator
+    arguments: ['@service_container', '@bungle.entity.registry', []]
 
   bungle.state_machine.stt_view_voter:
     class: Bungle\Framework\StateMachine\FSMViewVoter
