@@ -31,5 +31,6 @@ final class RegisterSTTPassTest extends TestCase
         self::assertInstanceOf(OrderSTT::class, $events[0][0]);
         self::assertEquals('__invoke', $events[0][1]);
         self::assertTrue($sttDef->isPublic());
+        self::assertFalse($sttDef->isPrivate());
     }
 }

@@ -27,7 +27,9 @@ class RegisterSTTPass implements CompilerPassInterface
                 ]);
             };
 
-            $sttClass = self::getSTTClass($container, $id);
+            $sttDef = $container->getDefinition($id);
+            $sttDef->setPrivate(false);
+            $sttClass = $sttDef->getClass();
             $high = self::getHigh($sttClass);
             $hook("workflow.$high.transition", '__invoke');
 
@@ -36,11 +38,6 @@ class RegisterSTTPass implements CompilerPassInterface
 
         $locator = $container->getDefinition('bungle.state_machine.stt_locator');
         $locator->setArgument(2, $sttByHigh);
-    }
-
-    private static function getSTTClass(ContainerBuilder $container, string $id): string
-    {
-        return $container->getDefinition($id)->getClass();
     }
 
     private static function getHigh(string $sttClass): string
