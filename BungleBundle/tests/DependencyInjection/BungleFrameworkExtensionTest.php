@@ -15,7 +15,7 @@ use Bungle\Framework\StateMachine\MarkingStore\StatefulInterfaceMarkingStore;
 use Bungle\Framework\StateMachine\SaveSteps\ValidateSaveStep;
 use Bungle\Framework\StateMachine\Steps\SetCodeStep;
 use Bungle\Framework\StateMachine\Steps\ValidateStep;
-use Bungle\Framework\StateMachine\STTLocator\ContainerSTTLocator;
+use Bungle\Framework\StateMachine\STTLocator\STTLocator;
 use Bungle\Framework\StateMachine\Vina;
 use Bungle\Framework\Tests\StateMachine\EventListener\FakeAuthorizationChecker;
 use Bungle\Framework\Twig\BungleTwigExtension;
@@ -70,6 +70,7 @@ final class BungleFrameworkExtensionTest extends TestCase
 
     public function testVina(): void
     {
+        $this->addManagerRegistry();
         $this->container->set('workflow.registry', new Registry());
         $this->container->set(
             'security.authorization_checker',
@@ -140,10 +141,10 @@ final class BungleFrameworkExtensionTest extends TestCase
 
     public function testSTTLocator(): void
     {
-        /** @var ContainerSTTLocator $locator */
+        $this->addManagerRegistry();
+        /** @var STTLocator $locator */
         $locator = $this->container->get('bungle.state_machine.stt_locator');
-        self::assertInstanceOf(ContainerSTTLocator::class, $locator);
-        self::assertEquals($this->container, $locator->getContainer());
+        self::assertInstanceOf(STTLocator::class, $locator);
     }
 
     public function testSTTViewVoter(): void
