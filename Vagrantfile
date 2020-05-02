@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
     install = false
   end
   config.vm.network "private_network", ip: "192.168.33.18"
-  config.vm.synced_folder "./", "/home/vagrant/bungle_framework", type: 'nfs', nfs_udp: false
+  config.vm.synced_folder "./", "/vagrant", type: 'nfs', nfs_udp: false
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
