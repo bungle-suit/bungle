@@ -31,7 +31,8 @@ final class BungleFrameworkBundle extends Bundle
 
         $container->registerForAutoconfiguration(STTInterface::class)
             ->addTag(RegisterSTTPass::STT_TAG)
-            ->setPublic(true);
+            ->setPublic(true)
+            ->setPrivate(false);
 
         $container->addCompilerPass(new HighIDNameTranslatorPass());
         $container->addCompilerPass(new DisableFormGuesser(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 100);
