@@ -15,6 +15,8 @@ class RegisterSTTPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
+        /** @var string[] $sttByHigh */
+        $sttByHigh = [];
         $dispatcher = $container->findDefinition('event_dispatcher');
         foreach ($container->findTaggedServiceIds(self::STT_TAG, true) as $id => $stt) {
             $hook = function (string $evt, string $method) use ($dispatcher, $id) {
@@ -25,15 +27,24 @@ class RegisterSTTPass implements CompilerPassInterface
                 ]);
             };
 
-            $high = self::getHigh($container, $id);
+            $sttClass = self::getSTTClass($container, $id);
+            $high = self::getHigh($sttClass);
             $hook("workflow.$high.transition", '__invoke');
+
+            $sttByHigh[$high] = $sttClass;
         }
+
+        $locator = $container->getDefinition('bungle.state_machine.stt_locator');
+        $locator->setArgument(2, $sttByHigh);
     }
 
-    private static function getHigh(ContainerBuilder $container, string $id): string
+    private static function getSTTClass(ContainerBuilder $container, string $id): string
     {
-        $cls = $container->getDefinition($id)->getClass();
+        return $container->getDefinition($id)->getClass();
+    }
 
-        return ($cls.'::getHigh')();
+    private static function getHigh(string $sttClass): string
+    {
+        return ($sttClass.'::getHigh')();
     }
 }
