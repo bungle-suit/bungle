@@ -5,7 +5,6 @@ services:
 
   bungle.entity.meta_resolver:
     class: Bungle\Framework\Entity\EntityMetaResolver
-    arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
 
   Bungle\Framework\Ent\Inquiry\Inquiry:
     class: Bungle\Framework\Ent\Inquiry\Inquiry
