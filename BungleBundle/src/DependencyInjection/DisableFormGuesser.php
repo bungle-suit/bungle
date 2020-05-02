@@ -22,9 +22,9 @@ class DisableFormGuesser implements CompilerPassInterface
         // If not disabled, depends type guessers order, builtin
         // guess used instead of ours.
         $ids = $container->findTaggedServiceIds(self::TAG_TYPE_GUESSER);
-        foreach ($ids as $id =>$v) {
-           $def = $container->findDefinition($id);
-           $def->clearTag(self::TAG_TYPE_GUESSER);
+        foreach ($ids as $id => $v) {
+            $def = $container->findDefinition($id);
+            $def->clearTag(self::TAG_TYPE_GUESSER);
         }
         $chained = new Definition(FormTypeGuesserChain::class);
         $chained->addArgument(
@@ -34,6 +34,7 @@ class DisableFormGuesser implements CompilerPassInterface
         $ours = new Definition(BungleFormTypeGuesser::class);
         $ours->addArgument(new Reference('bungle.type_guesser.chained'));
         $ours->addArgument(new Reference('bungle.entity.registry'));
+        $ours->addArgument(new Reference('Psr\Log\LoggerInterface'));
         $ours->addTag(self::TAG_TYPE_GUESSER);
         $container->addDefinitions([
             'bungle.type_guesser.chained' => $chained,
