@@ -8,6 +8,7 @@ use Bungle\Framework\Ent\Code\CodeGenerator;
 use Bungle\Framework\Ent\IDName\HighIDNameTranslator;
 use Bungle\Framework\Ent\Inquiry\Inquiry;
 use Bungle\Framework\Entity\EntityRegistry;
+use Bungle\Framework\Form\PropertyInfoTypeGuesser;
 use Bungle\Framework\Security\RoleRegistry;
 use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
 use Bungle\Framework\StateMachine\FSMViewVoter;
@@ -22,6 +23,7 @@ use Bungle\Framework\Twig\BungleTwigExtension;
 use Bungle\FrameworkBundle\Command\ListCodeGeneratorsCommand;
 use Bungle\FrameworkBundle\Command\ListIDNameCommand;
 use Bungle\FrameworkBundle\DependencyInjection\BungleFrameworkExtension;
+use Bungle\FrameworkBundle\DependencyInjection\DisableFormGuesser;
 use Bungle\FrameworkBundle\DependencyInjection\HighIDNameTranslatorPass;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\ODM\MongoDB\Configuration;
@@ -34,6 +36,7 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Workflow\Registry;
 
@@ -191,6 +194,16 @@ final class BungleFrameworkExtensionTest extends TestCase
     {
         $cmd = $this->container->get('bungle.command.list_code_generators');
         self::assertInstanceOf(ListCodeGeneratorsCommand::class, $cmd);
+    }
+
+    public function testPropertyInfoTypeGuesser(): void
+    {
+        $def = $this->container->getDefinition(PropertyInfoTypeGuesser::class);
+        self::assertTrue($def->hasTag(DisableFormGuesser::TAG_TYPE_GUESSER));
+
+        $this->container->set('property_info', $this->createMock(PropertyInfoExtractorInterface::class));
+        $guesser = $this->container->get(PropertyInfoTypeGuesser::class);
+        self::assertInstanceOf(PropertyInfoTypeGuesser::class, $guesser);
     }
 
     private function addManagerRegistry(): ManagerRegistry

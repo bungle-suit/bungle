@@ -14,6 +14,7 @@ use Symfony\Component\Form\FormTypeGuesserChain;
 class DisableFormGuesser implements CompilerPassInterface
 {
     const TAG_TYPE_GUESSER = 'form.type_guesser';
+
     public function process(ContainerBuilder $container)
     {
         // Disable builtin form type guessers, because we defined
