@@ -33,5 +33,12 @@
         replace: ';zend.assertions = -1'
       become: true
 
+    - name: Enable iconv extension
+      replace:
+        path: /etc/php/php.ini
+        regexp: ';extension=iconv'
+        replace: 'extension=iconv'
+      become: true
+
     - name: set composer mirror
       shell: composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
