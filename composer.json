@@ -27,6 +27,7 @@
     "symfony/property-info": "^5.0",
     "symfony/property-access": "^5.0",
     "ext-json": "*",
+    "ext-mongodb": "*",
     "symfony/string": "^5.0"
   },
   "autoload": {
