@@ -1,19 +1,22 @@
-.phony: test lint format regen-autoload
+.phony: test lint regen-autoload
 
-test:
-	cd ./Framework; $(MAKE) test
-	cd ./BungleBundle; $(MAKE) test
-	cd ./DingTalk; $(MAKE) test
+docker-run = docker run --name bungle -it --rm --entrypoint ''  --mount type=volume,src=php-global,dst=/home/work/.config --mount type=bind,src=${PWD},dst=/home/work/app bungle/base-dev
+
+test-framework:
+	$(docker-run)	./vendor/bin/phpunit --bootstrap ./Framework/tests/bootstrap.php ./Framework/tests/
+
+test-bungle:
+	$(docker-run)	./vendor/bin/phpunit --bootstrap ./BungleBundle/tests/bootstrap.php ./BungleBundle/tests/
+
+test-dingtalk:
+	$(docker-run)	./vendor/bin/phpunit --bootstrap ./DingTalk/tests/bootstrap.php ./DingTalk/tests/
+
+test: test-framework test-bungle test-dingtalk
 
 lint:
 	cd ./Framework; $(MAKE) lint
 	cd ./BungleBundle; $(MAKE) lint
 	cd ./DingTalk; $(MAKE) lint
-
-format:
-	cd ./Framework; $(MAKE) format
-	cd ./BungleBundle; $(MAKE) format
-	cd ./DingTalk; $(MAKE) format
 
 publish-framework:
 	git subtree push --prefix=Framework framework master
@@ -26,5 +29,5 @@ publish-bundle:
 
 publish: publish-framework publish-dingtalk publish-bundle
 
-regen-autoload:
-	composer dump-autoload
+build-docker-images:
+	docker build --tag bungle/base-dev ./Dockerfiles/base-dev
