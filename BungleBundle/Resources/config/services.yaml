@@ -1,15 +1,10 @@
 services:
   bungle.entity.discover:
-    class: Bungle\Framework\Entity\ODMEntityDiscoverer
-    arguments: ["@doctrine_mongodb"]
+    class: Bungle\Framework\Entity\ORMEntityDiscoverer
+    arguments: ["@doctrine"]
 
   bungle.entity.meta_resolver:
     class: Bungle\Framework\Entity\EntityMetaResolver
-
-  Bungle\Framework\Ent\Inquiry\Inquiry:
-    class: Bungle\Framework\Ent\Inquiry\Inquiry
-    public: true
-    arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
 
   bungle.entity.high_resolver:
     class: Bungle\Framework\Entity\AnnotationHighResolver
@@ -37,15 +32,14 @@ services:
       - { name: kernel.event_listener, event: workflow.guard }
     arguments: ["@security.authorization_checker"]
 
-  bungle.workflow.odm_synctodb:
+  bungle.workflow.empty_synctodb:
      public: false
-     class: Bungle\Framework\StateMachine\ODMSyncToDB
-     arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
+     class: Bungle\Framework\StateMachine\EmptySyncToDB
 
   bungle.workflow.vina:
     public: false
     class: Bungle\Framework\StateMachine\Vina
-    arguments: ["@workflow.registry", "@security.authorization_checker", "@request_stack", "@bungle.state_machine.stt_locator", "@bungle.workflow.odm_synctodb"]
+    arguments: ["@workflow.registry", "@security.authorization_checker", "@request_stack", "@bungle.state_machine.stt_locator", "@bungle.workflow.empty_synctodb"]
 
   Bungle\Framework\StateMachine\Vina: '@bungle.workflow.vina'
 
@@ -82,18 +76,6 @@ services:
     class: Bungle\Framework\StateMachine\FSMViewVoter
     arguments: ['@bungle.state_machine.stt_locator', '@bungle.entity.registry']
     tags: ['security.voter']
-
-  bungle.id_name.code_translator:
-    class: Bungle\Framework\Ent\IDName\CodeAbleHighIDNameTranslator
-    arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
-    tags:
-      - { name: 'bungle.idName', priority: -2 }
-
-  bungle.id_name.name_translator:
-    class: Bungle\Framework\Ent\IDName\NameAbleHighIDNameTranslator
-    arguments: ["@Doctrine\\ODM\\MongoDB\\DocumentManager"]
-    tags:
-      - { name: 'bungle.idName', priority: -1 }
 
   bungle.id_name.chain_translator:
     class: Bungle\Framework\Ent\IDName\HighIDNameTranslatorChain
