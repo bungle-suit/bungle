@@ -28,7 +28,8 @@
     "symfony/property-access": "^5.0",
     "ext-json": "*",
     "ext-mongodb": "*",
-    "symfony/string": "^5.0"
+    "symfony/string": "^5.0",
+    "doctrine/orm": "^2.7"
   },
   "autoload": {
     "psr-4": {
