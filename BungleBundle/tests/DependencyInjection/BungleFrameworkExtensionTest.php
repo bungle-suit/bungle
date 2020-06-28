@@ -6,7 +6,6 @@ namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 
 use Bungle\Framework\Ent\Code\CodeGenerator;
 use Bungle\Framework\Ent\IDName\HighIDNameTranslator;
-use Bungle\Framework\Ent\Inquiry\Inquiry;
 use Bungle\Framework\Entity\EntityRegistry;
 use Bungle\Framework\Form\PropertyInfoTypeGuesser;
 use Bungle\Framework\Security\RoleRegistry;
@@ -25,9 +24,7 @@ use Bungle\FrameworkBundle\Command\ListIDNameCommand;
 use Bungle\FrameworkBundle\DependencyInjection\BungleFrameworkExtension;
 use Bungle\FrameworkBundle\DependencyInjection\DisableFormGuesser;
 use Bungle\FrameworkBundle\DependencyInjection\HighIDNameTranslatorPass;
-use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
-use Doctrine\ODM\MongoDB\Configuration;
-use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Mockery;
 use PHPUnit\Framework\MockObject\Stub;
@@ -81,7 +78,6 @@ final class BungleFrameworkExtensionTest extends TestCase
         );
         $this->container->set('event_dispatcher', new EventDispatcher());
         $this->container->set('request_stack', new RequestStack());
-        $this->container->set(DocumentManager::class, $this->createStub(DocumentManager::class));
 
         $vina = $this->container->get('bungle.workflow.vina');
         self::assertInstanceOf(Vina::class, $vina);
@@ -98,21 +94,13 @@ final class BungleFrameworkExtensionTest extends TestCase
 
         /** @var RoleRegistry $reg */
         $reg = $this->container->get('Bungle\Framework\Security\RoleRegistry');
-        self::assertEmpty($reg->getDefinitions());
+        self::assertInstanceOf(RoleRegistry::class, $reg);
     }
 
     public function testStatefulMarkingStore(): void
     {
         $store = $this->container->get('bungle.workflow.stateful_marking_store');
         self::assertInstanceOf(StatefulInterfaceMarkingStore::class, $store);
-    }
-
-    public function testInquiry(): void
-    {
-        $docManager = $this->createStub(DocumentManager::class);
-        $this->container->set(DocumentManager::class, $docManager);
-        $inst = $this->container->get(Inquiry::class);
-        self::assertInstanceOf(Inquiry::class, $inst);
     }
 
     public function testBungleTwigExtension(): void
@@ -210,11 +198,8 @@ final class BungleFrameworkExtensionTest extends TestCase
     {
         $mappingDriver = $this->createStub(MappingDriver::class);
         $mappingDriver->method('getAllClassNames')->willReturn([]);
-        $config = $this->createStub(Configuration::class);
-        $config->method('getMetadataDriverImpl')->willReturn($mappingDriver);
-        $defManager = $this->createStub(DocumentManager::class);
-        $defManager->method('getConfiguration')->willReturn($config);
-        $this->container->set('Doctrine\ODM\MongoDB\DocumentManager', $defManager);
+        $defManager = $this->createStub(ManagerRegistry::class);
+        $this->container->set('doctrine', $defManager);
 
         /** @var Stub|ManagerRegistry $r */
         $r = $this->createStub(ManagerRegistry::class);

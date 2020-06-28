@@ -5,18 +5,16 @@
   "license": "MIT",
   "require": {
     "doctrine/annotations": "^1.8",
-    "beberlei/assert": "^3.2",
     "symfony/dependency-injection": "^5.0",
     "symfony/config": "^5.0",
     "symfony/workflow": "^5.0",
     "symfony/security-core": "^5.0",
-    "doctrine/mongodb-odm-bundle": "^4.1",
     "symfony/form": "^5.0",
     "symfony/yaml": "^5.0",
     "symfony/validator": "^5.0",
     "ext-json": "*",
-    "ext-mongodb": "*",
-    "symfony/string": "^5.0"
+    "symfony/string": "^5.0",
+    "doctrine/orm": "^2.7"
   },
   "autoload": {
     "psr-4": { "Bungle\\Framework\\": "src/" }
