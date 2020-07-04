@@ -3,8 +3,9 @@ services:
     class: Bungle\Framework\Entity\ORMEntityDiscoverer
     arguments: ["@doctrine"]
 
-  bungle.entity.meta_resolver:
-    class: Bungle\Framework\Entity\EntityMetaResolver
+  Bungle\Framework\Ent\ObjectName:
+    class: Bungle\Framework\Ent\ObjectName
+    arguments: ['@cache.app']
 
   bungle.entity.high_resolver:
     class: Bungle\Framework\Entity\AnnotationHighResolver
@@ -12,14 +13,13 @@ services:
 
   bungle.entity.registry:
     class: Bungle\Framework\Entity\EntityRegistry
-    arguments: ["@bungle.entity.discover", "@bungle.entity.high_resolver", "@bungle.entity.meta_resolver"]
+    arguments: ["@bungle.entity.discover", "@bungle.entity.high_resolver"]
 
   bungle.twig.extension:
     class: Bungle\Framework\Twig\BungleTwigExtension
-    arguments: ["@Bungle\\Framework\\Ent\\IDName\\HighIDNameTranslator"]
+    arguments: ['@Bungle\Framework\Ent\IDName\HighIDNameTranslator', '@Bungle\Framework\Ent\ObjectName']
     tags: ['twig.extension']
 
-  Bungle\Framework\Entity\EntityMetaRepository: '@bungle.entity.meta_repository'
   Bungle\Framework\Entity\EntityRegistry: '@bungle.entity.registry'
 
   bungle.workflow.stateful_marking_store:
@@ -51,7 +51,7 @@ services:
   bungle.role.entity_role_provider:
     public: false
     class: Bungle\Framework\Security\EntityRoleDefinitionProvider
-    arguments: ['@bungle.entity.registry', '@bungle.state_machine.workflow_definition_resolver']
+    arguments: ['@bungle.entity.registry', '@bungle.state_machine.workflow_definition_resolver', '@Bungle\Framework\Ent\ObjectName']
 
   bungle.role.registry:
     public: false
@@ -96,7 +96,7 @@ services:
 
   bungle.command.list_code_generators:
     class: Bungle\FrameworkBundle\Command\ListCodeGeneratorsCommand
-    arguments: ["@Bungle\\Framework\\Ent\\Code\\CodeGenerator"]
+    arguments: ['@Bungle\Framework\Ent\Code\CodeGenerator']
     tags: ["console.command"]
 
   Bungle\Framework\StateMachine\Steps\SetCodeStep:

@@ -6,6 +6,7 @@ namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 
 use Bungle\Framework\Ent\Code\CodeGenerator;
 use Bungle\Framework\Ent\IDName\HighIDNameTranslator;
+use Bungle\Framework\Ent\ObjectName;
 use Bungle\Framework\Entity\EntityRegistry;
 use Bungle\Framework\Form\PropertyInfoTypeGuesser;
 use Bungle\Framework\Security\RoleRegistry;
@@ -44,6 +45,7 @@ final class BungleFrameworkExtensionTest extends TestCase
     public function setUp(): void
     {
         $this->container = new ContainerBuilder();
+        $this->container->set('cache.app', new ArrayAdapter());
         (new BungleFrameworkExtension())->load([], $this->container);
     }
 
@@ -56,6 +58,12 @@ final class BungleFrameworkExtensionTest extends TestCase
         $registry = $container->get('bungle.entity.registry');
         self::assertInstanceOf(EntityRegistry::class, $registry);
         self::assertSame($registry, $container->get(EntityRegistry::class));
+    }
+
+    public function testObjectName(): void
+    {
+        $name = $this->container->get(ObjectName::class);
+        self::assertInstanceOf(ObjectName::class, $name);
     }
 
     public function testStateMachine(): void
