@@ -9,6 +9,7 @@ use Bungle\Framework\Ent\IDName\HighIDNameTranslator;
 use Bungle\Framework\Ent\ObjectName;
 use Bungle\Framework\Entity\EntityRegistry;
 use Bungle\Framework\Form\PropertyInfoTypeGuesser;
+use Bungle\Framework\Request\JsonRequestDataResolver;
 use Bungle\Framework\Security\RoleRegistry;
 use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
 use Bungle\Framework\StateMachine\FSMViewVoter;
@@ -35,6 +36,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractorInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Workflow\Registry;
 
@@ -200,6 +202,16 @@ final class BungleFrameworkExtensionTest extends TestCase
         $this->container->set('property_info', $this->createMock(PropertyInfoExtractorInterface::class));
         $guesser = $this->container->get(PropertyInfoTypeGuesser::class);
         self::assertInstanceOf(PropertyInfoTypeGuesser::class, $guesser);
+    }
+
+    public function testJsonRequestDataResolver(): void
+    {
+        $this->container->set('serializer', $this->createMock(SerializerInterface::class));
+        $resolver = $this->container->get('bungle.json.request.data.resolver');
+        self::assertInstanceOf(JsonRequestDataResolver::class, $resolver);
+
+        $def = $this->container->getDefinition('bungle.json.request.data.resolver');
+        self::assertEquals([['priority' => 50]], $def->getTag('controller.argument_value_resolver'));
     }
 
     private function addManagerRegistry(): ManagerRegistry

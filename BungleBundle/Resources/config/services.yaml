@@ -107,3 +107,10 @@ services:
     class: Bungle\Framework\Form\PropertyInfoTypeGuesser
     arguments: ['@property_info']
     tags: ["form.type_guesser"]
+
+  bungle.json.request.data.resolver:
+    class: Bungle\Framework\Request\JsonRequestDataResolver
+    arguments: ['@serializer']
+    tags:
+      - { name: controller.argument_value_resolver, priority: 50 }
+
