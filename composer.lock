@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3452bc569b4d4ea26052b65edaf1c59a",
+    "content-hash": "c36653133c423ddb5f26c4dc79eb10d7",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -6643,6 +6643,60 @@
                 "test"
             ],
             "time": "2020-07-09T08:09:16+00:00"
+        },
+        {
+            "name": "keboola/php-temp",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/keboola/php-temp.git",
+                "reference": "cbdb4dd0dfe548d7bffd74a0e66294981aea49ce"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/keboola/php-temp/zipball/cbdb4dd0dfe548d7bffd74a0e66294981aea49ce",
+                "reference": "cbdb4dd0dfe548d7bffd74a0e66294981aea49ce",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.1",
+                "symfony/filesystem": ">2.8"
+            },
+            "require-dev": {
+                "infection/infection": "^0.12",
+                "jakub-onderka/php-parallel-lint": "^1.0",
+                "keboola/coding-standard": "^8.0",
+                "phpstan/phpstan-shim": "^0.11",
+                "phpunit/phpunit": "^7.0|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Keboola\\Temp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Keboola",
+                    "email": "devel@keboola.com"
+                }
+            ],
+            "description": "Temp library handles application temporary files",
+            "keywords": [
+                "filesystem",
+                "temp"
+            ],
+            "time": "2019-04-26T07:18:24+00:00"
         },
         {
             "name": "mockery/mockery",
