@@ -7,6 +7,17 @@ services:
     class: Bungle\Framework\Ent\ObjectName
     arguments: ['@cache.app']
 
+  Bungle\Framework\Ent\BasalInfoService:
+    class: Bungle\Framework\Ent\BasalInfoService
+    arguments: ['@security.helper', '@doctrine.orm.default_entity_manager', '@Bungle\Framework\Ent\ObjectName']
+
+  Bungle\Framework\Export\ParamParser\Parsers:
+    class: Bungle\Framework\Export\ParamParser\Parsers
+    arguments: ['@Bungle\Framework\Ent\BasalInfoService']
+
+  Bungle\Framework\Export\FSInterface:
+    class: Bungle\Framework\Export\FS
+
   bungle.entity.high_resolver:
     class: Bungle\Framework\Entity\AnnotationHighResolver
     arguments: [[]]
