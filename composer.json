@@ -31,7 +31,8 @@
     "symfony/property-access": "^5.1",
     "ext-json": "*",
     "symfony/string": "^5.1",
-    "doctrine/orm": "^2.7"
+    "doctrine/orm": "^2.7",
+    "phpoffice/phpspreadsheet": "^1.14"
   },
   "autoload": {
     "psr-4": {
