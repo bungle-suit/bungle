@@ -34,7 +34,7 @@ class DisableFormGuesser implements CompilerPassInterface
 
         $ours = new Definition(BungleFormTypeGuesser::class);
         $ours->addArgument(new Reference('bungle.type_guesser.chained'));
-        $ours->addArgument(new Reference('bungle.entity.registry'));
+        $ours->addArgument(new Reference('property_info'));
         $ours->addArgument(new Reference('Psr\Log\LoggerInterface'));
         $ours->addTag(self::TAG_TYPE_GUESSER);
         $container->addDefinitions([

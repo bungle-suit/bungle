@@ -4,10 +4,16 @@ declare(strict_types=1);
 
 namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 
+use Bungle\Framework\Ent\BasalInfoService;
 use Bungle\Framework\Ent\Code\CodeGenerator;
 use Bungle\Framework\Ent\IDName\HighIDNameTranslator;
+use Bungle\Framework\Ent\ObjectName;
 use Bungle\Framework\Entity\EntityRegistry;
+use Bungle\Framework\Export\FS;
+use Bungle\Framework\Export\FSInterface;
+use Bungle\Framework\Export\ParamParser\Parsers;
 use Bungle\Framework\Form\PropertyInfoTypeGuesser;
+use Bungle\Framework\Request\JsonRequestDataResolver;
 use Bungle\Framework\Security\RoleRegistry;
 use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
 use Bungle\Framework\StateMachine\FSMViewVoter;
@@ -24,6 +30,7 @@ use Bungle\FrameworkBundle\Command\ListIDNameCommand;
 use Bungle\FrameworkBundle\DependencyInjection\BungleFrameworkExtension;
 use Bungle\FrameworkBundle\DependencyInjection\DisableFormGuesser;
 use Bungle\FrameworkBundle\DependencyInjection\HighIDNameTranslatorPass;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Mockery;
@@ -34,6 +41,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractorInterface;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Workflow\Registry;
 
@@ -44,6 +53,7 @@ final class BungleFrameworkExtensionTest extends TestCase
     public function setUp(): void
     {
         $this->container = new ContainerBuilder();
+        $this->container->set('cache.app', new ArrayAdapter());
         (new BungleFrameworkExtension())->load([], $this->container);
     }
 
@@ -56,6 +66,12 @@ final class BungleFrameworkExtensionTest extends TestCase
         $registry = $container->get('bungle.entity.registry');
         self::assertInstanceOf(EntityRegistry::class, $registry);
         self::assertSame($registry, $container->get(EntityRegistry::class));
+    }
+
+    public function testObjectName(): void
+    {
+        $name = $this->container->get(ObjectName::class);
+        self::assertInstanceOf(ObjectName::class, $name);
     }
 
     public function testStateMachine(): void
@@ -192,6 +208,38 @@ final class BungleFrameworkExtensionTest extends TestCase
         $this->container->set('property_info', $this->createMock(PropertyInfoExtractorInterface::class));
         $guesser = $this->container->get(PropertyInfoTypeGuesser::class);
         self::assertInstanceOf(PropertyInfoTypeGuesser::class, $guesser);
+    }
+
+    public function testJsonRequestDataResolver(): void
+    {
+        $this->container->set('serializer', $this->createMock(SerializerInterface::class));
+        $resolver = $this->container->get('bungle.json.request.data.resolver');
+        self::assertInstanceOf(JsonRequestDataResolver::class, $resolver);
+
+        $def = $this->container->getDefinition('bungle.json.request.data.resolver');
+        self::assertEquals([['priority' => 50]], $def->getTag('controller.argument_value_resolver'));
+    }
+
+    public function testBasalInfo(): void
+    {
+        $this->container->set('security.helper', $this->createMock(Security::class));
+        $this->container->set('doctrine.orm.default_entity_manager', $this->createMock(EntityManagerInterface::class));
+        $basal = $this->container->get(BasalInfoService::class);
+        self::assertInstanceOf(BasalInfoService::class, $basal);
+    }
+
+    public function testExportFSInterface(): void
+    {
+        $fs = $this->container->get(FSInterface::class);
+        self::assertInstanceOf(FS::class, $fs);
+    }
+
+    public function testExportParsers(): void
+    {
+        $this->container->set('security.helper', $this->createMock(Security::class));
+        $this->container->set('doctrine.orm.default_entity_manager', $this->createMock(EntityManagerInterface::class));
+        $parsers = $this->container->get(Parsers::class);
+        self::assertInstanceOf(Parsers::class, $parsers);
     }
 
     private function addManagerRegistry(): ManagerRegistry

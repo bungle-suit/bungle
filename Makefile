@@ -31,3 +31,6 @@ publish: publish-framework publish-dingtalk publish-bundle
 
 build-docker-images:
 	docker build --tag bungle/base-dev ./Dockerfiles/base-dev
+
+phpstan:
+	vendor/bin/phpstan analys
