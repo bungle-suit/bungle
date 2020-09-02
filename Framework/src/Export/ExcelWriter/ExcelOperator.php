@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bungle\Framework\Export\ExcelWriter;
 
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
@@ -56,5 +57,28 @@ class ExcelOperator
     public function getBook(): Spreadsheet
     {
         return $this->book;
+    }
+
+    /**
+     * Return the value of cell at $loc.
+     * If cell not exist, returns null, and not auto created.
+     *
+     * @return mixed
+     */
+    public function getCellValue(string $loc)
+    {
+        $cell = $this->sheet->getCell($loc, false);
+        return self::cellValue($cell);
+    }
+
+    public function getCellValueByColumn(int $col)
+    {
+        $cell = $this->sheet->getCellByColumnAndRow($col, $this->row, false);
+        return self::cellValue($cell);
+    }
+
+    private static function cellValue(?Cell $cell)
+    {
+        return $cell === null ? null : $cell->getValue();
     }
 }
