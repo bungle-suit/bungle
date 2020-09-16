@@ -6,7 +6,6 @@ namespace Bungle\Framework\Inquiry;
 use Bungle\Framework\Inquiry\Steps\QuerySteps;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
 use LogicException;
 use Traversable;
 
@@ -14,9 +13,11 @@ class Query
 {
     /** @var array<string, ColumnMeta> */
     private array $columns;
+    /** @var array<string, QBEMeta> */
+    private array $qbeMetas;
 
     /**
-     * @var QueryStepInterface[] $steps;
+     * @var QueryStepInterface[] $steps ;
      */
     private array $steps;
 
@@ -32,6 +33,21 @@ class Query
     }
 
     /**
+     * Build qbe metas. It should be called before query/pagedQuery.
+     * @return array<string, QBEMeta>
+     */
+    public function buildQBEMetas(QueryParams $params): array
+    {
+        if (isset($this->qbeMetas)) {
+            throw new LogicException("QBEs already built");
+        }
+
+        $builder = $this->prepareQuery($params, self::BUILD_FOR_QBE);
+
+        return $this->qbeMetas = $builder->getQBEs();
+    }
+
+    /**
      * Query data.
      *
      * NOTE: use query step to control weather page no take cared.
@@ -44,8 +60,11 @@ class Query
 
     private function queryData(QueryParams $params, bool $paging): Traversable
     {
-        $qb = $this->prepareQuery($params, false, $paging);
-        foreach ($qb->getQuery()->iterate(null, AbstractQuery::HYDRATE_ARRAY) as $rows) {
+        $qb = $this->prepareQuery($params, $paging ? self::BUILD_FOR_PAGING : self::BUILD_FOR_DATA)
+                   ->getQueryBuilder()
+        ;
+        foreach ($qb->getQuery()
+                    ->iterate(null, AbstractQuery::HYDRATE_ARRAY) as $rows) {
             yield from $rows;
         }
     }
@@ -59,35 +78,64 @@ class Query
     {
         $data = iterator_to_array($this->queryData($params, true), false);
         $count = $this->queryCount($params);
+
         return new PagedData($data, $count);
     }
 
     private function queryCount(QueryParams $params): int
     {
-        $qb = $this->prepareQuery($params, true, false);
-        return intval($qb->getQuery()->execute(null, AbstractQuery::HYDRATE_SINGLE_SCALAR));
+        $qb = $this->prepareQuery($params, self::BUILD_FOR_COUNT)
+                   ->getQueryBuilder()
+        ;
+
+        return intval(
+            $qb->getQuery()
+               ->execute(null, AbstractQuery::HYDRATE_SINGLE_SCALAR)
+        );
     }
 
-    private function prepareQuery(QueryParams $params, bool $forCount, bool $pagedData): QueryBuilder
+    private const BUILD_FOR_COUNT = 1;
+    private const BUILD_FOR_PAGING = 2;
+    private const BUILD_FOR_QBE = 3;
+    private const BUILD_FOR_DATA = 4; // triggered by self::query() method
+
+    private function prepareQuery(QueryParams $params, int $buildFor): Builder
     {
         $qb = $this->em->createQueryBuilder();
         $builder = new Builder($qb, $params);
         $steps = $this->steps;
-        if ($forCount) {
-            $builder->set(Builder::ATTR_BUILD_FOR_COUNT, true);
-            $steps = array_merge($steps, $this->createExtraCountSteps());
-        }
-        if ($pagedData) {
-            $steps = array_merge($steps, $this->createExtraPagingSteps());
+        switch ($buildFor) {
+            case self::BUILD_FOR_COUNT:
+                $builder->set(Builder::ATTR_BUILD_FOR_COUNT, true);
+                $steps = array_merge($steps, $this->createExtraCountSteps());
+                break;
+            case self::BUILD_FOR_PAGING:
+                $steps = array_merge($steps, $this->createExtraPagingSteps());
+                break;
+            case self::BUILD_FOR_QBE:
+                $builder->set(Builder::ATTR_BUILD_FOR_QBE, true);
+                break;
+            case self::BUILD_FOR_DATA:
+                break;
+            default:
+                throw new LogicException("Unknown build type: $buildFor");
         }
 
         foreach ($steps as $step) {
             $step($builder);
         }
-        if (!$forCount) {
-            $this->columns = $builder->getColumns();
+
+        switch ($buildFor) {
+            case self::BUILD_FOR_PAGING:
+            case self::BUILD_FOR_DATA:
+                $this->columns = $builder->getColumns();
+                break;
+            case self::BUILD_FOR_QBE:
+                $this->qbeMetas = $builder->getQBEs();
+                break;
         }
-        return $qb;
+
+        return $builder;
     }
 
     /**
@@ -125,6 +173,15 @@ class Query
         if (!isset($this->columns)) {
             throw new LogicException('columns not exist, until query/pagedQuery()');
         }
+
         return $this->columns;
+    }
+
+    /**
+     * @return array<string, QBEMeta>
+     */
+    public function getQBEMetas(): array
+    {
+        return $this->qbeMetas;
     }
 }
