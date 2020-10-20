@@ -125,3 +125,8 @@ services:
     tags:
       - { name: controller.argument_value_resolver, priority: 50 }
 
+  Bungle\Framework\Form\PropertyInfoLabelFormExtension:
+    class: Bungle\Framework\Form\PropertyInfoLabelFormExtension
+    arguments: ['@property_info', '@cache.app']
+    tags:
+      - {name: form.type_extension }

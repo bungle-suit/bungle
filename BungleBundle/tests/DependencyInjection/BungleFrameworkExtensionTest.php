@@ -12,6 +12,7 @@ use Bungle\Framework\Entity\EntityRegistry;
 use Bungle\Framework\Export\FS;
 use Bungle\Framework\Export\FSInterface;
 use Bungle\Framework\Export\ParamParser\Parsers;
+use Bungle\Framework\Form\PropertyInfoLabelFormExtension;
 use Bungle\Framework\Form\PropertyInfoTypeGuesser;
 use Bungle\Framework\Request\JsonRequestDataResolver;
 use Bungle\Framework\Security\RoleRegistry;
@@ -240,6 +241,16 @@ final class BungleFrameworkExtensionTest extends TestCase
         $this->container->set('doctrine.orm.default_entity_manager', $this->createMock(EntityManagerInterface::class));
         $parsers = $this->container->get(Parsers::class);
         self::assertInstanceOf(Parsers::class, $parsers);
+    }
+
+    public function testPropertyInfoLabelFormExtension(): void
+    {
+        $this->container->set('property_info', $this->createMock(PropertyInfoExtractorInterface::class));
+        $ext = $this->container->get(PropertyInfoLabelFormExtension::class);
+        self::assertInstanceOf(PropertyInfoLabelFormExtension::class, $ext);
+
+        $def = $this->container->getDefinition(PropertyInfoLabelFormExtension::class);
+        self::assertEquals(['form.type_extension' => [[]]], $def->getTags());
     }
 
     private function addManagerRegistry(): ManagerRegistry
