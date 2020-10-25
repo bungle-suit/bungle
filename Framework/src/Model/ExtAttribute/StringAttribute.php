@@ -1,30 +1,31 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Bungle\Framework\Model\ExtAttribute;
 
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class BoolAttribute extends AbstractAttribute
+class StringAttribute extends AbstractAttribute
 {
     public function createDefault()
     {
-        return false;
+        return '';
     }
 
     public function restoreValue(AttributeInterface $attribute)
     {
-        return $attribute->asBool();
+        return $attribute->getValue();
     }
 
     public function saveValue(AttributeInterface $attribute, $value): void
     {
-        $attribute->setBool($value);
+        $attribute->setValue($value);
     }
 
     public function getFormType(): string
     {
-        return CheckboxType::class;
+        return TextType::class;
     }
 
     public function getFormOption(): array

@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Bungle\Framework\Model\ExtAttribute;
 
-use Symfony\Component\Form\FormBuilderInterface;
-
 /**
  * Describe attribute
  */
@@ -16,7 +14,16 @@ interface AttributeDefinitionInterface
 
     public function getDescription(): string;
 
-    public function buildForm(FormBuilderInterface $formBuilder, array $options): void;
+    /**
+     * Return symfony form type
+     */
+    public function getFormType(): string;
+
+    /**
+     * Return symfony form options, no need set 'required', 'label', 'description' options,
+     * these are set by caller.
+     */
+    public function getFormOption(): array;
 
     /**
      * @return mixed create attribute default value
