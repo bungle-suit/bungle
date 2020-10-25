@@ -119,10 +119,6 @@ services:
     arguments: ['@property_info']
     tags: ["form.type_guesser"]
 
-  Bungle\Framework\Form\ExtAttributeTypeGuesser:
-    class: Bungle\Framework\Form\ExtAttributeTypeGuesser
-    tags: ["form.type_guesser"]
-
   bungle.json.request.data.resolver:
     class: Bungle\Framework\Request\JsonRequestDataResolver
     arguments: ['@serializer']
