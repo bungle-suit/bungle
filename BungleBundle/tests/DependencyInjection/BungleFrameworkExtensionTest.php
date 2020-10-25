@@ -12,6 +12,7 @@ use Bungle\Framework\Entity\EntityRegistry;
 use Bungle\Framework\Export\FS;
 use Bungle\Framework\Export\FSInterface;
 use Bungle\Framework\Export\ParamParser\Parsers;
+use Bungle\Framework\Form\ExtAttributeTypeGuesser;
 use Bungle\Framework\Form\PropertyInfoLabelFormExtension;
 use Bungle\Framework\Form\PropertyInfoTypeGuesser;
 use Bungle\Framework\Request\JsonRequestDataResolver;
@@ -209,6 +210,15 @@ final class BungleFrameworkExtensionTest extends TestCase
         $this->container->set('property_info', $this->createMock(PropertyInfoExtractorInterface::class));
         $guesser = $this->container->get(PropertyInfoTypeGuesser::class);
         self::assertInstanceOf(PropertyInfoTypeGuesser::class, $guesser);
+    }
+
+    public function testExtAttributeTypeGuesser(): void
+    {
+        $def = $this->container->getDefinition(ExtAttributeTypeGuesser::class);
+        self::assertTrue($def->hasTag(DisableFormGuesser::TAG_TYPE_GUESSER));
+
+        $guesser = $this->container->get(ExtAttributeTypeGuesser::class);
+        self::assertInstanceOf(ExtAttributeTypeGuesser::class, $guesser);
     }
 
     public function testJsonRequestDataResolver(): void
