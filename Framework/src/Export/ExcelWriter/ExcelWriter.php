@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace Bungle\Framework\Export\ExcelWriter;
 
+use Bungle\Framework\Export\ExcelWriter\TablePlugins\CompositeTablePlugin;
+use Bungle\Framework\Export\ExcelWriter\TablePlugins\DefaultStyleTablePlugin;
+use Bungle\Framework\Export\ExcelWriter\TablePlugins\FormulaColumnTablePlugin;
+use Bungle\Framework\Export\ExcelWriter\TablePlugins\NumberFormatTablePlugin;
+use Bungle\Framework\Export\ExcelWriter\TablePlugins\SumTablePlugin;
 use Bungle\Framework\FP;
 use LogicException;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class ExcelWriter extends ExcelOperator
@@ -67,129 +72,106 @@ class ExcelWriter extends ExcelOperator
     }
 
     /**
+     * @param ExcelColumn[] $cols ,
+     * @param TablePluginInterface[] $userPlugins
+     */
+    private static function createPlugin(array $cols, array $userPlugins): TablePluginInterface
+    {
+        foreach ($cols as $col) {
+            if ($col->formulaEnabled()) {
+                $userPlugins[] = new FormulaColumnTablePlugin();
+                break;
+            }
+        }
+
+        foreach ($cols as $col) {
+            if ($col->isEnableSum()) {
+                $userPlugins[] = new SumTablePlugin();
+                break;
+            }
+        }
+
+        foreach ($cols as $col) {
+            if ($col->getCellFormat() !== null) {
+                $userPlugins[] = new NumberFormatTablePlugin();
+                break;
+            }
+        }
+
+        $userPlugins[] = new DefaultStyleTablePlugin();
+
+        return new CompositeTablePlugin($userPlugins);
+    }
+
+    /**
      * @param array<int, ExcelColumn> $cols
      * @param iterable<object|(string|number|null)[]> $rows
+     * @param array{plugins?: TablePluginInterface|(TablePluginInterface[])} $options
      */
-    public function writeTable(array $cols, iterable $rows, string $col = 'A'): void
-    {
+    public function writeTable(
+        array $cols,
+        iterable $rows,
+        string $col = 'A',
+        array $options = []
+    ): void {
+        $options = self::resolveTableOptions($options);
+        $plugin = self::createPlugin($cols, $options['plugins']);
+
         $sheet = $this->sheet;
         $startRow = $this->row;
         $startColIdx = Coordinate::columnIndexFromString($col);
 
-        $colCountIncludeSpan = 0;
-        $idx = $startColIdx;
+        $pluginContext = new TableContext($this, $cols, $startColIdx, $startRow);
+        $plugin->onTableStart($pluginContext);
+
+        $colIdx = $startColIdx;
         /** @var ExcelColumn $c */
         foreach ($cols as $c) {
-            $colCountIncludeSpan += $c->getColSpan();
-            $sheet->setCellValueByColumnAndRow($idx, $this->getRow(), $c->getHeader());
-            $idx += $c->getColSpan();
+            $sheet->setCellValueByColumnAndRow($colIdx, $this->getRow(), $c->getHeader());
+            if ($c->getColSpan() > 1) {
+                $sheet->mergeCellsByColumnAndRow(
+                    $colIdx,
+                    $this->row,
+                    $colIdx + $c->getColSpan() - 1,
+                    $this->row
+                );
+            }
+            $colIdx += $c->getColSpan();
         }
-
-        $sheet->getStyleByColumnAndRow(
-            $startColIdx,
-            $this->row,
-            $startColIdx + $colCountIncludeSpan - 1,
-            $this->row
-        )->applyFromArray(
-            [
-                'alignment' => [
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                ],
-                'font' => ['bold' => true],
-                'fill' => [
-                    'fillType' => Fill::FILL_SOLID,
-                    'startColor' => ['argb' => 'FFDDDDDD'],
-                ],
-            ]
-        );
-
+        $plugin->onHeaderFinish($pluginContext);
         $this->nextRow();
 
         $propertyAccessor = new PropertyAccessor();
         foreach ($rows as $idx => $row) {
             $dataRow = [];
             /** @var ExcelColumn $c */
+            $colIdx = $startColIdx;
             foreach ($cols as $c) {
-                $v = $c->getPropertyPath() ? $propertyAccessor->getValue(
-                    $row,
-                    $c->getPropertyPath()
-                ) : $row;
+                $v = $c->getPropertyPath() ?
+                    $propertyAccessor->getValue($row, $c->getPropertyPath()) :
+                    $row;
                 $v = ($c->getValueConverter())($v, $idx, $row);
                 $dataRow[] = $v;
-                for ($i = 0; $i < ($c->getColSpan() - 1); $i++) {
-                    $dataRow[] = null;
+                if ($c->getColSpan() > 1) {
+                    for ($i = 0; $i < ($c->getColSpan() - 1); $i++) {
+                        $dataRow[] = null;
+                    }
+                    $sheet->mergeCellsByColumnAndRow(
+                        $colIdx,
+                        $this->row,
+                        $colIdx + $c->getColSpan() - 1,
+                        $this->row
+                    );
                 }
+                $colIdx += $c->getColSpan();
             }
             $sheet->fromArray($dataRow, null, "$col{$this->row}", true);
+            $plugin->onRowFinish($dataRow, $pluginContext);
+
             $this->nextRow();
         }
-        /** @var ExcelColumn $col */
-        foreach ($cols as $idx => $col) {
-            if ($col->formulaEnabled()) {
-                $f = $col->getFormula();
-                $colIdx = $idx + $startColIdx;
-                for ($row = $startRow + 1; $row < $this->getRow(); $row++) {
-                    $sheet->setCellValueByColumnAndRow($colIdx, $row, $f($row));
-                }
-            }
-        }
-        $firstSumCol = -1;
-        foreach ($cols as $idx => $col) {
-            if ($col->isEnableSum()) {
-                $firstSumCol = -1 === $firstSumCol ? $idx : $firstSumCol;
-                $colName = Coordinate::stringFromColumnIndex($startColIdx + $idx);
-                [$firstDataRow, $lastDataRow] = [$startRow + 1, $this->row - 1];
-                /** @var Cell $c */
-                $c = $sheet->getCell("{$colName}{$this->row}");
-                $c->setValue("=round(sum({$colName}{$firstDataRow}:{$colName}{$lastDataRow}),2)");
-            }
-        }
-        if ($firstSumCol > 0) {
-            $colName = Coordinate::stringFromColumnIndex($startColIdx + $firstSumCol - 1);
-            /** @var Cell $c */
-            $c = $sheet->getCell($colName.$this->row);
-            $c->setValue('总计');
-            $c->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
-        }
-
-        $sheet
-            ->getStyleByColumnAndRow(
-                $startColIdx,
-                $startRow,
-                $startColIdx + $colCountIncludeSpan - 1,
-                $this->row - 1
-            )
-            ->getBorders()
-            ->getAllBorders()
-            ->setBorderStyle(Border::BORDER_THIN);
-
-        $colIdx = $startColIdx;
-        foreach ($cols as $idx => $c) {
-            $fmt = $c->getCellFormat();
-            if (null !== $fmt) {
-                $sheet
-                    ->getStyleByColumnAndRow(
-                        $startColIdx + $idx,
-                        $startRow,
-                        $startColIdx + $idx,
-                        $this->row - 1
-                    )
-                    ->getNumberFormat()->setFormatCode($fmt);
-            }
-
-            if (!$c->isMergeCells()) {
-                if ($c->getColSpan() > 1) {
-                    $colName = Coordinate::stringFromColumnIndex($colIdx);
-                    $endColName = Coordinate::stringFromColumnIndex($colIdx + $c->getColSpan() - 1);
-                    foreach (range($startRow, $this->getRow() - 1) as $row) {
-                        $sheet->mergeCells("$colName$row:$endColName$row");
-                    }
-                }
-            } else {
-                $this->mergeColCells($c, $startColIdx + $idx, $startRow);
-            }
-            $colIdx += $c->getColSpan();
-        }
+        $plugin->onDataFinish($pluginContext);
+        $plugin->onTableFinish($pluginContext);
     }
 
     /**
@@ -259,40 +241,24 @@ class ExcelWriter extends ExcelOperator
         }
     }
 
-    private function mergeColCells(ExcelColumn $c, int $colIdx, int $startRow)
+    /** @noinspection PhpUnusedParameterInspection */
+    private static function resolveTableOptions(array $options): array
     {
-        $colName = Coordinate::stringFromColumnIndex($colIdx);
-        $startDataRow = $startRow + 1;
-        $endRow = $this->getRow() - 1;
-        $range = "$colName$startDataRow:$colName$endRow";
-        $data = $this->sheet->rangeToArray($range);
-        if (!$data) {
-            return;
-        }
+        $resolver = new OptionsResolver();
+        $resolver
+            ->setDefault('plugins', [])
+            ->setAllowedTypes('plugins', ['null', 'array', TablePluginInterface::class])
+            ->setNormalizer(
+                'plugins',
+                function ($options, $val) {
+                    if ($val === null) {
+                        return [];
+                    }
 
-        $start = 0;
-        $val = $data[0];
-        foreach ($data as $i => $v) {
-            if ($val !== $v) {
-                if ($i - $start > 1 || $c->getColSpan() > 1) {
-                    $this->sheet->mergeCellsByColumnAndRow(
-                        $colIdx,
-                        $start + $startDataRow,
-                        ($colIdx + $c->getColSpan() - 1),
-                        $i + $startDataRow - 1
-                    );
+                    return is_array($val) ? $val : [$val];
                 }
-                $val = $v;
-                $start = $i;
-            }
-        }
-        if ($start !== count($data) - 1) {
-            $this->sheet->mergeCellsByColumnAndRow(
-                $colIdx,
-                $start + $startDataRow,
-                ($colIdx + $c->getColSpan() - 1),
-                $endRow
             );
-        }
+
+        return $resolver->resolve($options);
     }
 }

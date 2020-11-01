@@ -7,6 +7,10 @@ namespace Bungle\Framework\Tests\Export\ExcelWriter;
 use Bungle\Framework\Export\ExcelWriter\ExcelCell;
 use Bungle\Framework\Export\ExcelWriter\ExcelColumn;
 use Bungle\Framework\Export\ExcelWriter\ExcelWriter;
+use Bungle\Framework\Export\ExcelWriter\TableContext;
+use Bungle\Framework\Export\ExcelWriter\TablePluginInterface;
+use Bungle\Framework\Export\ExcelWriter\TablePlugins\CellMergeTablePlugin;
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -76,13 +80,38 @@ class ExcelWriterTest extends MockeryTestCase
             new ExcelColumn('FooBar', '[0]'),
         ];
 
+        $plugin = Mockery::mock(TablePluginInterface::class);
+        $plugin->expects('onTableStart')->with(
+            Mockery::on(fn(TableContext $ctx) => $ctx->getRowIndex() === 1)
+        );
+        $plugin->expects('onHeaderFinish')->with(
+            Mockery::on(
+                function (TableContext $ctx) {
+                    self::assertRowContent(['Foo', 'Bar', 'FooBar'], 'B1:D3');
+
+                    return $ctx->getRowIndex() === 1;
+                }
+            )
+        );
+        $plugin->expects('onRowFinish')->with([12, 0, 'a'], Mockery::type(TableContext::class));
+        $plugin->expects('onRowFinish')->with(
+            [15, null, 'b'],
+            Mockery::on(fn(TableContext $ctx) => $ctx->getRowIndex() === 3)
+        );
+        $plugin->expects('onDataFinish')->with(
+            Mockery::on(fn(TableContext $ctx) => $ctx->getRowIndex() === 4)
+        );
+        $plugin->expects('onTableFinish')->with(
+            Mockery::on(fn(TableContext $ctx) => $ctx->getRowIndex() === 4)
+        );
         $this->writer->writeTable(
             $cols,
             [
                 ['a', 0, 2],
                 ['b', null, 4],
             ],
-            'B'
+            'B',
+            ['plugins' => $plugin]
         );
 
         $this->assertRow(4);
@@ -91,55 +120,77 @@ class ExcelWriterTest extends MockeryTestCase
         $this->assertRowContent([15, null, 'b'], 'B3:D3');
     }
 
-    public function testTableMergeCells(): void
+    /**
+     * @dataProvider tableCellMergeDataProvider
+     */
+    public function testTableCellMerge(array $data, array $exp, array $merges): void
     {
         $cols = [
-            (new ExcelColumn('Foo', '[0]'))->setMergeCells(true)->setColSpan(2),
-            new ExcelColumn('Bar', '[1]'),
+            $col1 = new ExcelColumn('A', '[0]'),
+            $col2 = (new ExcelColumn('B', '[1]'))->setColSpan(2),
+            $col3 = new ExcelColumn('C', '[2]'),
+            new ExcelColumn('Number', '[3]'),
         ];
+        array_unshift($exp, ['A', 'B', null, 'C', 'Number']);
 
+        $plugin = new CellMergeTablePlugin([$col1, $col2, $col3]);
         $this->writer->writeTable(
             $cols,
-            [
-                ['a', 1],
-            ]
+            $data,
+            'A',
+            ['plugins' => $plugin]
         );
-        $this->assertRangeContent(
-            [
-                ['a', null, 1],
-                [null, null, null],
-            ],
-            'A2:C3'
-        );
+        $this->assertRangeContent($exp, 'A1:E'.(count($data) + 1));
+        self::assertEquals($merges, array_values($this->workSheet->getMergeCells()));
+    }
 
-        $this->writer->writeTable(
-            $cols,
+    public function tableCellMergeDataProvider(): array
+    {
+        return [
+            // no group
             [
-                ['a', 1],
-                ['a', 2],
-                ['a', 3],
-                ['b', 4],
-                ['a', 5],
-                ['a', 6],
-            ]
-        );
-
-        $this->assertRangeContent(
-            [
-                ['Foo', null, 'Bar'],
-                ['a', null, 1],
-                [null, null, 2],
-                [null, null, 3],
-                ['b', null, 4],
-                ['a', null, 5],
-                [null, null, 6],
+                [['a', 'b', 'c', 1]],
+                [['a', 'b', null, 'c', 1]],
+                ['B1:C1', 'B2:C2'],
             ],
-            'A3:C9'
-        );
-        self::assertEquals(
-            ['A4:B6', 'A7:B7', 'A8:B9'],
-            array_values($this->workSheet->getMergeCells())
-        );
+
+            // group in 1st column only
+            [
+                [['a', 'b', 'c', 1], ['a', 'bb', 'cc', 2]],
+                [['a', 'b', null, 'c', 1], [null, 'bb', null, 'cc', 2]],
+                ['B1:C1', 'B2:C2', 'B3:C3', 'A2:A3'],
+            ],
+
+            // end with non-group
+            [
+                [
+                    ['a', 'b', 'c', 1],
+                    ['a', 'b1', 'c1', 2],
+                    ['b', 'b2', 'c2', 3],
+                ],
+                [
+                    ['a', 'b', null, 'c', 1],
+                    [null, 'b1', null, 'c1', 2],
+                    ['b', 'b2', null, 'c2', 3],
+                ],
+                ['B1:C1', 'B2:C2', 'B3:C3', 'B4:C4', 'A2:A3'],
+            ],
+
+            // chained group
+            [
+                [
+                    ['a', 'b', 'c', 1],
+                    ['a', 'b', 'c1', 2],
+                    ['a', 'b2', 'c1', 3],
+                ],
+                [
+                    ['a', 'b', null, 'c', 1],
+                    [null, null, null, 'c1', 2],
+                    [null, 'b2', null, 'c1', 3],
+                ],
+                ['B1:C1', 'B4:C4', 'B2:C3', 'A2:A4'],
+            ],
+        ];
     }
 
     public function testSpanColumn(): void
@@ -167,10 +218,10 @@ class ExcelWriterTest extends MockeryTestCase
         self::assertEquals(
             [
                 'B1:C1',
-                'B2:C2',
-                'B3:C3',
                 'D1:E1',
+                'B2:C2',
                 'D2:E2',
+                'B3:C3',
                 'D3:E3',
             ],
             array_values($this->workSheet->getMergeCells())
