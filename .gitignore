@@ -1,6 +1,5 @@
 /vendor
 .php_cs.cache
 .phplint-cache
-.idea
 .phpunit.result.cache
 .vagrant
