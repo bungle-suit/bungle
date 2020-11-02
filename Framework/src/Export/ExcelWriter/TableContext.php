@@ -28,12 +28,19 @@ class TableContext
      */
     private array $colNames;
 
+    /**
+     * Index is the same of self::$cols.
+     * @var array<int, string>
+     */
+    private array $colEndNames;
+
     public function __construct(ExcelWriter $writer, array $columns, int $startCol, int $startRow)
     {
         $this->cols = $columns;
         $this->writer = $writer;
         $this->startCol = $startCol;
         $this->startRow = $startRow;
+        self::initColIndexes($columns);
     }
 
     public function getWriter(): ExcelWriter
@@ -41,20 +48,12 @@ class TableContext
         return $this->writer;
     }
 
-    private function indexColumn(ExcelColumn $col): int
-    {
-        $idx = array_search($col, $this->cols);
-        assert($idx !== false, 'Column not in '.self::class);
-
-        return $idx;
-    }
-
     /**
      * Return column spread sheet index (start from 1)
      */
     public function getColumnIndex(ExcelColumn $col): int
     {
-        return $this->initColIndexes()[$this->indexColumn($col)];
+        return $this->colIdxes[spl_object_id($col)];
     }
 
     /**
@@ -62,7 +61,15 @@ class TableContext
      */
     public function getColumnName(ExcelColumn $col): string
     {
-        return $this->initColNames()[$this->indexColumn($col)];
+        return $this->colNames[spl_object_id($col)];
+    }
+
+    /**
+     * If column has colSpan, returns the end column name, or return getColumnName().
+     */
+    public function getColumnEndName(ExcelColumn $col): string
+    {
+        return $this->colEndNames[spl_object_id($col)];
     }
 
     /**
@@ -120,40 +127,26 @@ class TableContext
     public function newValueGetter(ExcelColumn $column): callable
     {
         $idx = $this->getColumnIndex($column) - $this->startCol;
-        return fn (array $row) => $row[$idx];
+
+        return fn(array $row) => $row[$idx];
     }
 
     /**
+     * @param ExcelColumn[] $cols
      * @return array<int, int>
      */
-    private function initColIndexes(): array
+    private function initColIndexes(array $cols): void
     {
-        if (!isset($this->colIdxes)) {
-            $arr = [];
-            $idx = $this->startCol;
-            foreach ($this->cols as $col) {
-                $arr[] = $idx;
-                $idx += $col->getColSpan();
-            }
-
-            $this->colIdxes = $arr;
+        [$idxes, $names, $endNames] = [[], [], []];
+        $idx = $this->startCol;
+        foreach ($cols as $col) {
+            $id = spl_object_id($col);
+            $idxes[$id] = $idx;
+            $names[$id] = Coordinate::stringFromColumnIndex($idx);
+            $idx += $col->getColSpan();
+            $endNames[$id] = Coordinate::stringFromColumnIndex($idx - 1);
         }
 
-        return $this->colIdxes;
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    private function initColNames(): array
-    {
-        if (!isset($this->colNames)) {
-            $this->colNames = array_map(
-                fn(int $idx) => Coordinate::stringFromColumnIndex($idx),
-                $this->initColIndexes()
-            );
-        }
-
-        return $this->colNames;
+        [$this->colIdxes, $this->colNames, $this->colEndNames] = [$idxes, $names, $endNames];
     }
 }
