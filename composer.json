@@ -17,12 +17,9 @@
   },
   "require": {
     "doctrine/annotations": "^1.8",
-<<<<<<< HEAD
-    "beberlei/assert": "^3.2",
     "symfony/dependency-injection": "^5.1",
     "symfony/config": "^5.1",
     "symfony/workflow": "^5.1",
-    "symfony/security-bundle": "^5.1",
     "symfony/yaml": "^5.1",
     "symfony/form": "^5.1",
     "symfony/validator": "^5.1",
@@ -34,20 +31,10 @@
     "ext-json": "*",
     "symfony/string": "^5.1",
     "doctrine/orm": "^2.7",
-    "phpoffice/phpspreadsheet": "^1.14"
-=======
-    "symfony/dependency-injection": "^5.1",
-    "symfony/config": "^5.1",
-    "symfony/workflow": "^5.1",
+    "phpoffice/phpspreadsheet": "^1.14",
     "symfony/security-core": "^5.1",
-    "symfony/form": "^5.1",
-    "symfony/yaml": "^5.1",
-    "symfony/validator": "^5.1",
-    "ext-json": "*",
-    "symfony/string": "^5.1",
-    "phpstan/phpstan-phpunit": "^0.12.11",
-    "doctrine/orm": "^2.7"
->>>>>>> 064ee7a83f95ce37fe3866ec6b68c35a7a337364
+    "symfony/uid": "^5.1",
+    "symfony/http-kernel": "^5.1"
   },
   "autoload": {
     "psr-4": {
