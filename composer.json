@@ -13,7 +13,8 @@
     "phpstan/phpstan-mockery": "^0.12.5",
     "phpstan/phpstan-phpunit": "^0.12.11",
     "keboola/php-temp": "^2.0",
-    "phpunit/phpunit": "^9.4"
+    "phpunit/phpunit": "^9.4",
+    "phpstan/phpstan-symfony": "^0.12.11"
   },
   "require": {
     "doctrine/annotations": "^1.8",
