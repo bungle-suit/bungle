@@ -34,3 +34,6 @@ build-docker-images:
 
 phpstan:
 	vendor/bin/phpstan analys
+
+phpstan-baseline:
+	vendor/bin/phpstan analys --generate-baseline

@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Method Bungle\\\\Framework\\\\FP\\:\\:notNull\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: Framework/src/FP.php
+
+		-
 			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$fromState\\.$#"
 			count: 1
 			path: Framework/tests/StateMachine/STT/AbstractSTTTest.php
