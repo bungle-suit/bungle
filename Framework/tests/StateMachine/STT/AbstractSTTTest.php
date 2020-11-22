@@ -95,7 +95,7 @@ final class AbstractSTTTest extends TestBase
 
     public function testSaveNotConfigured(): void
     {
-        $old = set_error_handler(fn () => null, E_USER_NOTICE);
+        $old = set_error_handler(fn () => true, E_USER_NOTICE);
         try {
             $stt = new OrderSTT();
             $this->ord->setState('checked');
@@ -149,7 +149,7 @@ final class AbstractSTTTest extends TestBase
         $registry = Mockery::mock(EntityRegistry::class);
         $registry->allows('getEntityByHigh')->with('ord')->andReturn(Order::class);
         $stt = new Class extends AbstractSTT implements InitEntityInterface {
-            public static function getHigh() {
+            protected static function getHigh(): string {
                 return 'ord';
             }
 
@@ -171,7 +171,7 @@ final class AbstractSTTTest extends TestBase
             }
 
             protected function steps(): array {
-                return [];
+                return ['actions' => [], 'saveActions' => []];
             }
         };
         $stt->setEntityRegistry($registry);

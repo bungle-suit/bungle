@@ -1,0 +1,102 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$fromState\\.$#"
+			count: 1
+			path: Framework/tests/StateMachine/STT/AbstractSTTTest.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$toState\\.$#"
+			count: 1
+			path: Framework/tests/StateMachine/STT/AbstractSTTTest.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$transition\\.$#"
+			count: 1
+			path: Framework/tests/StateMachine/STT/AbstractSTTTest.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$transitionName\\.$#"
+			count: 1
+			path: Framework/tests/StateMachine/STT/AbstractSTTTest.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$workflow\\.$#"
+			count: 1
+			path: Framework/tests/StateMachine/STT/AbstractSTTTest.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$log\\.$#"
+			count: 5
+			path: Framework/tests/StateMachine/STT/AbstractSTTTest.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$before\\.$#"
+			count: 2
+			path: Framework/tests/StateMachine/STT/AbstractSTTTest.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$name\\.$#"
+			count: 2
+			path: Framework/tests/StateMachine/STT/AbstractSTTTest.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$after\\.$#"
+			count: 2
+			path: Framework/tests/StateMachine/STT/AbstractSTTTest.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$transition\\.$#"
+			count: 1
+			path: Framework/tests/StateMachine/STT/OrderSTT.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$transitionName\\.$#"
+			count: 1
+			path: Framework/tests/StateMachine/STT/OrderSTT.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$fromState\\.$#"
+			count: 1
+			path: Framework/tests/StateMachine/STT/OrderSTT.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$toState\\.$#"
+			count: 1
+			path: Framework/tests/StateMachine/STT/OrderSTT.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$workflow\\.$#"
+			count: 1
+			path: Framework/tests/StateMachine/STT/OrderSTT.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$name\\.$#"
+			count: 1
+			path: Framework/tests/StateMachine/STT/OrderSTT.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$before\\.$#"
+			count: 1
+			path: Framework/tests/StateMachine/STT/OrderSTT.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$after\\.$#"
+			count: 1
+			path: Framework/tests/StateMachine/STT/OrderSTT.php
+
+		-
+			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$log\\.$#"
+			count: 1
+			path: Framework/tests/StateMachine/STT/OrderSTT.php
+
+		-
+			message: "#^Call to an undefined method Mockery\\\\ExpectationInterface\\|Mockery\\\\ExpectsHigherOrderMessage\\:\\:with\\(\\)\\.$#"
+			count: 3
+			path: Framework/tests/StateMachine/VinaTest.php
+
+		-
+			message: "#^Call to an undefined method Mockery\\\\ExpectationInterface\\|Mockery\\\\ExpectsHigherOrderMessage\\:\\:twice\\(\\)\\.$#"
+			count: 1
+			path: Framework/tests/StateMachine/VinaTest.php
+

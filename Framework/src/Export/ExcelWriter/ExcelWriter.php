@@ -10,7 +10,6 @@ use Bungle\Framework\Export\ExcelWriter\TablePlugins\FormulaColumnTablePlugin;
 use Bungle\Framework\Export\ExcelWriter\TablePlugins\NumberFormatTablePlugin;
 use Bungle\Framework\Export\ExcelWriter\TablePlugins\SumTablePlugin;
 use Bungle\Framework\FP;
-use LogicException;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -26,10 +25,6 @@ class ExcelWriter extends ExcelOperator
      */
     public function newSheet(string $name): void
     {
-        if ($this->book === null) {
-            throw new LogicException('newSheet() requires pass Spreadsheet to constructor');
-        }
-
         $this->sheet = $this->book->createSheet();
         $this->sheet->setTitle($name);
         $this->sheet->getPageSetup()->setPaperSize(PageSetup::PAPERSIZE_A4);
@@ -108,7 +103,7 @@ class ExcelWriter extends ExcelOperator
     /**
      * @param array<int, ExcelColumn> $cols
      * @param iterable<object|(string|number|null)[]> $rows
-     * @param array{plugins?: TablePluginInterface|(TablePluginInterface[])} $options
+     * @param array<string, mixed> $options
      */
     public function writeTable(
         array $cols,
@@ -128,7 +123,10 @@ class ExcelWriter extends ExcelOperator
 
         /** @var ExcelColumn $c */
         foreach ($cols as $c) {
-            $sheet->setCellValue("{$pluginContext->getColumnName($c)}{$this->row}", $c->getHeader());
+            $sheet->setCellValue(
+                "{$pluginContext->getColumnName($c)}{$this->row}",
+                $c->getHeader()
+            );
             if ($c->getColSpan() > 1) {
                 $sheet->mergeCells(
                     "{$pluginContext->getColumnName($c)}{$this->row}:{$pluginContext->getColumnEndName($c)}{$this->row}"
@@ -143,7 +141,10 @@ class ExcelWriter extends ExcelOperator
             $dataRow = [];
             /** @var ExcelColumn $c */
             foreach ($cols as $c) {
-                [$colName, $colEndName] = [$pluginContext->getColumnName($c), $pluginContext->getColumnEndName($c)];
+                [$colName, $colEndName] = [
+                    $pluginContext->getColumnName($c),
+                    $pluginContext->getColumnEndName($c),
+                ];
                 $v = $c->getPropertyPath() ?
                     $propertyAccessor->getValue($row, $c->getPropertyPath()) :
                     $row;
@@ -232,7 +233,11 @@ class ExcelWriter extends ExcelOperator
         }
     }
 
-    /** @noinspection PhpUnusedParameterInspection */
+    /**
+     * @noinspection PhpUnusedParameterInspection
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     */
     private static function resolveTableOptions(array $options): array
     {
         $resolver = new OptionsResolver();

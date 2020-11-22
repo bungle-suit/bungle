@@ -9,8 +9,12 @@ use Bungle\Framework\Model\Tree\ChildrenTreeNode;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+/**
+ * @implements ChildrenTreeNode<TestChildrenNode>
+ */
 class TestChildrenNode implements ChildrenTreeNode, NameAbleInterface
 {
+    /** @var Collection<int, self> */
     private Collection $children;
     private string $name;
     private ?self $parent;
@@ -30,6 +34,9 @@ class TestChildrenNode implements ChildrenTreeNode, NameAbleInterface
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getChildren(): Collection
     {
         return $this->children;
@@ -55,7 +62,7 @@ class TestChildrenNode implements ChildrenTreeNode, NameAbleInterface
     }
 
     /**
-     * @param array<string, string[]> $arr
+     * @phpstan-param array<string|int, string|(mixed[])> $arr
      */
     public static function createTree(string $rootName, array $arr): self
     {
@@ -69,14 +76,15 @@ class TestChildrenNode implements ChildrenTreeNode, NameAbleInterface
     }
 
     /**
-     * @param array<string, string[]> $arr
+     * @phpstan-param array<string|int, string|(mixed[])> $arr
      * @return self[]
      */
     private static function createForest(array $arr): array
     {
         $r = [];
         foreach ($arr as $name => $children) {
-            if (is_string($name)) {
+            if (is_array($children)) {
+                assert(is_string($name));
                 $r[] = self::createTree($name, $children);
             } else {
                 $r[] = new self($children);

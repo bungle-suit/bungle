@@ -31,5 +31,5 @@ interface LabelledValueInterface
      * Called on section end, useful such as require post-process.
      * @phpstan-param Context<T> $context
      */
-    public function onSectionEnd(Context $context);
+    public function onSectionEnd(Context $context): void;
 }

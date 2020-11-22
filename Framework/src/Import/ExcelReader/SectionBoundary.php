@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bungle\Framework\Import\ExcelReader;
 
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 /**
@@ -10,9 +11,15 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
  */
 class SectionBoundary implements SectionBoundaryInterface
 {
+    /** @var callable(ExcelReader): bool */
     private $isSectionStart;
+    /** @var callable(ExcelReader): bool */
     private $isSectionEnd;
 
+    /**
+     * @param callable(ExcelReader): bool $isSectionStart
+     * @param callable(ExcelReader): bool $isSectionEnd
+     */
     public function __construct(callable $isSectionStart, callable $isSectionEnd)
     {
         $this->isSectionStart = $isSectionStart;
@@ -60,9 +67,9 @@ class SectionBoundary implements SectionBoundaryInterface
      * @param string $col Which column to read, such as 'A' means first column.
      * @return callable(ExcelReader): bool
      */
-    public static function colIs(array $keywords, string $colIdx = 'A'): callable
+    public static function colIs(array $keywords, string $col = 'A'): callable
     {
-        return fn(ExcelReader $reader): bool => in_array($reader->getCellValue($colIdx.$reader->getRow()), $keywords);
+        return fn(ExcelReader $reader): bool => in_array($reader->getCellValue($col.$reader->getRow()), $keywords);
     }
 
     /**
@@ -81,6 +88,7 @@ class SectionBoundary implements SectionBoundaryInterface
     public static function colIsMergedStart(string $col = 'A'): callable
     {
         return function (ExcelReader $reader) use ($col): bool {
+            /** @var Cell $cell */
             $cell = $reader->getSheet()->getCell($col.$reader->getRow());
             return $cell->isMergeRangeValueCell();
         };

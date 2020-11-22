@@ -21,7 +21,7 @@ use Symfony\Component\PropertyInfo\Type;
 
 class PropertyInfoTypeGuesserTest extends MockeryTestCase
 {
-    /** @var Mockery\MockInterface|Mockery\LegacyMockInterface|PropertyInfoExtractorInterface */
+    /** @var Mockery\MockInterface|PropertyInfoExtractorInterface */
     private $propertyInfoExtractor;
     private PropertyInfoTypeGuesser $guesser;
 
@@ -54,6 +54,7 @@ class PropertyInfoTypeGuesserTest extends MockeryTestCase
 
     /**
      * @dataProvider guessTypeProvider
+     * @param array<string, mixed> $formOptions
      */
     public function testGuessType(Type $propType, string $formType, array $formOptions): void
     {
@@ -68,6 +69,9 @@ class PropertyInfoTypeGuesserTest extends MockeryTestCase
         }
     }
 
+    /**
+     * @return array<mixed[]>
+     */
     public function guessTypeProvider(): array
     {
         $collType = new Type(Type::BUILTIN_TYPE_INT, false, null, true);

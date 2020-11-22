@@ -332,7 +332,7 @@ class FP
      *
      * @phpstan-template T
      * @phpstan-param T|null $v
-     * @phpstanreturn T
+     * @phpstan-return T
      */
     public static function notNull($v, string $message = '')
     {
@@ -344,9 +344,9 @@ class FP
     }
 
     /**
-     * @param callable(mixed...): bool $a
-     * @param callable(mixed...): bool $b
-     * @return callable(mixed...): bool
+     * @param callable $a
+     * @param callable $b
+     * @return callable bool
      */
     public static function and(callable $a, callable $b): callable
     {
@@ -380,7 +380,7 @@ class FP
 
     /**
      * @template T
-     * @phpstan-param (\ArrayAccess<T>&\Countable)|array<T> $arr
+     * @phpstan-param (\ArrayAccess<mixed, T>&\Countable)|array<T> $arr
      * @phpstan-return null|T null if $arr is empty
      */
     public static function last($arr)

@@ -15,7 +15,10 @@ use Bungle\Framework\StateMachine\STT\AbstractSTT;
 use Bungle\Framework\StateMachine\STT\STTInterface;
 use Bungle\Framework\Tests\StateMachine\Entity\Order;
 
-/** @SuppressWarnings(PHPMD.UnusedFormalParameter("ord")) */
+/**
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter("ord"))
+ * @extends AbstractSTT<Order>
+ */
 final class OrderSTT extends AbstractSTT implements STTInterface
 {
     public static function setCodeFoo(Order $ord): void
@@ -28,15 +31,17 @@ final class OrderSTT extends AbstractSTT implements STTInterface
         $ord->code = 'bar';
     }
 
-    public function abort(Order $ord, StepContext $ctx): ?string
+    /**
+     * @return void|string
+     */
+    public function abort(Order $ord, StepContext $ctx)
     {
         if ($ctx->get('abort', true)) {
             return 'Abort';
         }
-        return null;
     }
 
-    public function updateCodeWithTransitionName(Order $ord, StepContext $ctx): void
+    public static function updateCodeWithTransitionName(Order $ord, StepContext $ctx): void
     {
         self::log($ctx, 'update');
         $ord->code = $ctx->getTransitionName();
@@ -56,50 +61,61 @@ final class OrderSTT extends AbstractSTT implements STTInterface
         $ord->workflow = $ctx->getWorkflow();
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function steps(): array
     {
        return [
             'actions' => [
                 'save' => [
-                    [static::class, 'setCodeFoo'],
+                    [self::class, 'setCodeFoo'],
                 ],
                 'update' => [
-                    [static::class, 'updateCodeWithTransitionName'],
-                    [static::class, 'saveContextAttrs'],
+                    [self::class, 'updateCodeWithTransitionName'],
+                    [self::class, 'saveContextAttrs'],
                 ],
                 'check' => [
-                    [static::class, 'setCodeBar'],
+                    [self::class, 'setCodeBar'],
                     [$this, 'abort'],
-                    [static::class, 'setCodeFoo'],
+                    [self::class, 'setCodeFoo'],
                 ],
             ],
            'before' => [
-               [static::class, 'hitBefore'],
-               [static::class, 'prepBarAttr'],
+               [self::class, 'hitBefore'],
+               [self::class, 'prepBarAttr'],
            ],
            'after' => [
-               [static::class, 'hitAfter'],
-               [static::class, 'saveLog'],
+               [self::class, 'hitAfter'],
+               [self::class, 'saveLog'],
            ],
 
            'saveActions' => [
                'saved' => [
-                   fn (Order $ord, SaveStepContext $ctx) => self::log($ctx, 'save'),
-                   fn (Order $ord) => $ord->name = 'foo',
-                   fn (Order $ord) => $ord->setState('hack'), // test prevent manipulate set state.
+                   function (Order $ord, SaveStepContext $ctx): void {
+                       self::log($ctx, 'save');
+                   },
+                   function (Order $ord): void {
+                       $ord->name = 'foo';
+                   },
+                   function (Order $ord): void {
+                       $ord->setState('hack');
+                   }, // test prevent manipulate set state.
                ],
                StatefulInterface::INITIAL_STATE => [],
            ],
            'beforeSave' => [
-               fn (Order $ord, SaveStepContext $ctx) => self::log($ctx, 'before save'.$ctx->get('attr', '')),
-               fn (Order $ord) => $ord->before = 'bar',
+               function (Order $ord, SaveStepContext $ctx): void {
+                   self::log($ctx, 'before save'.$ctx->get('attr', ''));
+               },
+               function (Order $ord): void {
+                   $ord->before = 'bar';
+               },
            ],
            'afterSave' => [
-               fn (Order $ord, SaveStepContext $ctx) => self::log($ctx, 'after save'),
-               fn (Order $ord) => $ord->after = 'after',
+               function (Order $ord, SaveStepContext $ctx): void {
+                   self::log($ctx, 'after save');
+               },
+               function (Order $ord): void {
+                   $ord->after = 'after';
+               },
                [self::class, 'saveLog'],
            ],
        ];
@@ -127,7 +143,7 @@ final class OrderSTT extends AbstractSTT implements STTInterface
         self::log($ctx, 'before');
     }
 
-    public function hitAfter(Order $ord, StepContext $ctx): void
+    public static function hitAfter(Order $ord, StepContext $ctx): void
     {
         self::log($ctx, 'after');
     }

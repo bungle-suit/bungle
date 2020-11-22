@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Bungle\Framework\Inquiry;
@@ -18,7 +19,7 @@ class Query
     private array $qbeMetas;
 
     /**
-     * @var QueryStepInterface[] $steps ;
+     * @phpstan-var (callable(Builder): void)[]
      */
     private array $steps;
 
@@ -26,10 +27,13 @@ class Query
     private string $title;
 
     /**
-     * @phpstan-param QueryStepInterface[] $iterSteps
+     * @phpstan-param array<callable(Builder): void> $steps
      */
-    public function __construct(EntityManagerInterface $em, array $steps, string $title = 'Query Name Not Set')
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        array $steps,
+        string $title = 'Query Name Not Set'
+    ) {
         $this->em = $em;
         $this->steps = $steps;
         $this->title = $title;
@@ -63,10 +67,15 @@ class Query
         return $this->queryData($qb);
     }
 
+    /**
+     * @return Traversable<array<mixed>>
+     */
     protected function queryData(QueryBuilder $qb): Traversable
     {
-        foreach ($qb->getQuery()
-                    ->iterate(null, AbstractQuery::HYDRATE_ARRAY) as $rows) {
+        foreach (
+            $qb->getQuery()
+               ->iterate(null, AbstractQuery::HYDRATE_ARRAY) as $rows
+        ) {
             yield from $rows;
         }
     }
@@ -144,7 +153,7 @@ class Query
      * In pagedQuery(), these steps will appended to steps to build count query.
      *
      * Normally no need to override, default implementation can handle most cases.
-     * @return QueryStepInterface[]
+     * @phpstan-return (callable(Builder): void)[]
      */
     protected function createExtraCountSteps(): array
     {
@@ -157,7 +166,7 @@ class Query
      * In pagedQuery(), these steps will appended to steps to build data query.
      *
      * Normally no need to override, default implementation can handle most cases.
-     * @return QueryStepInterface[]
+     * @phpstan-return (callable(Builder): void)[]
      */
     protected function createExtraPagingSteps(): array
     {

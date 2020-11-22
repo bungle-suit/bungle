@@ -7,6 +7,7 @@ namespace Bungle\Framework\Import\ExcelReader\TableReader;
 use Bungle\Framework\FP;
 use Bungle\Framework\Import\ExcelReader\ExcelReader;
 use Bungle\Framework\Import\ExcelReader\SectionContentReaderInterface;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use RuntimeException;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -22,19 +23,18 @@ class TableReader implements SectionContentReaderInterface
     private $onRowComplete;
     /**
      * @var ColumnInterface[]
-     * @phpstan-var ColumnInterface<T>[]
      */
     private array $cols;
+    /** @var callable(T): void */
     private $appendItem;
     private bool $firstRow = true;
     /** @var array<int, int> */
     private array $colIdxes; // column excel column index by column array index
-    private $startColIdx;
+    private int $startColIdx;
     private Context $context;
     private PropertyAccessor $propertyAccessor;
 
     /**
-     * @phpstan-param ColumnInterface<T>[] $cols
      * @param ColumnInterface[] $cols
      * @phpstan-param callable(T): void $appendItem
      */
@@ -45,7 +45,8 @@ class TableReader implements SectionContentReaderInterface
         $this->startColIdx = Coordinate::columnIndexFromString($startCol);
         $this->createItem = FP::constant([]);
         $this->propertyAccessor = new PropertyAccessor();
-        $this->onRowComplete = fn() => null;
+        $this->onRowComplete = function (): void {
+        };
     }
 
     public function onSectionStart(ExcelReader $reader): void
@@ -55,19 +56,20 @@ class TableReader implements SectionContentReaderInterface
 
         $arrLabels = array_map(fn(ColumnInterface $col) => $col->getTitle(), $this->cols);
         $sheet = $reader->getSheet();
-        $cols = Coordinate::columnIndexFromString($sheet->getHighestColumn($reader->getRow()));
+        $cols = Coordinate::columnIndexFromString($sheet->getHighestColumn("{$reader->getRow()}"));
         $this->colIdxes = [];
         for ($i = $this->startColIdx; $i <= $cols; $i++) {
+            /** @var Cell $cell */
             $cell = $reader->getSheet()->getCellByColumnAndRow($i, $reader->getRow());
             $col = FP::firstOrNull(
-                fn(Column $c) => $c->getHeaderCellMatcher()->matches($cell),
+                fn(ColumnInterface $c): bool => $c->getHeaderCellMatcher()->matches($cell),
                 $this->cols
             );
             if ($col === null) {
                 continue;
             }
             $idx = array_search($col, $this->cols, true);
-            assert($idx !== false);
+            assert(is_int($idx));
             $this->colIdxes[$idx] = $i;
         }
 
@@ -103,6 +105,10 @@ class TableReader implements SectionContentReaderInterface
     {
     }
 
+    /**
+     * @phpstan-param callable(): T $createItem
+     * @phpstan-return self<T>
+     */
     public function setCreateItem(callable $createItem): self
     {
         $this->createItem = $createItem;
@@ -128,6 +134,10 @@ class TableReader implements SectionContentReaderInterface
         return $this->onRowComplete;
     }
 
+    /**
+     * @phpstan-param callable(T, Context): void $onRowComplete
+     * @phpstan-return self<T>
+     */
     public function setOnRowComplete(callable $onRowComplete): self
     {
         $this->onRowComplete = $onRowComplete;

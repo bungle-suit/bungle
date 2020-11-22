@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace Bungle\Framework\Entity;
 
 use Bungle\Framework\Exceptions;
+
 use function in_array;
 
 class EntityRegistry
 {
     // array of entities full class name.
-    /** @var string[] $entities */
+    /** @phpstan-var class-string<mixed>[] $entities */
     private array $entities;
     private HighResolverInterface $highResolver;
-    /** @var string[] */
+    /** @var array<string, class-string<mixed>> */
     private array $highClsMap;
 
     private EntityDiscovererInterface $discoverer;
@@ -29,6 +30,7 @@ class EntityRegistry
     /**
      * Like getHigh(), return empty if not High defined on
      * $clsName instead of throw exception.
+     * @param class-string<mixed> $clsName
      */
     public function getHighSafe(string $clsName): string
     {
@@ -36,10 +38,12 @@ class EntityRegistry
             $this->highClsMap = $this->scanMap($this->getEntities());
         }
 
-        if (!($r = array_search($clsName, $this->highClsMap))) {
-            if (!in_array($clsName, $this->getEntities())) {
-                return '';
-            }
+        $r = array_search($clsName, $this->highClsMap);
+        if ($r === false) {
+            return '';
+        }
+        if (!in_array($clsName, $this->getEntities())) {
+            return '';
         }
 
         return $r;
@@ -47,6 +51,7 @@ class EntityRegistry
 
     /**
      * Get high prefix by clsName.
+     * @param class-string<mixed> $clsName
      */
     public function getHigh(string $clsName): string
     {
@@ -61,6 +66,7 @@ class EntityRegistry
 
     /**
      * Get Entity class by the high prefix.
+     * @return class-string<mixed>
      */
     public function getEntityByHigh(string $high): string
     {
@@ -78,6 +84,7 @@ class EntityRegistry
     /**
      * Shortcut method to create entity object by high,
      * Entity must have public zero-less constructor.
+     * @return mixed
      */
     public function createEntity(string $high)
     {
@@ -86,6 +93,10 @@ class EntityRegistry
         return EntityUtils::create($cls);
     }
 
+    /**
+     * @param array<class-string<mixed>> $entities
+     * @return array<string, class-string<mixed>>
+     */
     private function scanMap(array $entities): array
     {
         $r = [];
@@ -104,11 +115,15 @@ class EntityRegistry
         return $r;
     }
 
+    /**
+     * @return array<class-string<mixed>>
+     */
     public function getEntities(): array
     {
         if (!isset($this->entities)) {
             $this->entities = iterator_to_array($this->discoverer->getAllEntities(), false);
         }
+
         return $this->entities;
     }
 }

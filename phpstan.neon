@@ -3,3 +3,6 @@ parameters:
   paths:
     - Framework/src
     - Framework/tests
+
+includes:
+  - phpstan-baseline.neon

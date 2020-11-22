@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Bungle\Framework\Model;
@@ -18,18 +19,22 @@ final class ArrayUtil
             array_splice($array, $key, 0, $item);
         } else {
             $pos = array_search($key, array_keys($array));
-            $array = array_merge(
-                array_slice($array, 0, $pos),
-                $item,
-                array_slice($array, $pos)
-            );
+            assert($pos !== false);
+            $part1 = array_slice($array, 0, $pos);
+            $part2 = array_slice($array, $pos);
+            assert($part1 !== false);
+            assert($part2 !== false);
+            $array = array_merge($part1, $item, $part2);
         }
     }
 
     /**
+     * @template T
      * Remove $element from $array
+     * @phpstan-param array<int|string, T> $array
+     * @phpstan-param T $element
      * @param bool $reindex reindex after removing.
-     * @return true if element found and removed.
+     * Return true if element found and removed.
      */
     public static function removeElement(array &$array, $element, bool $reindex = false): bool
     {
@@ -42,6 +47,7 @@ final class ArrayUtil
         if ($reindex) {
             $array = array_values($array);
         }
+
         return true;
     }
 }

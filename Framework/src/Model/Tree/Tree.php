@@ -16,14 +16,17 @@ class Tree
      *
      * @template T of ChildrenTreeNode
      * @template V of ParentTreeNode
-     * @phpstan-param array<ParentTreeNode<V>> $items
+     * @phpstan-param V[] $items
      * @phpstan-param callable(V): T $fCreateNode create dest tree node from source.
-     * @phpstan-return ChildrenTreeNode<T>
+     * @phpstan-return T[]
      */
     public static function toForest(array $items, callable $fCreateNode): array
     {
         $map = [];
-        $findOrCreate = function (ParentTreeNode $node) use (
+        /**
+         * @phpstan-param V $node
+         */
+        $findOrCreate = function ($node) use (
             $fCreateNode,
             &$map
         ) : ChildrenTreeNode {
@@ -36,7 +39,6 @@ class Tree
         };
 
         $r = [];
-        /** @var ParentTreeNode $item */
         foreach ($items as $item) {
             $child = $findOrCreate($item);
             if ($item->getParent() === null) {
@@ -48,13 +50,14 @@ class Tree
             $parent->addChild($child);
         }
 
+        /** @phpstan-var T[] */
         return $r;
     }
 
     /**
      * @template T of ChildrenTreeNode
      * @template V of ParentTreeNode
-     * @phpstan-param array<ParentTreeNode<V>> $items
+     * @phpstan-param array<V> $items
      * @phpstan-param callable(V): T $fCreateNode create dest tree node from source.
      * @phpstan-return T
      * @throws LogicException if $items is empty, or more than one root node.
@@ -75,6 +78,7 @@ class Tree
 
     /**
      * @template T of ParentTreeNode
+     * @phpstan-param T $node
      * @phpstan-return Traversable<T>
      */
     public static function iterToRoot(ParentTreeNode $node): Traversable
@@ -92,9 +96,13 @@ class Tree
      */
     public static function iterDescent(ChildrenTreeNode $node): Traversable
     {
-        yield $node;
+        /** @noinspection PhpUnnecessaryLocalVariableInspection */
+        $n = $node;
+        yield $n;
         foreach ($node->getChildren() as $child) {
-            yield from self::iterDescent($child);
+            /** @phpstan-var Traversable<mixed> $r */
+            $r = self::iterDescent($child);
+            yield from $r;
         }
     }
 
@@ -102,16 +110,16 @@ class Tree
      * Return path of the node from root, path is names from root to $node separate with '/'.
      * Not prefixed with '/', i.e., 'a/b/c' instead of '/a/b/c'.
      *
-     * @param ParentTreeNode|NameAbleInterface $node
+     * @param ParentTreeNode&NameAbleInterface $node
      * @param bool $includeRoot exclude root name if false.
      * @phpstan-param ParentTreeNode&NameAbleInterface $node
      */
     public static function path(ParentTreeNode $node, bool $includeRoot = true): string
     {
         $parts = [];
-        /** @var NameAbleInterface|ParentTreeNode $node */
-        foreach (self::iterToRoot($node) as $node) {
-            $parts[] = $node->getName();
+        /** @var NameAbleInterface&ParentTreeNode $n*/
+        foreach (self::iterToRoot($node) as $n) {
+            $parts[] = $n->getName();
         }
         $parts = array_reverse($parts, false);
         if (!$includeRoot) {

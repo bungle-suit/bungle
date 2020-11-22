@@ -7,13 +7,13 @@ namespace Bungle\Framework\Tests\Ent\IDName;
 use Bungle\Framework\Ent\IDName\HighIDNameTranslatorChain;
 use Bungle\Framework\Ent\IDName\HighIDNameTranslatorInterface;
 use Bungle\Framework\Entity\EntityRegistry;
-use Bungle\Framework\Tests\Entity\Order;
+use Bungle\Framework\Tests\Entity\Entities\Order;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 class HighIDNameTranslatorChainTest extends MockeryTestCase
 {
-    public function testTranslate()
+    public function testTranslate(): void
     {
         $entityRegistry = Mockery::mock(EntityRegistry::class);
         $entityRegistry->allows('getEntityByHigh')->with('ord')->andReturn(Order::class);
