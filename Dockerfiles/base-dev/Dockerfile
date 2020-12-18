@@ -7,6 +7,7 @@ RUN docker-php-ext-configure gd --enable-gd --with-jpeg --with-freetype
 RUN docker-php-ext-install gd && docker-php-ext-enable gd
 RUN docker-php-ext-install intl && docker-php-ext-enable intl
 RUN docker-php-ext-enable opcache
+RUN echo 'export LC_ALL=C.UTF-8' >> /etc/profile
 
 COPY my-php-tweak.ini $PHP_INI_DIR/conf.d/
 
