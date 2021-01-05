@@ -1,6 +1,21 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Method Bungle\\\\Framework\\\\FP\\:\\:notNull\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: Framework/src/FP.php
+
+		-
+			message: "#^Parameter \\#1 \\$a of static method Bungle\\\\Framework\\\\FP\\:\\:and\\(\\) expects callable\\(\\.\\.\\.mixed\\)\\: bool, Closure\\(int, int\\)\\: bool given\\.$#"
+			count: 2
+			path: Framework/tests/FPTest.php
+
+		-
+			message: "#^Parameter \\#2 \\.\\.\\.\\$b of static method Bungle\\\\Framework\\\\FP\\:\\:and\\(\\) expects callable\\(\\.\\.\\.mixed\\)\\: bool, Closure\\(int, int\\)\\: bool given\\.$#"
+			count: 2
+			path: Framework/tests/FPTest.php
+
+		-
 			message: "#^Access to an undefined property Bungle\\\\Framework\\\\Tests\\\\StateMachine\\\\Entity\\\\Order\\:\\:\\$fromState\\.$#"
 			count: 1
 			path: Framework/tests/StateMachine/STT/AbstractSTTTest.php
