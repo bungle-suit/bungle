@@ -12,15 +12,32 @@ class CodeContextTest extends TestCase
     {
         $ctx = new CodeContext();
         $ctx->addSection('foo');
-        self::assertEquals(['foo'], $ctx->sections);
+        self::assertEquals(['foo'], $ctx->getSections());
 
         $ctx->addSection('bar');
-        self::assertEquals(['foo', 'bar'], $ctx->sections);
+        self::assertEquals(['foo', 'bar'], $ctx->getSections());
 
         $ctx->addSection('');
-        self::assertEquals(['foo', 'bar', ''], $ctx->sections);
+        self::assertEquals(['foo', 'bar', ''], $ctx->getSections());
 
         $ctx->addSection('', true);
-        self::assertEquals(['foo', 'bar', ''], $ctx->sections);
+        self::assertEquals(['foo', 'bar', ''], $ctx->getSections());
+    }
+
+    public function testToString(): void
+    {
+        $ctx = new CodeContext();
+        $ctx->addSection('a');
+        $ctx->addSection('b');
+        $ctx->addSection('c');
+
+        // result set, returns result.
+        $ctx->result = 'abc';
+        self::assertEquals('abc', strval($ctx));
+
+        // result not set, join sections up
+        $ctx->result = '';
+        self::assertEquals('a-b-c', strval($ctx));
+        self::assertEquals('', $ctx->result);
     }
 }

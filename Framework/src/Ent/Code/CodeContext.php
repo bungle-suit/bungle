@@ -20,7 +20,15 @@ class CodeContext implements HasAttributesInterface
      * them together.
      * @var string[]
      */
-    public array $sections = [];
+    private array $sections = [];
+
+    /**
+     * @return string[]
+     */
+    public function getSections(): array
+    {
+        return $this->sections;
+    }
 
     /**
      * Append $section to $sections
@@ -32,5 +40,21 @@ class CodeContext implements HasAttributesInterface
         if (!$ignoreEmpty || $section !== '') {
             $this->sections[] = $section;
         }
+    }
+
+    /**
+     * Get the code result.
+     *
+     * Normally the last step will set self::result field, and __toString()
+     * return it as the end result.
+     * But if not, __toString() join sections up by '-'.
+     */
+    public function __toString(): string
+    {
+        if ($this->result) {
+            return $this->result;
+        }
+
+        return implode('-', $this->sections);
     }
 }
