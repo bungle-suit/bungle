@@ -6,6 +6,7 @@ namespace Bungle\FrameworkBundle\Tests\DependencyInjection;
 
 use Bungle\Framework\Ent\BasalInfoService;
 use Bungle\Framework\Ent\Code\CodeGenerator;
+use Bungle\Framework\Ent\Code\CodeSteps;
 use Bungle\Framework\Ent\IDName\HighIDNameTranslator;
 use Bungle\Framework\Ent\ObjectName;
 use Bungle\Framework\Entity\EntityRegistry;
@@ -251,6 +252,13 @@ final class BungleFrameworkExtensionTest extends TestCase
 
         $def = $this->container->getDefinition(PropertyInfoLabelFormExtension::class);
         self::assertEquals(['form.type_extension' => [[]]], $def->getTags());
+    }
+
+    public function testCodeSteps(): void
+    {
+        $this->container->set('security.helper', $this->createMock(Security::class));
+        $this->container->set('doctrine.orm.default_entity_manager', $this->createMock(EntityManagerInterface::class));
+        self::assertInstanceOf(CodeSteps::class, $this->container->get(CodeSteps::class));
     }
 
     private function addManagerRegistry(): ManagerRegistry

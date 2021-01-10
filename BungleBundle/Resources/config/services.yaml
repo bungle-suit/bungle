@@ -11,6 +11,10 @@ services:
     class: Bungle\Framework\Ent\BasalInfoService
     arguments: ['@security.helper', '@doctrine.orm.default_entity_manager', '@Bungle\Framework\Ent\ObjectName']
 
+  Bungle\Framework\Ent\Code\CodeSteps:
+    class: Bungle\Framework\Ent\Code\CodeSteps
+    arguments: ['@Bungle\Framework\Ent\BasalInfoService']
+
   Bungle\Framework\Export\ParamParser\Parsers:
     class: Bungle\Framework\Export\ParamParser\Parsers
     arguments: ['@Bungle\Framework\Ent\BasalInfoService']
