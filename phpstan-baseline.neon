@@ -6,6 +6,16 @@ parameters:
 			path: Framework/src/FP.php
 
 		-
+			message: "#^Parameter \\#1 \\$steps of class class@anonymous/tests/Ent/Code/AbstractCoderTest\\.php\\:34 constructor expects array\\<callable\\(mixed, Bungle\\\\Framework\\\\Ent\\\\Code\\\\CodeContext\\)\\: string\\|null\\>, array\\(Bungle\\\\Framework\\\\Ent\\\\Code\\\\CoderStepInterface&Mockery\\\\MockInterface, Bungle\\\\Framework\\\\Ent\\\\Code\\\\CoderStepInterface&Mockery\\\\MockInterface, Bungle\\\\Framework\\\\Ent\\\\Code\\\\CoderStepInterface&Mockery\\\\MockInterface, Closure\\(stdClass, Bungle\\\\Framework\\\\Ent\\\\Code\\\\CodeContext\\)\\: void\\) given\\.$#"
+			count: 1
+			path: Framework/tests/Ent/Code/AbstractCoderTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$steps of static method Bungle\\\\Framework\\\\Ent\\\\Code\\\\CodeSteps\\:\\:compose\\(\\) expects array\\<callable\\(stdClass, Bungle\\\\Framework\\\\Ent\\\\Code\\\\CodeContext\\)\\: string\\|null\\>, array\\(Bungle\\\\Framework\\\\Ent\\\\Code\\\\CoderStepInterface&Mockery\\\\MockInterface, Bungle\\\\Framework\\\\Ent\\\\Code\\\\CoderStepInterface&Mockery\\\\MockInterface, Bungle\\\\Framework\\\\Ent\\\\Code\\\\CoderStepInterface&Mockery\\\\MockInterface, Closure\\(stdClass, Bungle\\\\Framework\\\\Ent\\\\Code\\\\CodeContext\\)\\: void\\) given\\.$#"
+			count: 1
+			path: Framework/tests/Ent/Code/CodeStepsTest.php
+
+		-
 			message: "#^Parameter \\#1 \\$a of static method Bungle\\\\Framework\\\\FP\\:\\:and\\(\\) expects callable\\(\\.\\.\\.mixed\\)\\: bool, Closure\\(int, int\\)\\: bool given\\.$#"
 			count: 2
 			path: Framework/tests/FPTest.php
@@ -13,6 +23,21 @@ parameters:
 		-
 			message: "#^Parameter \\#2 \\.\\.\\.\\$b of static method Bungle\\\\Framework\\\\FP\\:\\:and\\(\\) expects callable\\(\\.\\.\\.mixed\\)\\: bool, Closure\\(int, int\\)\\: bool given\\.$#"
 			count: 2
+			path: Framework/tests/FPTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$cond of static method Bungle\\\\Framework\\\\FP\\:\\:if\\(\\) expects callable\\(\\.\\.\\.mixed\\)\\: bool, Closure\\(int, int\\)\\: bool given\\.$#"
+			count: 1
+			path: Framework/tests/FPTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$a of static method Bungle\\\\Framework\\\\FP\\:\\:if\\(\\) expects callable\\(\\.\\.\\.mixed\\)\\: array\\|float\\|int, Closure\\(int, int\\)\\: \\(array\\|float\\|int\\) given\\.$#"
+			count: 1
+			path: Framework/tests/FPTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$b of static method Bungle\\\\Framework\\\\FP\\:\\:if\\(\\) expects callable\\(\\.\\.\\.mixed\\)\\: array\\|float\\|int, Closure\\(int, int\\)\\: \\(float\\|int\\) given\\.$#"
+			count: 1
 			path: Framework/tests/FPTest.php
 
 		-
