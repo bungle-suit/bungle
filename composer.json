@@ -15,7 +15,7 @@
     "keboola/php-temp": "^2.0",
     "phpunit/phpunit": "^9.4",
     "phpstan/phpstan-symfony": "^0.12.11",
-    "phpstan/phpstan-beberlei-assert": "^0.12.4"
+    "phpstan/phpstan-webmozart-assert": "^0.12.8"
   },
   "require": {
     "doctrine/annotations": "^1.8",
@@ -37,7 +37,7 @@
     "symfony/security-core": "^5.1",
     "symfony/uid": "^5.1",
     "symfony/http-kernel": "^5.1",
-    "beberlei/assert": "^3.3"
+    "webmozart/assert": "^1.9"
   },
   "autoload": {
     "psr-4": {
