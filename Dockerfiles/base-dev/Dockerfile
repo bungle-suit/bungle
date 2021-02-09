@@ -1,4 +1,4 @@
-FROM php:7.4.5-fpm-buster
+FROM php:8.0.2-fpm-buster
 
 COPY sources.list /etc/apt/sources.list
 RUN apt-get update && apt-get install -y libicu-dev zlib1g-dev libpng-dev libjpeg-dev libfreetype6-dev
@@ -13,9 +13,8 @@ COPY my-php-tweak.ini $PHP_INI_DIR/conf.d/
 
 RUN groupadd -g 1000 work && useradd --uid 1000 --gid 1000 --create-home work
 
-COPY ./symfony-installer /tmp 
-COPY ./symfony_linux_amd64.gz /tmp
-RUN /tmp/symfony-installer
+COPY ./installer /tmp 
+RUN /tmp/installer
 
 USER work
 COPY config.json /home/work/.config/composer
