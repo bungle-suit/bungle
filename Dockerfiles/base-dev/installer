@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# SymfonyCloud CLI installer.
+# Symfony CLI installer.
 set -euo pipefail
 
 CLI_LATEST_VERSION_URL="https://get.symfony.com/cli/LATEST"
 CLI_CONFIG_DIR=".symfony"
 CLI_EXECUTABLE="symfony"
-CLI_TMP_NAME="symfony_linux_amd64"
+CLI_TMP_NAME="$CLI_EXECUTABLE-"$(date +"%s")
 CLI_NAME="Symfony CLI"
-latest_version="4.14.4"
+CLI_DOWNLOAD_URL_PATTERN="https://github.com/symfony/cli/releases/download/v~latest_version~/symfony_~platform~.gz"
 
 function output {
     style_start=""
@@ -38,7 +38,7 @@ function output {
 
 output "${CLI_NAME} installer" "heading"
 
-binary_dest="/bin"
+binary_dest="${HOME}/${CLI_CONFIG_DIR}/bin"
 custom_dir="false"
 
 # Getops does not support long option names
@@ -50,10 +50,16 @@ case $1 in
         shift # past argument=value
         ;;
     --install-dir)
-        binary_dest="$2"
+        binary_dest="${2:-}"
         custom_dir="true"
         shift # past argument
         shift # past value
+        ;;
+    --channel=*)
+        channel="${1#*=}"
+        shift # past argument=value
+        CLI_DOWNLOAD_URL_PATTERN="${channel}/v~latest_version~/symfony_~platform~"
+        CLI_LATEST_VERSION_URL="${channel}/LATEST"
         ;;
     *)
         output "Unknown option $1" "error"
@@ -94,7 +100,7 @@ else
     output "  [ ] Warning: Git will be needed." "warning"
 fi
 
-kernel=`uname -s 2>/dev/null || /usr/bin/uname -s`
+kernel=$(uname -s 2>/dev/null || /usr/bin/uname -s)
 case ${kernel} in
     "Linux"|"linux")
         kernel="linux"
@@ -108,27 +114,75 @@ case ${kernel} in
         ;;
 esac
 
-machine=`uname -m 2>/dev/null || /usr/bin/uname -m`
+machine=$(uname -m 2>/dev/null || /usr/bin/uname -m)
 case ${machine} in
     arm|armv7*)
         machine="arm"
         ;;
-    aarch64*|armv8*)
+    aarch64*|armv8*|arm64)
         machine="arm64"
         ;;
-    i386)
+    i[36]86)
         machine="386"
         ;;
     x86_64)
         machine="amd64"
         ;;
     *)
-        output "  [ ] You architecture (${machine}) is not currently supported" "error"
+        output "  [ ] Your architecture (${machine}) is not currently supported" "error"
         exit 1
         ;;
 esac
 
-output "  [*] You architecture (${machine}) is supported" "success"
+platform="${kernel}_${machine}"
+
+if [ "darwin_386" = "${platform}" ]; then
+    output "  [ ] Your architecture (${machine}) is not supported anymore" "error"
+    exit 1
+fi
+
+if [ "darwin_arm64" = "${platform}" ]; then
+    platform="darwin_amd64"
+fi
+
+output "  [*] Your architecture (${machine}) is supported" "success"
+
+# The necessary checks have passed. Start downloading the right version.
+output "\nDownload" "heading"
+
+output "  Finding the latest version (platform: \"${platform}\")...";
+
+case ${downloader} in
+    "curl")
+        latest_version=$(curl --fail "${CLI_LATEST_VERSION_URL}" -s)
+        ;;
+    "wget")
+        latest_version=$(wget -q "${CLI_LATEST_VERSION_URL}" -O - 2>/dev/null)
+        ;;
+esac
+# shellcheck disable=SC2181
+if [ $? != 0 ]; then
+    output "  Failed to download LATEST version file: ${CLI_LATEST_VERSION_URL}" "error"
+    exit 1
+fi
+
+latest_url=${CLI_DOWNLOAD_URL_PATTERN/~latest_version~/${latest_version}}
+latest_url=${latest_url/~platform~/${platform}}
+output "  Downloading version ${latest_version} (${latest_url})...";
+case $downloader in
+    "curl")
+        curl --fail --location "${latest_url}" > "/tmp/${CLI_TMP_NAME}.gz"
+        ;;
+    "wget")
+        wget -q --show-progress "${latest_url}" -O "/tmp/${CLI_TMP_NAME}.gz"
+        ;;
+esac
+
+# shellcheck disable=SC2181
+if [ $? != 0 ]; then
+    output "  The download failed." "error"
+    exit 1
+fi
 
 output "  Uncompress binary..."
 gzip -d "/tmp/${CLI_TMP_NAME}.gz"
@@ -137,8 +191,7 @@ output "  Making the binary executable..."
 chmod 755 "/tmp/${CLI_TMP_NAME}"
 
 if [ ! -d "${binary_dest}" ]; then
-    mkdir -p "${binary_dest}"
-    if [ $? != 0 ]; then
+    if ! mkdir -p "${binary_dest}"; then
         binary_dest="."
     fi
 fi
@@ -149,7 +202,7 @@ else
     output "  Installing the binary into your home directory..."
 fi
 
-if mv "/tmp/${CLI_TMP_NAME}" "${binary_dest}/${CLI_EXECUTABLE}" </dev/null; then
+if mv "/tmp/${CLI_TMP_NAME}" "${binary_dest}/${CLI_EXECUTABLE}"; then
     output "  The binary was saved to: ${binary_dest}/${CLI_EXECUTABLE}"
 else
     output "  Failed to move the binary to ${binary_dest}." "error"
@@ -163,7 +216,7 @@ fi
 #    output "  Failed to install the shell auto-completion." "warning"
 #fi
 
-output "\nThe ${CLI_NAME} ${latest_version} was installed successfully!" "success"
+output "\nThe ${CLI_NAME} v${latest_version} was installed successfully!" "success"
 
 if [ "${custom_dir}" == "false" ]; then
     output "\nUse it as a local file:" "info"
