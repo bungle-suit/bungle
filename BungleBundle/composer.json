@@ -5,13 +5,12 @@
   "license": "MIT",
   "require": {
     "bungle/framework": "dev-master",
-    "doctrine/annotations": "^1.8",
-    "symfony/dependency-injection": "^5.1",
-    "symfony/config": "^5.1",
-    "symfony/workflow": "^5.1",
-    "symfony/security-core": "^5.1",
-    "doctrine/orm": "^2.7",
-    "symfony/yaml": "^5.1"
+    "doctrine/annotations": "^1.11",
+    "symfony/dependency-injection": "^5.2",
+    "symfony/config": "^5.2",
+    "symfony/workflow": "^5.2",
+    "symfony/security-core": "^5.2",
+    "symfony/yaml": "^5.2"
   },
   "autoload": {
     "psr-4": { "Bungle\\FrameworkBundle\\": "src/" }
