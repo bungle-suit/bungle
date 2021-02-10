@@ -13,11 +13,10 @@ COPY my-php-tweak.ini $PHP_INI_DIR/conf.d/
 
 RUN groupadd -g 1000 work && useradd --uid 1000 --gid 1000 --create-home work
 
-COPY ./installer /tmp 
-RUN /tmp/installer
-
 USER work
 COPY config.json /home/work/.config/composer
+COPY ./installer /tmp 
+RUN /tmp/installer
 
 ENV PATH=/home/work/.symfony/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 EXPOSE 8000
