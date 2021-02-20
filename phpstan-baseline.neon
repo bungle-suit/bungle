@@ -1,11 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method Bungle\\\\Framework\\\\FP\\:\\:notNull\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: Framework/src/FP.php
-
-		-
 			message: "#^Parameter \\#1 \\$steps of class class@anonymous/tests/Ent/Code/AbstractCoderTest\\.php\\:34 constructor expects array\\<callable\\(mixed, Bungle\\\\Framework\\\\Ent\\\\Code\\\\CodeContext\\)\\: string\\|null\\>, array\\(Bungle\\\\Framework\\\\Ent\\\\Code\\\\CoderStepInterface&Mockery\\\\MockInterface, Bungle\\\\Framework\\\\Ent\\\\Code\\\\CoderStepInterface&Mockery\\\\MockInterface, Bungle\\\\Framework\\\\Ent\\\\Code\\\\CoderStepInterface&Mockery\\\\MockInterface, Closure\\(stdClass, Bungle\\\\Framework\\\\Ent\\\\Code\\\\CodeContext\\)\\: void\\) given\\.$#"
 			count: 1
 			path: Framework/tests/Ent/Code/AbstractCoderTest.php
