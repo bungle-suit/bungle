@@ -38,7 +38,8 @@
     "symfony/uid": "^5.2",
     "symfony/http-kernel": "^5.2",
     "webmozart/assert": "^1.9",
-    "symfony/cache": "^5.2"
+    "symfony/cache": "^5.2",
+    "aura/sqlquery": "^2.7"
   },
   "autoload": {
     "psr-4": {
