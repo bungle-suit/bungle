@@ -32,7 +32,7 @@ services:
 
   bungle.twig.extension:
     class: Bungle\Framework\Twig\BungleTwigExtension
-    arguments: ['@Bungle\Framework\Ent\IDName\HighIDNameTranslator', '@Bungle\Framework\Ent\ObjectName']
+    arguments: [ '@Bungle\Framework\Ent\IDName\HighIDNameTranslator', '@Bungle\Framework\Ent\ObjectName', '@serializer' ]
     tags: ['twig.extension']
 
   Bungle\Framework\Entity\EntityRegistry: '@bungle.entity.registry'

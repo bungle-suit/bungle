@@ -36,8 +36,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -48,7 +48,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Workflow\Registry;
 
-final class BungleFrameworkExtensionTest extends TestCase
+final class BungleFrameworkExtensionTest extends MockeryTestCase
 {
     private ContainerBuilder $container;
 
@@ -56,6 +56,8 @@ final class BungleFrameworkExtensionTest extends TestCase
     {
         $this->container = new ContainerBuilder();
         $this->container->set('cache.app', new ArrayAdapter());
+        $serializer = Mockery::mock(SerializerInterface::class);
+        $this->container->set('serializer', $serializer);
         (new BungleFrameworkExtension())->load([], $this->container);
     }
 
