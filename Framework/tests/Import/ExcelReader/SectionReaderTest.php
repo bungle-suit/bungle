@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Bungle\DingTalk\Tests\Import\ExcelReader;
+namespace Bungle\Framework\Tests\Import\ExcelReader;
 
 use Bungle\Framework\Import\ExcelReader\ExcelReader;
 use Bungle\Framework\Import\ExcelReader\SectionBoundaryInterface;
