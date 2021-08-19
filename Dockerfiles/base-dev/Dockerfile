@@ -1,6 +1,6 @@
 FROM php:8.0.2-fpm-buster
 
-COPY sources.list /etc/apt/sources.list
+# COPY sources.list /etc/apt/sources.list
 RUN apt-get update && apt-get install -y libicu-dev zlib1g-dev libpng-dev libjpeg-dev libfreetype6-dev
 
 RUN docker-php-ext-configure gd --enable-gd --with-jpeg --with-freetype
