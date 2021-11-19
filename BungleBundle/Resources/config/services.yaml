@@ -125,12 +125,15 @@ services:
 
   bungle.json.request.data.resolver:
     class: Bungle\Framework\Request\JsonRequestDataResolver
-    arguments: ['@serializer']
+    arguments: [ '@serializer' ]
     tags:
       - { name: controller.argument_value_resolver, priority: 50 }
 
   Bungle\Framework\Form\PropertyInfoLabelFormExtension:
     class: Bungle\Framework\Form\PropertyInfoLabelFormExtension
-    arguments: ['@property_info', '@cache.app']
+    arguments: [ '@property_info', '@cache.app' ]
     tags:
-      - {name: form.type_extension }
+      - { name: form.type_extension }
+
+  Bungle\Framework\Export\ExporterFactory:
+    class: Bungle\Framework\Export\ExporterFactory

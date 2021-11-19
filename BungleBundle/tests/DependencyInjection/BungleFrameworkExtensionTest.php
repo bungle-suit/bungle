@@ -10,6 +10,7 @@ use Bungle\Framework\Ent\Code\CodeSteps;
 use Bungle\Framework\Ent\IDName\HighIDNameTranslator;
 use Bungle\Framework\Ent\ObjectName;
 use Bungle\Framework\Entity\EntityRegistry;
+use Bungle\Framework\Export\ExporterFactory;
 use Bungle\Framework\Export\FS;
 use Bungle\Framework\Export\FSInterface;
 use Bungle\Framework\Export\ParamParser\Parsers;
@@ -259,8 +260,17 @@ final class BungleFrameworkExtensionTest extends MockeryTestCase
     public function testCodeSteps(): void
     {
         $this->container->set('security.helper', $this->createMock(Security::class));
-        $this->container->set('doctrine.orm.default_entity_manager', $this->createMock(EntityManagerInterface::class));
+        $this->container->set(
+            'doctrine.orm.default_entity_manager',
+            $this->createMock(EntityManagerInterface::class)
+        );
         self::assertInstanceOf(CodeSteps::class, $this->container->get(CodeSteps::class));
+    }
+
+    public function testExporterFactory(): void
+    {
+        $ext = $this->container->get(ExporterFactory::class);
+        self::assertInstanceOf(ExporterFactory::class, $ext);
     }
 
     private function addManagerRegistry(): ManagerRegistry
