@@ -28,7 +28,6 @@ class RegisterSTTPass implements CompilerPassInterface
             };
 
             $sttDef = $container->getDefinition($id);
-            $sttDef->setPrivate(false);
             $sttClass = $sttDef->getClass();
             $high = self::getHigh($sttClass);
             $hook("workflow.$high.transition", '__invoke');

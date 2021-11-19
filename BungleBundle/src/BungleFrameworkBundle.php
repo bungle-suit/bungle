@@ -12,6 +12,7 @@ use Bungle\Framework\StateMachine\STT\STTInterface;
 use Bungle\FrameworkBundle\DependencyInjection\DisableFormGuesser;
 use Bungle\FrameworkBundle\DependencyInjection\HighIDNameTranslatorPass;
 use Bungle\FrameworkBundle\DependencyInjection\RegisterCodeGeneratorPass;
+use Bungle\FrameworkBundle\DependencyInjection\RegisterExporterPass;
 use Bungle\FrameworkBundle\DependencyInjection\RegisterSTTPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -45,5 +46,6 @@ final class BungleFrameworkBundle extends Bundle
             100
         );
         $container->addCompilerPass(new RegisterCodeGeneratorPass());
+        $container->addCompilerPass(new RegisterExporterPass());
     }
 }
