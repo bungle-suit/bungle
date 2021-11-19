@@ -32,7 +32,8 @@
     "symfony/http-kernel": "^5.3",
     "webmozart/assert": "^1.9",
     "symfony/cache": "^5.3",
-    "aura/sqlquery": "^2.7"
+    "aura/sqlquery": "^2.7",
+    "ext-mbstring": "*"
   },
   "autoload": {
     "psr-4": {

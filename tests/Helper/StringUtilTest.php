@@ -26,4 +26,21 @@ class StringUtilTest extends MockeryTestCase
             [true, 'foobar', ['blah', 'foo']],
         ];
     }
+
+    /** @dataProvider removeContinuousSpaceProvider */
+    public function testRemoveContinuousSpace($exp, $s): void
+    {
+        self::assertEquals($exp, StringUtil::removeContinuousSpace($s));
+    }
+
+    public function removeContinuousSpaceProvider()
+    {
+        return [
+            'empty' => ['', ''],
+            'not empty' => ['foo', 'foo'],
+            'remove space' => ['foo bar', 'foo   bar'],
+            'remove space with tab' => ['foo bar', "foo  \t bar"],
+            'replace tab to space' => ['foo bar', "foo\tbar"],
+        ];
+    }
 }
