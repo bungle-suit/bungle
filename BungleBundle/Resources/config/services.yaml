@@ -137,3 +137,6 @@ services:
 
   Bungle\Framework\Export\ExporterFactory:
     class: Bungle\Framework\Export\ExporterFactory
+
+  Bungle\Framework\Inquiry\QueryFactory:
+    class: Bungle\Framework\Inquiry\QueryFactory

@@ -16,6 +16,7 @@ use Bungle\Framework\Export\FSInterface;
 use Bungle\Framework\Export\ParamParser\Parsers;
 use Bungle\Framework\Form\PropertyInfoLabelFormExtension;
 use Bungle\Framework\Form\PropertyInfoTypeGuesser;
+use Bungle\Framework\Inquiry\QueryFactory;
 use Bungle\Framework\Request\JsonRequestDataResolver;
 use Bungle\Framework\Security\RoleRegistry;
 use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
@@ -271,6 +272,12 @@ final class BungleFrameworkExtensionTest extends MockeryTestCase
     {
         $ext = $this->container->get(ExporterFactory::class);
         self::assertInstanceOf(ExporterFactory::class, $ext);
+    }
+
+    public function testQueryFactory(): void
+    {
+        $ext = $this->container->get(QueryFactory::class);
+        self::assertInstanceOf(QueryFactory::class, $ext);
     }
 
     private function addManagerRegistry(): ManagerRegistry
