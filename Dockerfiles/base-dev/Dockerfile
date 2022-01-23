@@ -1,4 +1,4 @@
-FROM php:8.0.2-fpm-buster
+FROM php:8.1.2-fpm-buster
 
 # COPY sources.list /etc/apt/sources.list
 RUN apt-get update && apt-get install -y libicu-dev zlib1g-dev libpng-dev libjpeg-dev libfreetype6-dev
