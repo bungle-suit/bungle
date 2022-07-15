@@ -26,7 +26,7 @@
     "ext-json": "*",
     "symfony/string": "^6.1",
     "doctrine/orm": "~2.8.0",
-    "phpoffice/phpspreadsheet": "^1.17.0",
+    "phpoffice/phpspreadsheet": "dev-master as 1.22.0",
     "symfony/security-core": "^6.1",
     "symfony/uid": "^6.1",
     "symfony/http-kernel": "^6.1",
@@ -51,6 +51,12 @@
       "Bungle\\FrameworkBundle\\Tests\\": "BungleBundle/tests/",
       "Bungle\\DingTalk\\Tests\\": "DingTalk/tests/"
     }
-  }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/redforks/PhpSpreadsheet.git"
+    }
+  ]
 
 }

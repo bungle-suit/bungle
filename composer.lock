@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2bfe438512e9169e6dd1c97e3eb2056a",
+    "content-hash": "815a98ce1462cccd196f21ca0e5d1b3b",
     "packages": [
         {
             "name": "aura/sqlquery",
@@ -1447,16 +1447,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "1.24.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "ebe8745c92a7cac4514d040758393b5399633b83"
+                "url": "https://github.com/redforks/PhpSpreadsheet.git",
+                "reference": "1ab67863c426b3081810d3abf0dd68896784fb8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/ebe8745c92a7cac4514d040758393b5399633b83",
-                "reference": "ebe8745c92a7cac4514d040758393b5399633b83",
+                "url": "https://api.github.com/repos/redforks/PhpSpreadsheet/zipball/1ab67863c426b3081810d3abf0dd68896784fb8b",
+                "reference": "1ab67863c426b3081810d3abf0dd68896784fb8b",
                 "shasum": ""
             },
             "require": {
@@ -1484,15 +1484,15 @@
             },
             "require-dev": {
                 "dealerdirect/phpcodesniffer-composer-installer": "dev-master",
-                "dompdf/dompdf": "^1.0 || ^2.0",
+                "dompdf/dompdf": "^1.0",
                 "friendsofphp/php-cs-fixer": "^3.2",
                 "jpgraph/jpgraph": "^4.0",
-                "mpdf/mpdf": "8.1.1",
+                "mpdf/mpdf": "8.0.17",
                 "phpcompatibility/php-compatibility": "^9.3",
                 "phpstan/phpstan": "^1.1",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^8.5 || ^9.0",
-                "squizlabs/php_codesniffer": "^3.7",
+                "squizlabs/php_codesniffer": "^3.6",
                 "tecnickcom/tcpdf": "^6.4"
             },
             "suggest": {
@@ -1501,13 +1501,33 @@
                 "mpdf/mpdf": "Option for rendering PDF with PDF Writer",
                 "tecnickcom/tcpdf": "Option for rendering PDF with PDF Writer (doesn't yet support PHP8)"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "PhpOffice\\PhpSpreadsheet\\": "src/PhpSpreadsheet"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "PhpOffice\\PhpSpreadsheetTests\\": "tests/PhpSpreadsheetTests",
+                    "PhpOffice\\PhpSpreadsheetInfra\\": "infra"
+                }
+            },
+            "scripts": {
+                "check": [
+                    "php-cs-fixer fix --ansi --dry-run --diff",
+                    "phpcs",
+                    "phpunit --color=always",
+                    "phpstan analyse --ansi"
+                ],
+                "fix": [
+                    "php-cs-fixer fix --ansi"
+                ],
+                "versions": [
+                    "phpcs --report-width=200 samples/ src/ tests/ --ignore=samples/Header.php --standard=PHPCompatibility --runtime-set testVersion 7.3- -n"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -1534,20 +1554,19 @@
             "description": "PHPSpreadsheet - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
             "homepage": "https://github.com/PHPOffice/PhpSpreadsheet",
             "keywords": [
+                "Excel",
                 "OpenXML",
-                "excel",
+                "PHP",
                 "gnumeric",
                 "ods",
-                "php",
                 "spreadsheet",
                 "xls",
                 "xlsx"
             ],
             "support": {
-                "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
-                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/1.24.0"
+                "source": "https://github.com/redforks/PhpSpreadsheet/tree/master"
             },
-            "time": "2022-07-09T13:49:09+00:00"
+            "time": "2022-04-17T15:14:16+00:00"
         },
         {
             "name": "psr/cache",
@@ -8071,9 +8090,18 @@
             "time": "2021-07-28T10:34:58+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "phpoffice/phpspreadsheet",
+            "version": "9999999-dev",
+            "alias": "1.22.0",
+            "alias_normalized": "1.22.0.0"
+        }
+    ],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "phpoffice/phpspreadsheet": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
