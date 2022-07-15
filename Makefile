@@ -3,12 +3,15 @@
 docker-run = docker run --name bungle -it --rm --entrypoint ''  --mount type=volume,src=php-global,dst=/home/work/.config --mount type=bind,src=${PWD},dst=/home/work/app bungle/base-dev
 
 test-framework:
-	$(docker-run)	./vendor/bin/phpunit --bootstrap ./Framework/tests/bootstrap.php ./Framework/tests/
+	# $(docker-run)	./vendor/bin/phpunit --bootstrap ./Framework/tests/bootstrap.php ./Framework/tests/
+	./vendor/bin/phpunit --bootstrap ./Framework/tests/bootstrap.php ./Framework/tests/
 
 test-bungle:
+	# $(docker-run)	./vendor/bin/phpunit --bootstrap ./BungleBundle/tests/bootstrap.php ./BungleBundle/tests/
 	$(docker-run)	./vendor/bin/phpunit --bootstrap ./BungleBundle/tests/bootstrap.php ./BungleBundle/tests/
 
 test-dingtalk:
+	# $(docker-run)	./vendor/bin/phpunit --bootstrap ./DingTalk/tests/bootstrap.php ./DingTalk/tests/
 	$(docker-run)	./vendor/bin/phpunit --bootstrap ./DingTalk/tests/bootstrap.php ./DingTalk/tests/
 
 test: test-framework test-bungle test-dingtalk
