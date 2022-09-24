@@ -1,23 +1,27 @@
 services:
   bungle.entity.discover:
     class: Bungle\Framework\Entity\ORMEntityDiscoverer
-    arguments: ["@doctrine"]
+    arguments: [ "@doctrine" ]
 
   Bungle\Framework\Ent\ObjectName:
     class: Bungle\Framework\Ent\ObjectName
-    arguments: ['@cache.app']
+    arguments: [ '@cache.app' ]
 
   Bungle\Framework\Ent\BasalInfoService:
     class: Bungle\Framework\Ent\BasalInfoService
-    arguments: ['@security.helper', '@doctrine.orm.default_entity_manager', '@Bungle\Framework\Ent\ObjectName']
+    arguments: [ '@security.helper', '@doctrine.orm.default_entity_manager', '@Bungle\Framework\Ent\ObjectName' ]
+
+  Bungle\Framework\Filters:
+    class: Bungle\Framework\Filters
+    arguments: [ '@Bungle\Framework\Ent\BasalInfoService' ]
 
   Bungle\Framework\Ent\Code\CodeSteps:
     class: Bungle\Framework\Ent\Code\CodeSteps
-    arguments: ['@Bungle\Framework\Ent\BasalInfoService']
+    arguments: [ '@Bungle\Framework\Ent\BasalInfoService' ]
 
   Bungle\Framework\Export\ParamParser\Parsers:
     class: Bungle\Framework\Export\ParamParser\Parsers
-    arguments: ['@Bungle\Framework\Ent\BasalInfoService']
+    arguments: [ '@Bungle\Framework\Ent\BasalInfoService' ]
 
   Bungle\Framework\Export\FSInterface:
     class: Bungle\Framework\Export\FS
