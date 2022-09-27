@@ -28,14 +28,14 @@ class ConvertersTest extends MockeryTestCase
             public string $f3 = 'f3';
         };
 
-        $ret = $this->converters->assocArrayFrom(
+        $f = $this->converters->assocArrayFrom(
             [
                 'a' => 'f1',
                 'b' => 'f2',
                 'c' => static fn($x) => $x->f3,
             ],
-            $o
         );
+        $ret = $f($o);
 
         self::assertEquals(['a' => 'f1', 'b' => 'f2', 'c' => 'f3'], $ret);
     }
