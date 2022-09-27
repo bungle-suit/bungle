@@ -39,4 +39,24 @@ class ConvertersTest extends MockeryTestCase
 
         self::assertEquals(['a' => 'f1', 'b' => 'f2', 'c' => 'f3'], $ret);
     }
+
+    public function testListArrayFrom(): void
+    {
+        $o = new class {
+            public string $f1 = 'f1';
+            public string $f2 = 'f2';
+            public string $f3 = 'f3';
+        };
+
+        $f = $this->converters->listArrayFrom(
+            [
+                'f1',
+                'f2',
+                static fn($x) => $x->f3,
+            ],
+        );
+        $ret = $f($o);
+
+        self::assertEquals(['f1', 'f2', 'f3'], $ret);
+    }
 }
