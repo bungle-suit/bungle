@@ -116,16 +116,20 @@ services:
   bungle.command.list_code_generators:
     class: Bungle\FrameworkBundle\Command\ListCodeGeneratorsCommand
     arguments: ['@Bungle\Framework\Ent\Code\CodeGenerator']
-    tags: ["console.command"]
+    tags: [ "console.command" ]
 
   Bungle\Framework\StateMachine\Steps\SetCodeStep:
     class: Bungle\Framework\StateMachine\Steps\SetCodeStep
-    arguments: ['@Bungle\Framework\Ent\Code\CodeGenerator']
+    arguments: [ '@Bungle\Framework\Ent\Code\CodeGenerator' ]
 
   Bungle\Framework\Form\PropertyInfoTypeGuesser:
     class: Bungle\Framework\Form\PropertyInfoTypeGuesser
-    arguments: ['@property_info']
-    tags: ["form.type_guesser"]
+    arguments: [ '@property_info' ]
+    tags: [ "form.type_guesser" ]
+
+  Bungle\Framework\Converters:
+    class: Bungle\Framework\Converters
+    arguments: [ '@property_accessor' ]
 
   bungle.json.request.data.resolver:
     class: Bungle\Framework\Request\JsonRequestDataResolver
