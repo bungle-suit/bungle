@@ -13,7 +13,6 @@ COPY my-php-tweak.ini $PHP_INI_DIR/conf.d/
 
 RUN groupadd -g 1000 work && useradd --uid 1000 --gid 1000 --create-home work -K UMASK=0022
 
-USER work
 COPY config.json /home/work/.config/composer
 COPY ./installer /tmp 
 RUN /tmp/installer
