@@ -58,4 +58,12 @@ class FiltersTest extends MockeryTestCase
             'after' => [true, '2021-01-02'],
         ];
     }
+
+    /** @dataProvider afterThatTimeProvider */
+    public function testAfterThatTimeFNow($exp, $t): void
+    {
+        $fNow = fn() => new DateTime($t);
+        $f = $this->filters->afterThatTime(new DateTime('2021-01-01'), $fNow);
+        $this->assertSame($exp, $f());
+    }
 }
