@@ -33,11 +33,12 @@ class ConvertersTest extends MockeryTestCase
                 'a' => 'f1',
                 'b' => 'f2',
                 'c' => static fn($x) => $x->f3,
+                'd' => ['f3', fn($x, $o) => $x.'-'.$o->f1],
             ],
         );
         $ret = $f($o);
 
-        self::assertEquals(['a' => 'f1', 'b' => 'f2', 'c' => 'f3'], $ret);
+        self::assertEquals(['a' => 'f1', 'b' => 'f2', 'c' => 'f3', 'd' => 'f3-f1'], $ret);
     }
 
     public function testListArrayFrom(): void
