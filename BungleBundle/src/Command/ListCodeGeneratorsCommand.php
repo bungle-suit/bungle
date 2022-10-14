@@ -5,15 +5,15 @@ namespace Bungle\FrameworkBundle\Command;
 
 use Bungle\Framework\Ent\Code\CodeGenerator;
 use Bungle\Framework\Ent\Code\GeneratorInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand('bungle:code-generator')]
 class ListCodeGeneratorsCommand extends Command
 {
-    protected static $defaultName = 'bungle:code-generator';
-
     /** @var GeneratorInterface[]  */
     private array $codeGenerators;
 
