@@ -46,7 +46,7 @@ class FiltersTest extends MockeryTestCase
     public function testAfterThatTime($exp, $t): void
     {
         $this->basal->expects('now')->andReturn(new DateTime($t));
-        $f = $this->filters->afterThatTime(new DateTime('2021-01-01'));
+        $f = $this->filters->afterThatTimeF(new DateTime('2021-01-01'));
         $this->assertSame($exp, $f());
     }
 
@@ -63,7 +63,7 @@ class FiltersTest extends MockeryTestCase
     public function testAfterThatTimeFNow($exp, $t): void
     {
         $fNow = fn() => new DateTime($t);
-        $f = $this->filters->afterThatTime(new DateTime('2021-01-01'), $fNow);
+        $f = $this->filters->afterThatTimeF(new DateTime('2021-01-01'), $fNow);
         $this->assertSame($exp, $f());
     }
 }
