@@ -6,11 +6,11 @@
   "require": {
     "bungle/framework": "dev-master",
     "doctrine/annotations": "^1.11",
-    "symfony/dependency-injection": "^6.1",
-    "symfony/config": "^6.1",
-    "symfony/workflow": "^6.1",
-    "symfony/security-core": "^6.1",
-    "symfony/yaml": "^6.1"
+    "symfony/dependency-injection": "^6.2",
+    "symfony/config": "^6.2",
+    "symfony/workflow": "^6.2",
+    "symfony/security-core": "^6.2",
+    "symfony/yaml": "^6.2"
   },
   "autoload": {
     "psr-4": { "Bungle\\FrameworkBundle\\": "src/" }

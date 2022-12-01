@@ -6,9 +6,9 @@
   "require": {
     "bungle/framework": "dev-master",
     "mingyoung/dingtalk": "^2.3",
-    "symfony/serializer": "^5.0",
-    "symfony/property-info": "^5.0",
-    "symfony/property-access": "^5.0"
+    "symfony/serializer": "^6.2",
+    "symfony/property-info": "^6.2",
+    "symfony/property-access": "^6.2"
   },
   "autoload": {
     "psr-4": { "Bungle\\DingTalk\\": "src/" }
