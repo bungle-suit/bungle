@@ -55,13 +55,6 @@ services:
      public: false
      class: Bungle\Framework\StateMachine\EmptySyncToDB
 
-  bungle.workflow.vina:
-    public: false
-    class: Bungle\Framework\StateMachine\Vina
-    arguments: ["@workflow.registry", "@security.authorization_checker", "@request_stack", "@bungle.state_machine.stt_locator", "@bungle.workflow.empty_synctodb"]
-
-  Bungle\Framework\StateMachine\Vina: '@bungle.workflow.vina'
-
   bungle.state_machine.workflow_definition_resolver:
     public: false
     class: Bungle\Framework\StateMachine\EntityWorkflowDefinitionResolver
