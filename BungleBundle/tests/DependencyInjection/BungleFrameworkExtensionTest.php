@@ -18,7 +18,6 @@ use Bungle\Framework\Form\PropertyInfoLabelFormExtension;
 use Bungle\Framework\Form\PropertyInfoTypeGuesser;
 use Bungle\Framework\Inquiry\QueryFactory;
 use Bungle\Framework\Request\JsonRequestDataResolver;
-use Bungle\Framework\Security\RoleRegistry;
 use Bungle\Framework\StateMachine\EventListener\TransitionRoleGuardListener;
 use Bungle\Framework\StateMachine\FSMViewVoter;
 use Bungle\Framework\StateMachine\MarkingStore\StatefulInterfaceMarkingStore;
@@ -26,7 +25,6 @@ use Bungle\Framework\StateMachine\SaveSteps\ValidateSaveStep;
 use Bungle\Framework\StateMachine\Steps\SetCodeStep;
 use Bungle\Framework\StateMachine\Steps\ValidateStep;
 use Bungle\Framework\StateMachine\STTLocator\STTLocator;
-use Bungle\Framework\StateMachine\Vina;
 use Bungle\Framework\Tests\StateMachine\EventListener\FakeAuthorizationChecker;
 use Bungle\Framework\Twig\BungleTwigExtension;
 use Bungle\FrameworkBundle\Command\ListCodeGeneratorsCommand;
@@ -40,15 +38,12 @@ use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPUnit\Framework\MockObject\Stub;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractorInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Workflow\Registry;
 
 final class BungleFrameworkExtensionTest extends MockeryTestCase
 {
@@ -88,35 +83,6 @@ final class BungleFrameworkExtensionTest extends MockeryTestCase
         $container->set('security.authorization_checker', new FakeAuthorizationChecker('Role_ADMIN'));
         $listener = $container->get('bungle.framework.state_machine.transition_role_guard_listener');
         self::assertInstanceOf(TransitionRoleGuardListener::class, $listener);
-    }
-
-    public function testVina(): void
-    {
-        $this->addManagerRegistry();
-        $this->container->set('workflow.registry', new Registry());
-        $this->container->set(
-            'security.authorization_checker',
-            new FakeAuthorizationChecker('Role_ADMIN'),
-        );
-        $this->container->set('event_dispatcher', new EventDispatcher());
-        $this->container->set('request_stack', new RequestStack());
-
-        $vina = $this->container->get('bungle.workflow.vina');
-        self::assertInstanceOf(Vina::class, $vina);
-        self::assertSame($vina, $this->container->get(Vina::class));
-    }
-
-    public function testRoleRegistry(): void
-    {
-        $this->container->set('workflow.registry', new Registry());
-        $this->container->set('security.authorization_checker', new FakeAuthorizationChecker('Role_ADMIN'));
-        $this->container->set('request_stack', new RequestStack());
-        $this->container->set('event_dispatcher', new EventDispatcher());
-        $this->addManagerRegistry();
-
-        /** @var RoleRegistry $reg */
-        $reg = $this->container->get('Bungle\Framework\Security\RoleRegistry');
-        self::assertInstanceOf(RoleRegistry::class, $reg);
     }
 
     public function testStatefulMarkingStore(): void

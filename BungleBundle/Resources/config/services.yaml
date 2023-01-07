@@ -55,16 +55,6 @@ services:
      public: false
      class: Bungle\Framework\StateMachine\EmptySyncToDB
 
-  bungle.state_machine.workflow_definition_resolver:
-    public: false
-    class: Bungle\Framework\StateMachine\EntityWorkflowDefinitionResolver
-    arguments: ['@workflow.registry', '@bungle.workflow.vina']
-
-  bungle.role.entity_role_provider:
-    public: false
-    class: Bungle\Framework\Security\EntityRoleDefinitionProvider
-    arguments: ['@bungle.entity.registry', '@bungle.state_machine.workflow_definition_resolver', '@Bungle\Framework\Ent\ObjectName']
-
   bungle.role.registry:
     public: false
     class: Bungle\Framework\Security\RoleRegistry
