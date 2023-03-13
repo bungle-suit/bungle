@@ -35,7 +35,8 @@
     "aura/sqlquery": "^2.7",
     "ext-mbstring": "*",
     "symfony/security-bundle": "^6.2",
-    "phpdocumentor/reflection": "^5.3"
+    "phpdocumentor/reflection": "^5.3",
+    "ext-zip": "*"
   },
   "autoload": {
     "psr-4": {
